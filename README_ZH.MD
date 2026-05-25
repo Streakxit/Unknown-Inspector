@@ -97,7 +97,7 @@ gradlew.bat :app:assembleDebug
  * **硬件与厂商限制**：因 OEM 策略或沙盒规则，部分探针在特定机型上可能报告降级状态。部分低级底层检查依赖于 arm64-v8a ABI 架构。
 ## 📈 项目状态与趋势 / Status & Stars
 
-[![Star History Chart][star-history-chart]][star-history]
+![star-history-chart]
 
 ## ⚖️ 免责声明 / Disclaimer
 ```text
