@@ -23,7 +23,7 @@ android {
     namespace = "com.eltavine.duckdetector"
 
     defaultConfig {
-        applicationId = "com.eltavine.duckdetector"
+        applicationId = "com.unknownsec.inspector"
     }
 }
 
