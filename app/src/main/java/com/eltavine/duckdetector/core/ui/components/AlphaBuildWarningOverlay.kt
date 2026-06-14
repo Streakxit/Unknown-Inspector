@@ -195,7 +195,41 @@ fun AlphaBuildWarningOverlay(
                         text = stringResource(R.string.alpha_helper),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    ),
+                    )
+
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Schedule,
+                            contentDescription = null,
+                            tint = if (canDismiss) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Text(
+                            text = if (canDismiss) {
+                                stringResource(R.string.alpha_dismiss_ready)
+                            } else {
+                                stringResource(R.string.alpha_dismiss_waiting, remainingSeconds)
+                            },
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            if (canDismiss) {
+                                dismissOverlay()
+                            }
+                        },
                         enabled = canDismiss,
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
