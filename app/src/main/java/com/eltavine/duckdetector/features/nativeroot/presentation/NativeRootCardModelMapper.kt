@@ -36,7 +36,7 @@ class NativeRootCardModelMapper {
         report: NativeRootReport,
     ): NativeRootCardModel {
         return NativeRootCardModel(
-            title = "Native Root",
+            title = "Root Nativo",
             subtitle = buildSubtitle(report),
             status = report.toDetectorStatus(),
             verdict = buildVerdict(report),
@@ -65,8 +65,8 @@ class NativeRootCardModelMapper {
 
     private fun buildVerdict(report: NativeRootReport): String {
         return when (report.stage) {
-            NativeRootStage.LOADING -> "Scanning kernel-root indicators"
-            NativeRootStage.FAILED -> "Native Root scan failed"
+            NativeRootStage.LOADING -> "Escaneando indicadores root del kernel"
+            NativeRootStage.FAILED -> "Escaneo de root nativo fallido"
             NativeRootStage.READY -> when {
                 report.kernelSuDetected && report.aPatchDetected -> "KernelSU and APatch indicators detected"
                 report.selfSuDomain -> "Current app already runs in KernelSU su domain"
@@ -84,7 +84,7 @@ class NativeRootCardModelMapper {
 
                 report.ksuManagerPackagePresent -> "KernelSU manager package detected"
                 report.hasWarningFindings -> "${report.warningFindingCount} native signal(s) need review"
-                !report.nativeAvailable -> "Native detector unavailable"
+                !report.nativeAvailable -> "Detector nativo no disponible"
                 report.hasReducedCoverage() -> "Native root scan has reduced coverage"
                 else -> "No native root indicators"
             }
@@ -94,7 +94,7 @@ class NativeRootCardModelMapper {
     private fun buildSummary(report: NativeRootReport): String {
         val base = when (report.stage) {
             NativeRootStage.LOADING ->
-                "Native probes are collecting read-only supercall, syscall, side-channel, self-process, isolated-process mount drift, manager manifest, path, cgroup, kernel-string, and property evidence."
+                "Las sondas nativas verifican supercall, syscall, side-channel, deriva de montaje y evidencia de propiedades."
 
             NativeRootStage.FAILED ->
                 report.errorMessage ?: "Native Root scan failed before evidence could be assembled."
@@ -133,7 +133,7 @@ class NativeRootCardModelMapper {
     private fun buildHeaderFacts(report: NativeRootReport): List<NativeRootHeaderFactModel> {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -155,8 +155,8 @@ class NativeRootCardModelMapper {
                     label = "Direct",
                     value = when {
                         report.directFindings.isNotEmpty() -> report.directFindings.size.toString()
-                        report.ksuSupercallBlocked || !report.ksuSupercallAttempted -> "Limited"
-                        else -> "Clean"
+                        report.ksuSupercallBlocked || !report.ksuSupercallAttempted -> "Limitado"
+                        else -> "Limpio"
                     },
                     status = when {
                         report.directFindings.any { it.severity == NativeRootFindingSeverity.DANGER } -> DetectorStatus.danger()
@@ -172,7 +172,7 @@ class NativeRootCardModelMapper {
                     label = "Kernel",
                     value = when {
                         report.kernelFindings.isNotEmpty() -> report.kernelFindings.size.toString()
-                        report.nativeAvailable -> "Clean"
+                        report.nativeAvailable -> "Limpio"
                         else -> "N/A"
                     },
                     status = when {
@@ -186,8 +186,8 @@ class NativeRootCardModelMapper {
                     value = if (report.runtimeFindings.isEmpty()) {
                         when {
                             !report.nativeAvailable -> "N/A"
-                            report.hasRuntimeReducedCoverage() -> "Limited"
-                            report.nativeAvailable -> "Clean"
+                            report.hasRuntimeReducedCoverage() -> "Limitado"
+                            report.nativeAvailable -> "Limpio"
                             else -> "N/A"
                         }
                     } else {
@@ -211,7 +211,7 @@ class NativeRootCardModelMapper {
             NativeRootStage.LOADING -> placeholderRows(
                 listOf("KSU supercall", "KernelSU prctl", "SUSFS side-channel"),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             NativeRootStage.FAILED -> placeholderRows(
@@ -248,7 +248,7 @@ class NativeRootCardModelMapper {
                     "Cgroup leakage",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             NativeRootStage.FAILED -> placeholderRows(
@@ -273,7 +273,7 @@ class NativeRootCardModelMapper {
             NativeRootStage.LOADING -> placeholderRows(
                 listOf("Kernel symbols", "Kernel modules", "Kernel identity"),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             NativeRootStage.FAILED -> placeholderRows(
@@ -291,7 +291,7 @@ class NativeRootCardModelMapper {
             NativeRootStage.LOADING -> placeholderRows(
                 listOf("Root-specific properties"),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
                 monospace = true,
             )
 
@@ -310,14 +310,14 @@ class NativeRootCardModelMapper {
         return when (report.stage) {
             NativeRootStage.LOADING -> listOf(
                 NativeRootImpactItemModel(
-                    text = "Gathering local native root evidence.",
+                    text = "Recolectando evidencia de root nativo local.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             NativeRootStage.FAILED -> listOf(
                 NativeRootImpactItemModel(
-                    text = report.errorMessage ?: "Native Root scan failed.",
+                    text = report.errorMessage ?: "Escaneo de root nativo fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -374,12 +374,12 @@ class NativeRootCardModelMapper {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             NativeRootStage.FAILED -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.ERROR),
-                "Failed"
+                "Fallido"
             )
 
             NativeRootStage.READY -> report.methods.map { result ->
@@ -424,7 +424,7 @@ class NativeRootCardModelMapper {
                     "Native library",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             NativeRootStage.FAILED -> placeholderRows(
@@ -507,7 +507,7 @@ class NativeRootCardModelMapper {
                     "Self context",
                     when {
                         report.selfContext.isNotBlank() -> report.selfContext
-                        report.nativeAvailable -> "Unavailable"
+                        report.nativeAvailable -> "No disponible"
                         else -> "N/A"
                     },
                     when {
@@ -537,7 +537,7 @@ class NativeRootCardModelMapper {
                 ),
                 NativeRootDetailRowModel(
                     "Main mnt ns",
-                    report.mainMountNamespaceInode.ifBlank { "Unavailable" },
+                    report.mainMountNamespaceInode.ifBlank { "No disponible" },
                     when {
                         report.mountDriftSignalCount > 0 -> DetectorStatus.warning()
                         report.mainMountNamespaceInode.isNotBlank() -> DetectorStatus.allClear()
@@ -548,7 +548,7 @@ class NativeRootCardModelMapper {
                     "Isolated mnt ns",
                     when {
                         report.isolatedMountNamespaceInode.isNotBlank() -> report.isolatedMountNamespaceInode
-                        report.isolatedMountProbeAvailable -> "Unavailable"
+                        report.isolatedMountProbeAvailable -> "No disponible"
                         else -> "N/A"
                     },
                     when {
@@ -578,9 +578,9 @@ class NativeRootCardModelMapper {
                 NativeRootDetailRowModel(
                     "Manager package",
                     when {
-                        report.ksuManagerPackagePresent -> "Present"
+                        report.ksuManagerPackagePresent -> "Presente"
                         report.ksuManagerVisibilityRestricted -> "Scoped"
-                        else -> "Clean"
+                        else -> "Limpio"
                     },
                     when {
                         report.ksuManagerPackagePresent -> DetectorStatus.warning()
@@ -671,7 +671,7 @@ class NativeRootCardModelMapper {
                 ),
                 NativeRootDetailRowModel(
                     "Native library",
-                    if (report.nativeAvailable) "Loaded" else "Unavailable",
+                    if (report.nativeAvailable) "Loaded" else "No disponible",
                     if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -746,7 +746,7 @@ class NativeRootCardModelMapper {
 
     private fun familyValue(report: NativeRootReport): String {
         return when {
-            report.detectedFamilies.isEmpty() && report.nativeAvailable -> "None"
+            report.detectedFamilies.isEmpty() && report.nativeAvailable -> "Ninguno"
             report.detectedFamilies.isEmpty() -> "N/A"
             report.detectedFamilies.size <= 2 -> report.detectedFamilies.joinToString("/")
             else -> report.detectedFamilies.take(2)

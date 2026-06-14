@@ -49,16 +49,16 @@ class SuCardModelMapper {
 
     private fun buildSubtitle(report: SuReport): String {
         return when (report.stage) {
-            SuStage.LOADING -> "su paths + PATH + adb daemons + native context"
-            SuStage.FAILED -> "local root probe failed"
+            SuStage.LOADING -> "rutas su + PATH + daemons adb + contexto nativo"
+            SuStage.FAILED -> "sonda root local fallida"
             SuStage.READY -> buildString {
-                append("${report.checkedSuPathCount} su paths")
-                append(" · ${report.checkedDaemonPathCount} adb daemon paths")
+                append("${report.checkedSuPathCount} rutas su")
+                append(" · ${report.checkedDaemonPathCount} rutas de daemon adb")
                 append(
                     if (report.nativeAvailable) {
-                        " · native /proc scan"
+                        " · escaneo nativo /proc"
                     } else {
-                        " · fallback self context"
+                        " · contexto propio de respaldo"
                     },
                 )
             }
@@ -67,14 +67,14 @@ class SuCardModelMapper {
 
     private fun buildVerdict(report: SuReport): String {
         return when (report.stage) {
-            SuStage.LOADING -> "Scanning root artifacts"
-            SuStage.FAILED -> "SU scan failed"
+            SuStage.LOADING -> "Escaneando artefactos root"
+            SuStage.FAILED -> "Escaneo SU fallido"
             SuStage.READY -> when {
-                report.daemons.isNotEmpty() -> "${daemonNames(report)} daemon detected"
-                report.selfContextAbnormal || report.suspiciousProcesses.isNotEmpty() -> "Abnormal root context detected"
-                report.suBinaries.isNotEmpty() -> "SU binary detected"
-                !report.nativeAvailable -> "No root indicators from available probes"
-                else -> "No root indicators"
+                report.daemons.isNotEmpty() -> "${daemonNames(report)} daemon detectado"
+                report.selfContextAbnormal || report.suspiciousProcesses.isNotEmpty() -> "Contexto root anormal detectado"
+                report.suBinaries.isNotEmpty() -> "Binario SU detectado"
+                !report.nativeAvailable -> "Sin indicadores root en sondas disponibles"
+                else -> "Sin indicadores root"
             }
         }
     }
@@ -82,26 +82,26 @@ class SuCardModelMapper {
     private fun buildSummary(report: SuReport): String {
         return when (report.stage) {
             SuStage.LOADING ->
-                "File, PATH, adb-daemon, SELinux context, and /proc visibility probes are collecting local evidence."
+                "Las sondas de archivo, PATH, daemon adb, contexto SELinux y visibilidad /proc están recolectando evidencia local."
 
             SuStage.FAILED ->
-                report.errorMessage ?: "SU scan failed before root evidence could be assembled."
+                report.errorMessage ?: "Escaneo SU fallido before root evidence could be assembled."
 
             SuStage.READY -> when {
                 report.daemons.isNotEmpty() ->
-                    "${daemonNames(report)} footprints were found under /data/adb, which is a direct root-management signal."
+                    "${daemonNames(report)} huellas encontradas en /data/adb, señal directa de gestión root."
 
                 report.selfContextAbnormal || report.suspiciousProcesses.isNotEmpty() ->
-                    "SELinux context probes surfaced abnormal app labels or corroborating root-like process-context residue."
+                    "Las sondas SELinux detectaron etiquetas anormales o residuos de contexto similares a root."
 
                 report.suBinaries.isNotEmpty() ->
-                    "Common su binaries were found in system or adb-managed locations."
+                    "Se encontraron binarios su en ubicaciones del sistema o gestionadas por adb."
 
                 !report.nativeAvailable ->
-                    "File and daemon probes were clean, but JNI-backed /proc process enumeration was unavailable."
+                    "Las sondas de archivo y daemon estuvieron limpias, pero la enumeración /proc con JNI no estuvo disponible."
 
                 else ->
-                    "Common su binaries, adb daemons, and native SELinux context probes stayed clean."
+                    "Binarios su, daemons adb y sondas SELinux nativas permanecieron limpios."
             }
         }
     }
@@ -109,34 +109,34 @@ class SuCardModelMapper {
     private fun buildHeaderFacts(report: SuReport): List<SuHeaderFactModel> {
         return when (report.stage) {
             SuStage.LOADING -> placeholderFacts(
-                value = "Pending",
+                value = "Pendiente",
                 status = DetectorStatus.info(InfoKind.SUPPORT),
             )
 
             SuStage.FAILED -> listOf(
-                SuHeaderFactModel("Artifacts", "Error", DetectorStatus.info(InfoKind.ERROR)),
+                SuHeaderFactModel("Artefactos", "Error", DetectorStatus.info(InfoKind.ERROR)),
                 SuHeaderFactModel("Daemons", "Error", DetectorStatus.info(InfoKind.ERROR)),
-                SuHeaderFactModel("Context", "Error", DetectorStatus.info(InfoKind.ERROR)),
-                SuHeaderFactModel("Processes", "N/A", DetectorStatus.info(InfoKind.SUPPORT)),
+                SuHeaderFactModel("Contexto", "Error", DetectorStatus.info(InfoKind.ERROR)),
+                SuHeaderFactModel("Procesos", "N/A", DetectorStatus.info(InfoKind.SUPPORT)),
             )
 
             SuStage.READY -> listOf(
                 SuHeaderFactModel(
-                    label = "Artifacts",
-                    value = if (report.suBinaries.isEmpty()) "None" else report.suBinaries.size.toString(),
+                    label = "Artefactos",
+                    value = if (report.suBinaries.isEmpty()) "Ninguno" else report.suBinaries.size.toString(),
                     status = if (report.suBinaries.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
                 ),
                 SuHeaderFactModel(
                     label = "Daemons",
-                    value = if (report.daemons.isEmpty()) "None" else daemonNames(report),
+                    value = if (report.daemons.isEmpty()) "Ninguno" else daemonNames(report),
                     status = if (report.daemons.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
                 ),
                 SuHeaderFactModel(
-                    label = "Context",
+                    label = "Contexto",
                     value = when {
-                        report.selfContextAbnormal -> "Abnormal"
+                        report.selfContextAbnormal -> "Anormal"
                         report.selfContext.isNotBlank() -> "Normal"
-                        else -> "Unknown"
+                        else -> "Desconocido"
                     },
                     status = when {
                         report.selfContextAbnormal -> DetectorStatus.danger()
@@ -145,7 +145,7 @@ class SuCardModelMapper {
                     },
                 ),
                 SuHeaderFactModel(
-                    label = "Processes",
+                    label = "Procesos",
                     value = when {
                         !report.nativeAvailable -> "N/A"
                         report.suspiciousProcesses.isEmpty() -> "0"
@@ -165,26 +165,26 @@ class SuCardModelMapper {
         return when (report.stage) {
             SuStage.LOADING -> listOf(
                 SuDetailRowModel(
-                    label = "Root daemons",
-                    value = "Pending",
+                    label = "Daemons root",
+                    value = "Pendiente",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 SuDetailRowModel(
-                    label = "SU binaries",
-                    value = "Pending",
+                    label = "Binarios SU",
+                    value = "Pendiente",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             SuStage.FAILED -> listOf(
                 SuDetailRowModel(
-                    label = "Root daemons",
+                    label = "Daemons root",
                     value = "Error",
                     status = DetectorStatus.info(InfoKind.ERROR),
                     detail = report.errorMessage,
                 ),
                 SuDetailRowModel(
-                    label = "SU binaries",
+                    label = "Binarios SU",
                     value = "Error",
                     status = DetectorStatus.info(InfoKind.ERROR),
                     detail = report.errorMessage,
@@ -193,8 +193,8 @@ class SuCardModelMapper {
 
             SuStage.READY -> listOf(
                 SuDetailRowModel(
-                    label = "Root daemons",
-                    value = if (report.daemons.isEmpty()) "None" else daemonNames(report),
+                    label = "Daemons root",
+                    value = if (report.daemons.isEmpty()) "Ninguno" else daemonNames(report),
                     status = if (report.daemons.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
                     detail = report.daemons
                         .joinToString(separator = "\n") { finding -> "${finding.name}: ${finding.path}" }
@@ -202,8 +202,8 @@ class SuCardModelMapper {
                     detailMonospace = true,
                 ),
                 SuDetailRowModel(
-                    label = "SU binaries",
-                    value = if (report.suBinaries.isEmpty()) "None" else report.suBinaries.size.toString(),
+                    label = "Binarios SU",
+                    value = if (report.suBinaries.isEmpty()) "Ninguno" else report.suBinaries.size.toString(),
                     status = if (report.suBinaries.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
                     detail = report.suBinaries.joinToString(separator = "\n").ifBlank { null },
                     detailMonospace = true,
@@ -216,38 +216,38 @@ class SuCardModelMapper {
         return when (report.stage) {
             SuStage.LOADING -> listOf(
                 SuDetailRowModel(
-                    label = "Self context",
-                    value = "Pending",
+                    label = "Contexto propio",
+                    value = "Pendiente",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 SuDetailRowModel(
-                    label = "Suspicious processes",
-                    value = "Pending",
+                    label = "Procesos sospechosos",
+                    value = "Pendiente",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 SuDetailRowModel(
-                    label = "Probe path",
-                    value = "Loading",
+                    label = "Ruta de sonda",
+                    value = "Cargando",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             SuStage.FAILED -> listOf(
                 SuDetailRowModel(
-                    label = "Self context",
+                    label = "Contexto propio",
                     value = "Error",
                     status = DetectorStatus.info(InfoKind.ERROR),
                     detail = report.errorMessage,
                 ),
                 SuDetailRowModel(
-                    label = "Suspicious processes",
+                    label = "Procesos sospechosos",
                     value = "Error",
                     status = DetectorStatus.info(InfoKind.ERROR),
                     detail = report.errorMessage,
                 ),
                 SuDetailRowModel(
-                    label = "Probe path",
-                    value = "Unavailable",
+                    label = "Ruta de sonda",
+                    value = "No disponible",
                     status = DetectorStatus.info(InfoKind.ERROR),
                     detail = report.errorMessage,
                 ),
@@ -255,11 +255,11 @@ class SuCardModelMapper {
 
             SuStage.READY -> listOf(
                 SuDetailRowModel(
-                    label = "Self context",
+                    label = "Contexto propio",
                     value = when {
-                        report.selfContextAbnormal -> "Abnormal"
+                        report.selfContextAbnormal -> "Anormal"
                         report.selfContext.isNotBlank() -> "Normal"
-                        else -> "Unknown"
+                        else -> "Desconocido"
                     },
                     status = when {
                         report.selfContextAbnormal -> DetectorStatus.danger()
@@ -267,15 +267,15 @@ class SuCardModelMapper {
                         else -> DetectorStatus.info(InfoKind.SUPPORT)
                     },
                     detail = report.selfContext.ifBlank {
-                        "No SELinux context could be read from the current app process."
+                        "No se pudo leer el contexto SELinux del proceso de app actual."
                     },
                     detailMonospace = report.selfContext.isNotBlank(),
                 ),
                 SuDetailRowModel(
-                    label = "Suspicious processes",
+                    label = "Procesos sospechosos",
                     value = when {
-                        !report.nativeAvailable -> "Unavailable"
-                        report.suspiciousProcesses.isEmpty() -> "None"
+                        !report.nativeAvailable -> "No disponible"
+                        report.suspiciousProcesses.isEmpty() -> "Ninguno"
                         else -> report.suspiciousProcesses.size.toString()
                     },
                     status = when {
@@ -285,19 +285,19 @@ class SuCardModelMapper {
                     },
                     detail = report.suspiciousProcesses.joinToString(separator = "\n").ifBlank {
                         if (report.nativeAvailable) {
-                            "No suspicious process contexts matched root-related tokens."
+                            "Ningún contexto de proceso coincidió con tokens de root."
                         } else {
-                            "Native /proc process enumeration was unavailable on this build."
+                            "La enumeración nativa de procesos /proc no está disponible en este build."
                         }
                     },
                     detailMonospace = true,
                 ),
                 SuDetailRowModel(
-                    label = "Probe path",
+                    label = "Ruta de sonda",
                     value = when {
-                        report.nativeAvailable -> "JNI syscall scan"
-                        report.selfContext.isNotBlank() -> "Fallback self read"
-                        else -> "Unavailable"
+                        report.nativeAvailable -> "Escaneo JNI syscall"
+                        report.selfContext.isNotBlank() -> "Lectura de respaldo"
+                        else -> "No disponible"
                     },
                     status = when {
                         report.nativeAvailable -> DetectorStatus.allClear()
@@ -305,9 +305,9 @@ class SuCardModelMapper {
                         else -> DetectorStatus.info(InfoKind.ERROR)
                     },
                     detail = if (report.nativeAvailable) {
-                        "Checked ${report.checkedProcessCount} process contexts; ${report.deniedProcessCount} /proc reads were denied. Denied reads are kept as supporting visibility evidence, not direct root-process proof."
+                        "Se verificaron ${report.checkedProcessCount} contextos de proceso; ${report.deniedProcessCount} lecturas /proc denegadas. Las lecturas denegadas son evidencia de soporte, no prueba directa de root."
                     } else {
-                        "Native library was unavailable, so only /proc/self/attr/current fallback could run."
+                        "La librería nativa no estuvo disponible, solo se ejecutó el fallback /proc/self/attr/current."
                     },
                 ),
             )
@@ -318,14 +318,14 @@ class SuCardModelMapper {
         return when (report.stage) {
             SuStage.LOADING -> listOf(
                 SuImpactItemModel(
-                    text = "Gathering local root evidence.",
+                    text = "Recolectando evidencia root local.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             SuStage.FAILED -> listOf(
                 SuImpactItemModel(
-                    text = report.errorMessage ?: "SU scan failed.",
+                    text = report.errorMessage ?: "Escaneo SU fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -333,45 +333,45 @@ class SuCardModelMapper {
             SuStage.READY -> when {
                 report.hasRootIndicators -> listOf(
                     SuImpactItemModel(
-                        text = "Privilege-escalation tooling is present or visible from this app context.",
+                        text = "Herramientas de escalación de privilegios presentes o visibles desde este contexto.",
                         status = DetectorStatus.danger(),
                     ),
                     SuImpactItemModel(
-                        text = "Root managers can hide files, alter system behavior, and weaken app trust signals.",
+                        text = "Los gestores root pueden ocultar archivos, alterar el sistema y debilitar señales de confianza.",
                         status = DetectorStatus.danger(),
                     ),
                     SuImpactItemModel(
-                        text = "Banking, payment, DRM, and integrity-sensitive apps may refuse to run.",
+                        text = "Apps bancarias, de pago, DRM y sensibles a integridad pueden negarse a ejecutarse.",
                         status = DetectorStatus.danger(),
                     ),
                 )
 
                 report.nativeAvailable -> listOf(
                     SuImpactItemModel(
-                        text = "No common SU binaries or adb root daemons surfaced.",
+                        text = "No se encontraron binarios SU comunes ni daemons root adb.",
                         status = DetectorStatus.allClear(),
                     ),
                     SuImpactItemModel(
-                        text = "Native SELinux context probes stayed within normal app boundaries.",
+                        text = "Las sondas nativas de contexto SELinux se mantuvieron dentro de los límites normales.",
                         status = DetectorStatus.allClear(),
                     ),
                     SuImpactItemModel(
-                        text = "This remains heuristic evidence, not proof of an unmodified device.",
+                        text = "Esto es evidencia heurística, no prueba de un dispositivo sin modificar.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                 )
 
                 else -> listOf(
                     SuImpactItemModel(
-                        text = "File and adb-daemon probes were clean.",
+                        text = "Las sondas de archivo y daemon adb estuvieron limpias.",
                         status = DetectorStatus.allClear(),
                     ),
                     SuImpactItemModel(
-                        text = "Native /proc process-context coverage was unavailable on this build.",
+                        text = "La cobertura nativa de contexto /proc no estuvo disponible.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                     SuImpactItemModel(
-                        text = "Absence of common SU artifacts is not proof that root is impossible.",
+                        text = "La ausencia de artefactos SU no prueba que root sea imposible.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                 )
@@ -383,10 +383,10 @@ class SuCardModelMapper {
         return when (report.stage) {
             SuStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
-            SuStage.FAILED -> placeholderMethodRows(DetectorStatus.info(InfoKind.ERROR), "Failed")
+            SuStage.FAILED -> placeholderMethodRows(DetectorStatus.info(InfoKind.ERROR), "Fallido")
             SuStage.READY -> report.methods.map { result ->
                 SuDetailRowModel(
                     label = result.label,
@@ -403,55 +403,55 @@ class SuCardModelMapper {
         return when (report.stage) {
             SuStage.LOADING -> listOf(
                 SuDetailRowModel(
-                    "SU paths checked",
-                    "Pending",
+                    "Rutas SU verificadas",
+                    "Pendiente",
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
                 SuDetailRowModel(
-                    "Daemon paths checked",
-                    "Pending",
+                    "Rutas de daemon verificadas",
+                    "Pendiente",
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
                 SuDetailRowModel(
-                    "Proc contexts checked",
-                    "Pending",
+                    "Contextos proc verificados",
+                    "Pendiente",
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
                 SuDetailRowModel(
-                    "Proc reads denied",
-                    "Pending",
+                    "Lecturas proc denegadas",
+                    "Pendiente",
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
             )
 
             SuStage.FAILED -> listOf(
-                SuDetailRowModel("SU paths checked", "Error", DetectorStatus.info(InfoKind.ERROR)),
+                SuDetailRowModel("Rutas SU verificadas", "Error", DetectorStatus.info(InfoKind.ERROR)),
                 SuDetailRowModel(
-                    "Daemon paths checked",
+                    "Rutas de daemon verificadas",
                     "Error",
                     DetectorStatus.info(InfoKind.ERROR)
                 ),
                 SuDetailRowModel(
-                    "Proc contexts checked",
+                    "Contextos proc verificados",
                     "N/A",
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
-                SuDetailRowModel("Proc reads denied", "N/A", DetectorStatus.info(InfoKind.SUPPORT)),
+                SuDetailRowModel("Lecturas proc denegadas", "N/A", DetectorStatus.info(InfoKind.SUPPORT)),
             )
 
             SuStage.READY -> listOf(
                 SuDetailRowModel(
-                    label = "SU paths checked",
+                    label = "Rutas SU verificadas",
                     value = report.checkedSuPathCount.toString(),
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 SuDetailRowModel(
-                    label = "Daemon paths checked",
+                    label = "Rutas de daemon verificadas",
                     value = report.checkedDaemonPathCount.toString(),
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 SuDetailRowModel(
-                    label = "Proc contexts checked",
+                    label = "Contextos proc verificados",
                     value = if (report.nativeAvailable) report.checkedProcessCount.toString() else "N/A",
                     status = when {
                         !report.nativeAvailable -> DetectorStatus.info(InfoKind.SUPPORT)
@@ -460,7 +460,7 @@ class SuCardModelMapper {
                     },
                 ),
                 SuDetailRowModel(
-                    label = "Proc reads denied",
+                    label = "Lecturas proc denegadas",
                     value = if (report.nativeAvailable) report.deniedProcessCount.toString() else "N/A",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
@@ -473,10 +473,10 @@ class SuCardModelMapper {
         status: DetectorStatus,
     ): List<SuHeaderFactModel> {
         return listOf(
-            SuHeaderFactModel("Artifacts", value, status),
+            SuHeaderFactModel("Artefactos", value, status),
             SuHeaderFactModel("Daemons", value, status),
-            SuHeaderFactModel("Context", value, status),
-            SuHeaderFactModel("Processes", value, status),
+            SuHeaderFactModel("Contexto", value, status),
+            SuHeaderFactModel("Procesos", value, status),
         )
     }
 
@@ -495,7 +495,7 @@ class SuCardModelMapper {
     private fun daemonNames(report: SuReport): String {
         val names = report.daemons.map { it.name }.distinct()
         return when {
-            names.isEmpty() -> "None"
+            names.isEmpty() -> "Ninguno"
             names.size <= 2 -> names.joinToString("/")
             else -> names.take(2).joinToString("/") + " +${names.size - 2}"
         }

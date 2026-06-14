@@ -79,7 +79,7 @@ class BootloaderCardModelMapper {
                 report.dangerFindings.isNotEmpty() -> "${report.dangerFindings.size} critical boot integrity signal(s)"
                 report.warningFindings.isNotEmpty() -> "${report.warningFindings.size} boot state signal(s) need review"
                 report.state == BootloaderState.VERIFIED && report.evidenceMode == BootloaderEvidenceMode.ATTESTATION ->
-                    "Locked and attested verified"
+                    "Bloqueado y attestation verificado"
 
                 report.state == BootloaderState.VERIFIED -> "Locked by boot properties"
                 report.state == BootloaderState.LOCKED_UNKNOWN -> "Locked state without full proof"
@@ -92,7 +92,7 @@ class BootloaderCardModelMapper {
     private fun buildSummary(report: BootloaderReport): String {
         return when (report.stage) {
             BootloaderStage.LOADING ->
-                "Attestation RootOfTrust, certificate trust, boot properties, raw androidboot parameters, and source consistency checks are collecting local evidence."
+                "Verificando RootOfTrust de attestation, confianza de certificados, propiedades de boot y consistencia de fuentes."
 
             BootloaderStage.FAILED ->
                 report.errorMessage ?: "Bootloader scan failed before evidence could be assembled."
@@ -108,7 +108,7 @@ class BootloaderCardModelMapper {
                     "Boot properties look conservative, but the result falls back to software-readable signals because attestation RootOfTrust was unavailable."
 
                 report.evidenceMode == BootloaderEvidenceMode.UNAVAILABLE ->
-                    "Neither attestation RootOfTrust nor readable boot properties exposed enough data for a confident bootloader verdict."
+                    "Ni el RootOfTrust de attestation ni las propiedades de boot expusieron datos suficientes para un veredicto del bootloader."
 
                 else ->
                     "Attestation and boot properties stayed aligned with a locked, verified boot chain."
@@ -119,14 +119,14 @@ class BootloaderCardModelMapper {
     private fun buildHeaderFacts(report: BootloaderReport): List<BootloaderHeaderFactModel> {
         return when (report.stage) {
             BootloaderStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
             BootloaderStage.FAILED -> placeholderFacts("Error", DetectorStatus.info(InfoKind.ERROR))
             BootloaderStage.READY -> listOf(
                 BootloaderHeaderFactModel(
-                    label = "State",
+                    label = "Estado",
                     value = stateLabel(report.state),
                     status = report.toDetectorStatus(),
                 ),
@@ -152,7 +152,7 @@ class BootloaderCardModelMapper {
                     },
                 ),
                 BootloaderHeaderFactModel(
-                    label = "Trust",
+                    label = "Confianza",
                     value = trustLabel(report.trustRoot),
                     status = trustStatus(report),
                 ),
@@ -168,7 +168,7 @@ class BootloaderCardModelMapper {
         return when (stage) {
             BootloaderStage.LOADING -> placeholderRows(
                 placeholders,
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -181,8 +181,8 @@ class BootloaderCardModelMapper {
             BootloaderStage.READY -> if (rows.isEmpty()) {
                 listOf(
                     BootloaderDetailRowModel(
-                        label = "Status",
-                        value = "None",
+                        label = "Estado",
+                        value = "Ninguno",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                         detail = "No rows were produced for this section on this device.",
                     ),
@@ -197,14 +197,14 @@ class BootloaderCardModelMapper {
         return when (report.stage) {
             BootloaderStage.LOADING -> listOf(
                 BootloaderImpactItemModel(
-                    text = "Gathering attestation, verified-boot, and property consistency evidence.",
+                    text = "Recolectando evidencia de attestation, verified-boot y consistencia de propiedades.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             BootloaderStage.FAILED -> listOf(
                 BootloaderImpactItemModel(
-                    text = report.errorMessage ?: "Bootloader scan failed.",
+                    text = report.errorMessage ?: "Escaneo de Bootloader fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -222,13 +222,13 @@ class BootloaderCardModelMapper {
         return when (report.stage) {
             BootloaderStage.LOADING -> placeholderRows(
                 methodPlaceholders(),
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
             BootloaderStage.FAILED -> placeholderRows(
                 methodPlaceholders(),
-                "Failed",
+                "Fallido",
                 DetectorStatus.info(InfoKind.ERROR)
             )
 
@@ -248,7 +248,7 @@ class BootloaderCardModelMapper {
         return when (report.stage) {
             BootloaderStage.LOADING -> placeholderRows(
                 scanPlaceholders(),
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -433,9 +433,9 @@ class BootloaderCardModelMapper {
             BootloaderState.VERIFIED -> "Verified"
             BootloaderState.SELF_SIGNED -> "Custom"
             BootloaderState.UNLOCKED -> "Unlocked"
-            BootloaderState.FAILED_VERIFICATION -> "Failed"
+            BootloaderState.FAILED_VERIFICATION -> "Fallido"
             BootloaderState.LOCKED_UNKNOWN -> "Locked?"
-            BootloaderState.UNKNOWN -> "Unknown"
+            BootloaderState.UNKNOWN -> "Desconocido"
         }
     }
 
@@ -444,8 +444,8 @@ class BootloaderCardModelMapper {
             TeeTier.STRONGBOX -> "StrongBox"
             TeeTier.TEE -> "TEE"
             TeeTier.SOFTWARE -> "Software"
-            TeeTier.NONE -> "None"
-            TeeTier.UNKNOWN -> "Unknown"
+            TeeTier.NONE -> "Ninguno"
+            TeeTier.UNKNOWN -> "Desconocido"
         }
     }
 
@@ -455,7 +455,7 @@ class BootloaderCardModelMapper {
             TeeTrustRoot.GOOGLE_RKP -> "RKP"
             TeeTrustRoot.AOSP -> "AOSP"
             TeeTrustRoot.FACTORY -> "Factory"
-            TeeTrustRoot.UNKNOWN -> "Unknown"
+            TeeTrustRoot.UNKNOWN -> "Desconocido"
         }
     }
 

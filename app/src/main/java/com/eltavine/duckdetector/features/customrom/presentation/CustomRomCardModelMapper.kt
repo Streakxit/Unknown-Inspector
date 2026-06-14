@@ -78,7 +78,7 @@ class CustomRomCardModelMapper {
     private fun buildSummary(report: CustomRomReport): String {
         return when (report.stage) {
             CustomRomStage.LOADING ->
-                "System properties, prop integrity, runtime packages/services, framework traces, and resource map checks are collecting local firmware evidence."
+                "Verificando propiedades del sistema, integridad de props, paquetes y trazas de framework."
 
             CustomRomStage.FAILED ->
                 report.errorMessage ?: "Custom ROM scan failed before evidence could be assembled."
@@ -102,7 +102,7 @@ class CustomRomCardModelMapper {
     private fun buildHeaderFacts(report: CustomRomReport): List<CustomRomHeaderFactModel> {
         return when (report.stage) {
             CustomRomStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -123,9 +123,9 @@ class CustomRomCardModelMapper {
                         report.buildSignalCount + report.modificationSignalCount > 0 ->
                             signalValue(report.buildSignalCount + report.modificationSignalCount)
 
-                        !report.propertyAreaAvailable -> "Unavailable"
+                        !report.propertyAreaAvailable -> "No disponible"
 
-                        else -> "None"
+                        else -> "Ninguno"
                     },
                     status = when {
                         report.buildSignalCount + report.modificationSignalCount > 0 ->
@@ -141,7 +141,7 @@ class CustomRomCardModelMapper {
                     value = when {
                         report.runtimeSignalCount > 0 -> report.runtimeSignalCount.toString()
                         report.packageVisibility == CustomRomPackageVisibility.RESTRICTED -> "Scoped"
-                        else -> "None"
+                        else -> "Ninguno"
                     },
                     status = when {
                         report.runtimeSignalCount > 0 -> DetectorStatus.warning()
@@ -157,7 +157,7 @@ class CustomRomCardModelMapper {
                     value = when {
                         !report.nativeAvailable -> "N/A"
                         report.nativeSignalCount > 0 -> report.nativeSignalCount.toString()
-                        else -> "None"
+                        else -> "Ninguno"
                     },
                     status = when {
                         report.nativeSignalCount > 0 -> DetectorStatus.warning()
@@ -175,7 +175,7 @@ class CustomRomCardModelMapper {
             CustomRomStage.LOADING -> placeholderRows(
                 labels = listOf("System properties", "Build fields"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             CustomRomStage.FAILED -> placeholderRows(
@@ -189,7 +189,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             label = "System properties",
-                            value = "Clean",
+                            value = "Limpio",
                             status = DetectorStatus.allClear(),
                         ),
                     )
@@ -201,7 +201,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             label = "Build fields",
-                            value = "Clean",
+                            value = "Limpio",
                             status = DetectorStatus.allClear(),
                         ),
                     )
@@ -213,7 +213,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             label = "Modification",
-                            value = if (report.propertyAreaAvailable) "Clean" else "Unavailable",
+                            value = if (report.propertyAreaAvailable) "Limpio" else "No disponible",
                             status = if (report.propertyAreaAvailable) {
                                 DetectorStatus.allClear()
                             } else {
@@ -238,7 +238,7 @@ class CustomRomCardModelMapper {
             CustomRomStage.LOADING -> placeholderRows(
                 labels = listOf("Packages", "Services", "Reflection"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             CustomRomStage.FAILED -> placeholderRows(
@@ -251,8 +251,8 @@ class CustomRomCardModelMapper {
                 if (report.packageFindings.isEmpty()) {
                     add(
                         CustomRomDetailRowModel(
-                            label = "Packages",
-                            value = if (report.packageVisibility == CustomRomPackageVisibility.RESTRICTED) "Scoped" else "Clean",
+                            label = "Paquetes",
+                            value = if (report.packageVisibility == CustomRomPackageVisibility.RESTRICTED) "Scoped" else "Limpio",
                             status = if (report.packageVisibility == CustomRomPackageVisibility.RESTRICTED) {
                                 DetectorStatus.info(InfoKind.SUPPORT)
                             } else {
@@ -273,7 +273,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             label = "Services",
-                            value = "Clean",
+                            value = "Limpio",
                             status = DetectorStatus.allClear(),
                             detail = "Listed ${report.listedServiceCount} services.",
                         ),
@@ -286,7 +286,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             label = "Reflection",
-                            value = "Clean",
+                            value = "Limpio",
                             status = DetectorStatus.allClear(),
                         ),
                     )
@@ -309,7 +309,7 @@ class CustomRomCardModelMapper {
                     "Product overlays"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             CustomRomStage.FAILED -> placeholderRows(
@@ -340,7 +340,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             "Resource maps",
-                            "Clean",
+                            "Limpio",
                             DetectorStatus.allClear()
                         )
                     )
@@ -352,7 +352,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             "Platform files",
-                            "Clean",
+                            "Limpio",
                             DetectorStatus.allClear()
                         )
                     )
@@ -364,7 +364,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             "Recovery scripts",
-                            "Clean",
+                            "Limpio",
                             DetectorStatus.allClear()
                         )
                     )
@@ -386,7 +386,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             "SELinux policy",
-                            "Clean",
+                            "Limpio",
                             DetectorStatus.allClear()
                         )
                     )
@@ -399,13 +399,13 @@ class CustomRomCardModelMapper {
                         if (report.symbolScanAvailable) {
                             CustomRomDetailRowModel(
                                 "Native symbols",
-                                "Clean",
+                                "Limpio",
                                 DetectorStatus.allClear()
                             )
                         } else {
                             CustomRomDetailRowModel(
                                 "Native symbols",
-                                "Unsupported",
+                                "No soportado",
                                 DetectorStatus.info(InfoKind.SUPPORT),
                                 detail = "Native symbol trace detection only runs on Android 10+.",
                             )
@@ -419,7 +419,7 @@ class CustomRomCardModelMapper {
                     add(
                         CustomRomDetailRowModel(
                             "Product overlays",
-                            "Clean",
+                            "Limpio",
                             DetectorStatus.allClear()
                         )
                     )
@@ -434,14 +434,14 @@ class CustomRomCardModelMapper {
         return when (report.stage) {
             CustomRomStage.LOADING -> listOf(
                 CustomRomImpactItemModel(
-                    text = "Gathering local firmware branding and framework evidence.",
+                    text = "Recolectando evidencia de firmware local y framework.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             CustomRomStage.FAILED -> listOf(
                 CustomRomImpactItemModel(
-                    text = report.errorMessage ?: "Custom ROM scan failed.",
+                    text = report.errorMessage ?: "Escaneo de ROM personalizada fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -527,7 +527,7 @@ class CustomRomCardModelMapper {
                     "nativeLibrary",
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             CustomRomStage.FAILED -> placeholderRows(
@@ -545,7 +545,7 @@ class CustomRomCardModelMapper {
                     "nativeLibrary",
                 ),
                 status = DetectorStatus.info(InfoKind.ERROR),
-                value = "Failed",
+                value = "Fallido",
             )
 
             CustomRomStage.READY -> report.methods.map { result ->
@@ -577,7 +577,7 @@ class CustomRomCardModelMapper {
                     "Native library",
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             CustomRomStage.FAILED -> placeholderRows(
@@ -614,7 +614,7 @@ class CustomRomCardModelMapper {
                     value = if (report.propertyAreaAvailable) {
                         report.checkedModificationPropertyCount.toString()
                     } else {
-                        "Unavailable"
+                        "No disponible"
                     },
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                     detail = if (report.propertyAreaAvailable) {
@@ -628,7 +628,7 @@ class CustomRomCardModelMapper {
                     value = if (report.propertyAreaAvailable) {
                         report.propertyAreaContextCount.toString()
                     } else {
-                        "Unavailable"
+                        "No disponible"
                     },
                     status = if (report.propertyAreaAvailable) {
                         if (report.propertyAreaContextCount > 0) {
@@ -650,7 +650,7 @@ class CustomRomCardModelMapper {
                     value = if (report.propertyAreaAvailable) {
                         report.propertyAreaAnomalyCount.toString()
                     } else {
-                        "Unavailable"
+                        "No disponible"
                     },
                     status = if (report.propertyAreaAvailable) {
                         if (report.propertyAreaAnomalyCount > 0) {
@@ -672,7 +672,7 @@ class CustomRomCardModelMapper {
                     value = if (report.propertyAreaAvailable) {
                         report.propertyAreaItemAnomalyCount.toString()
                     } else {
-                        "Unavailable"
+                        "No disponible"
                     },
                     status = if (report.propertyAreaAvailable) {
                         if (report.propertyAreaItemAnomalyCount > 0) {
@@ -695,7 +695,7 @@ class CustomRomCardModelMapper {
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 CustomRomDetailRowModel(
-                    label = "Package visibility",
+                    label = "Visibilidad de paquetes",
                     value = if (report.packageVisibility == CustomRomPackageVisibility.FULL) "Full" else "Scoped",
                     status = if (report.packageVisibility == CustomRomPackageVisibility.FULL) {
                         DetectorStatus.allClear()
@@ -709,13 +709,13 @@ class CustomRomCardModelMapper {
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 CustomRomDetailRowModel(
-                    label = "Services listed",
+                    label = "Servicios listados",
                     value = report.listedServiceCount.toString(),
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 CustomRomDetailRowModel(
                     label = "Native library",
-                    value = if (report.nativeAvailable) "Loaded" else "Unavailable",
+                    value = if (report.nativeAvailable) "Loaded" else "No disponible",
                     status = if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -776,7 +776,7 @@ class CustomRomCardModelMapper {
 
     private fun detectedRomValue(report: CustomRomReport): String {
         return when {
-            report.detectedRoms.isEmpty() -> "None"
+            report.detectedRoms.isEmpty() -> "Ninguno"
             report.detectedRoms.size <= 2 -> report.detectedRoms.joinToString("/")
             else -> report.detectedRoms.take(2)
                 .joinToString("/") + " +${report.detectedRoms.size - 2}"
@@ -784,7 +784,7 @@ class CustomRomCardModelMapper {
     }
 
     private fun signalValue(count: Int): String {
-        return if (count > 0) count.toString() else "None"
+        return if (count > 0) count.toString() else "Ninguno"
     }
 
     private fun buildCleanModificationDetail(report: CustomRomReport): String {
@@ -829,8 +829,8 @@ class CustomRomCardModelMapper {
 
         return when {
             verdictParts.isNotEmpty() -> "${verdictParts.joinToString(separator = " + ")} detected"
-            report.hasReducedCoverage() -> "Custom ROM scan has reduced coverage"
-            else -> "No custom ROM signatures"
+            report.hasReducedCoverage() -> "Escaneo de ROM con cobertura reducida"
+            else -> "Sin firmas de ROM personalizada"
         }
     }
 
@@ -858,7 +858,7 @@ class CustomRomCardModelMapper {
         add(
             CustomRomDetailRowModel(
                 label = label,
-                value = "Unavailable",
+                value = "No disponible",
                 status = DetectorStatus.info(InfoKind.SUPPORT),
                 detail = "Native framework trace coverage was unavailable on this build.",
             )

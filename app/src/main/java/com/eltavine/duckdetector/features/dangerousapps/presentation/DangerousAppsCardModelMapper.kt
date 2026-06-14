@@ -36,7 +36,7 @@ class DangerousAppsCardModelMapper {
         report: DangerousAppsReport,
     ): DangerousAppsCardModel {
         return DangerousAppsCardModel(
-            title = "Dangerous Apps",
+            title = "Apps Peligrosas",
             subtitle = buildSubtitle(report),
             status = report.toDetectorStatus(),
             verdict = buildVerdict(report),
@@ -92,11 +92,11 @@ class DangerousAppsCardModelMapper {
     private fun buildSummary(report: DangerousAppsReport): String {
         return when (report.stage) {
             DangerousAppsStage.LOADING ->
-                "PackageManager, createPackageContext + ZipFile, open APK descriptors, storage mirrors, loopback, IPC, accessibility, and native package-path probes are collecting local evidence."
+                "Verificando paquetes via PackageManager, descriptores APK, almacenamiento, IPC y rutas nativas."
 
             DangerousAppsStage.FAILED ->
                 report.issues.firstOrNull()
-                    ?: "Dangerous app scan failed before inventory could be built."
+                    ?: "El escaneo de apps peligrosas falló antes de construir el inventario."
 
             DangerousAppsStage.READY -> when {
                 report.hiddenCount > 0 ->
@@ -171,7 +171,7 @@ class DangerousAppsCardModelMapper {
             return null
         }
         return DangerousAppsHmaAlertModel(
-            title = "HMA mismatch",
+            title = "Discrepancia HMA",
             summary = "These packages were detected by direct corroboration probes but hidden from PackageManager inventory. This is the only Dangerous Apps path that stays red.",
             hiddenPackages = report.hiddenFromPackageManager.map { finding ->
                 DangerousAppsHiddenPackageItemModel(
@@ -209,14 +209,14 @@ class DangerousAppsCardModelMapper {
             .distinct()
             .let { names ->
                 when {
-                    names.isEmpty() -> "None"
+                    names.isEmpty() -> "Ninguno"
                     names.size <= 3 -> names.joinToString()
                     else -> names.take(3).joinToString() + " +${names.size - 3}"
                 }
             }
 
         val probeSummary = when {
-            report.probesRan.isEmpty() -> "Pending"
+            report.probesRan.isEmpty() -> "Pendiente"
             report.probesRan.size <= 4 -> report.probesRan.joinToString { it.label }
             else -> report.probesRan.take(4)
                 .joinToString { it.label } + " +${report.probesRan.size - 4}"
@@ -230,7 +230,7 @@ class DangerousAppsCardModelMapper {
                 if (report.packageManagerVisibleCount > 0) {
                     report.packageManagerVisibleCount.toString()
                 } else {
-                    "Unavailable"
+                    "No disponible"
                 },
             ),
             ContextItemModel("Categories", categories),
@@ -251,7 +251,7 @@ class DangerousAppsCardModelMapper {
         return when (visibility) {
             DangerousPackageVisibility.FULL -> "Full"
             DangerousPackageVisibility.RESTRICTED -> "Scoped"
-            DangerousPackageVisibility.UNKNOWN -> "Pending"
+            DangerousPackageVisibility.UNKNOWN -> "Pendiente"
         }
     }
 

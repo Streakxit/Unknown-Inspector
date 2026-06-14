@@ -29,7 +29,7 @@ class DeviceInfoCardModelMapper {
 
     fun map(report: DeviceInfoReport): DeviceInfoCardModel {
         return DeviceInfoCardModel(
-            title = "Device Info",
+            title = "Info del Dispositivo",
             subtitle = buildSubtitle(report),
             status = if (report.stage == DeviceInfoStage.FAILED) {
                 DetectorStatus.info(InfoKind.ERROR)
@@ -74,9 +74,9 @@ class DeviceInfoCardModelMapper {
                 ?.firstOrNull { it.label == label }
                 ?.value
                 ?: when (report.stage) {
-                    DeviceInfoStage.LOADING -> "Pending"
+                    DeviceInfoStage.LOADING -> "Pendiente"
                     DeviceInfoStage.FAILED -> "Error"
-                    DeviceInfoStage.READY -> "Unavailable"
+                    DeviceInfoStage.READY -> "No disponible"
                 }
         }
 
@@ -100,7 +100,7 @@ class DeviceInfoCardModelMapper {
 
             DeviceInfoStage.FAILED -> listOf(
                 DeviceInfoSectionModel(
-                    title = "Unavailable",
+                    title = "No disponible",
                     rows = listOf(
                         DeviceInfoRowModel(
                             label = "Reason",
@@ -129,7 +129,7 @@ class DeviceInfoCardModelMapper {
         return DeviceInfoSectionModel(
             title = title,
             rows = listOf(
-                DeviceInfoRowModel("Loading", "Pending"),
+                DeviceInfoRowModel("Cargando", "Pendiente"),
             ),
         )
     }

@@ -116,7 +116,7 @@ class TeeCardModelMapper {
 
     private fun buildActions(report: TeeReport): List<TeeFooterActionModel> {
         val actions = mutableListOf(
-            TeeFooterActionModel(TeeFooterActionId.DETAILS, "Details"),
+            TeeFooterActionModel(TeeFooterActionId.DETAILS, "Detalles"),
         )
         if (report.certificates.isNotEmpty()) {
             actions += TeeFooterActionModel(
@@ -129,16 +129,16 @@ class TeeCardModelMapper {
     }
 
     private fun verdictValue(report: TeeReport): String = when (report.verdict) {
-        TeeVerdict.LOADING -> "Scanning"
+        TeeVerdict.LOADING -> "Escaneando"
         TeeVerdict.CONSISTENT -> if (report.supplementaryIndicatorCount > 0) {
             "Aligned + review"
         } else {
             "Aligned"
         }
         TeeVerdict.SUSPICIOUS -> "Review"
-        TeeVerdict.TAMPERED -> "Tampered"
-        TeeVerdict.BROKEN -> "Broken"
-        TeeVerdict.INCONCLUSIVE -> "Mixed"
+        TeeVerdict.TAMPERED -> "Modificado"
+        TeeVerdict.BROKEN -> "Roto"
+        TeeVerdict.INCONCLUSIVE -> "Mixto"
     }
 
     private fun rkpBadgeLabel(report: TeeReport): String? =
@@ -211,7 +211,7 @@ class TeeCardModelMapper {
         TeeTrustRoot.GOOGLE -> "Google"
         TeeTrustRoot.AOSP -> "AOSP"
         TeeTrustRoot.FACTORY -> "Factory"
-        TeeTrustRoot.UNKNOWN -> "Unknown"
+        TeeTrustRoot.UNKNOWN -> "Desconocido"
     }
 
     private fun iconFor(
@@ -295,8 +295,8 @@ class TeeCardModelMapper {
 
     private fun com.eltavine.duckdetector.features.tee.domain.TeeTier.displayName(): String =
         when (this) {
-            com.eltavine.duckdetector.features.tee.domain.TeeTier.UNKNOWN -> "Unknown"
-            com.eltavine.duckdetector.features.tee.domain.TeeTier.NONE -> "None"
+            com.eltavine.duckdetector.features.tee.domain.TeeTier.UNKNOWN -> "Desconocido"
+            com.eltavine.duckdetector.features.tee.domain.TeeTier.NONE -> "Ninguno"
             com.eltavine.duckdetector.features.tee.domain.TeeTier.SOFTWARE -> "Software"
             com.eltavine.duckdetector.features.tee.domain.TeeTier.TEE -> "TEE"
             com.eltavine.duckdetector.features.tee.domain.TeeTier.STRONGBOX -> "StrongBox"

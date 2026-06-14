@@ -71,7 +71,7 @@ class KernelCheckCardModelMapper {
                 report.hasReviewInfoIndicators -> "Kernel behavior needs review"
                 report.hasInformationalCveState -> "CVE patch state is informational"
                 report.cvePatchState == KernelCheckCvePatchState.INCONCLUSIVE -> "CVE patch state inconclusive"
-                !report.nativeAvailable -> "Kernel scan has reduced native coverage"
+                !report.nativeAvailable -> "Escaneo de kernel con cobertura nativa reducida"
                 else -> "No suspicious kernel markers"
             }
         }
@@ -80,7 +80,7 @@ class KernelCheckCardModelMapper {
     private fun buildSummary(report: KernelCheckReport): String {
         return when (report.stage) {
             KernelCheckStage.LOADING ->
-                "Kernel naming, boot parameter, build-time, pointer-exposure, and Unicode path-bypass heuristics are collecting local evidence."
+                "Verificando nombre del kernel, parámetros de boot, exposición de punteros y bypass Unicode."
 
             KernelCheckStage.FAILED ->
                 report.errorMessage ?: "Kernel Check failed before evidence could be assembled."
@@ -110,7 +110,7 @@ class KernelCheckCardModelMapper {
     private fun buildHeaderFacts(report: KernelCheckReport): List<KernelCheckHeaderFactModel> {
         return when (report.stage) {
             KernelCheckStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -125,7 +125,7 @@ class KernelCheckCardModelMapper {
                     value = when {
                         report.namingFindingCount > 0 -> report.namingFindingCount.toString()
                         report.unameOutput.isBlank() && report.procVersion.isBlank() -> "N/A"
-                        else -> "Clean"
+                        else -> "Limpio"
                     },
                     status = when {
                         report.namingFindingCount > 0 -> DetectorStatus.danger()
@@ -140,7 +140,7 @@ class KernelCheckCardModelMapper {
                     label = "Boot",
                     value = when {
                         report.bootFindingCount > 0 -> report.bootFindingCount.toString()
-                        report.nativeAvailable || report.procCmdline.isNotBlank() -> "Clean"
+                        report.nativeAvailable || report.procCmdline.isNotBlank() -> "Limpio"
                         else -> "N/A"
                     },
                     status = when {
@@ -154,9 +154,9 @@ class KernelCheckCardModelMapper {
                     value = when {
                         report.hasReviewInfoIndicators -> report.reviewInfoFindingCount.toString()
                         report.hasInformationalCveState -> report.cvePatchState.label
-                        report.cvePatchState == KernelCheckCvePatchState.INCONCLUSIVE -> "Inconclusive"
+                        report.cvePatchState == KernelCheckCvePatchState.INCONCLUSIVE -> "Inconcluso"
                         report.nativeAvailable -> "OK"
-                        else -> "Partial"
+                        else -> "Parcial"
                     },
                     status = when {
                         report.hasReviewInfoIndicators -> DetectorStatus.warning()
@@ -185,7 +185,7 @@ class KernelCheckCardModelMapper {
             KernelCheckStage.LOADING -> placeholderRows(
                 labels = listOf("uname -a", "/proc/version", "/proc/cmdline"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -209,7 +209,7 @@ class KernelCheckCardModelMapper {
             KernelCheckStage.LOADING -> placeholderRows(
                 labels = listOf("Kernel naming", "Boot parameters", "Build time"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             KernelCheckStage.FAILED -> placeholderRows(
@@ -221,8 +221,8 @@ class KernelCheckCardModelMapper {
             KernelCheckStage.READY -> if (report.dangerFindings.isEmpty()) {
                 listOf(
                     KernelCheckDetailRowModel(
-                        label = "Anomalies",
-                        value = if (report.nativeAvailable) "Clean" else "Limited",
+                        label = "Anomalías",
+                        value = if (report.nativeAvailable) "Limpio" else "Limitado",
                         status = if (report.nativeAvailable) {
                             DetectorStatus.allClear()
                         } else {
@@ -246,7 +246,7 @@ class KernelCheckCardModelMapper {
             KernelCheckStage.LOADING -> placeholderRows(
                 labels = listOf("CVE patch state", "kptr_restrict"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             KernelCheckStage.FAILED -> placeholderRows(
@@ -266,14 +266,14 @@ class KernelCheckCardModelMapper {
         return when (report.stage) {
             KernelCheckStage.LOADING -> listOf(
                 KernelCheckImpactItemModel(
-                    text = "Gathering local kernel evidence.",
+                    text = "Recolectando evidencia del kernel local.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             KernelCheckStage.FAILED -> listOf(
                 KernelCheckImpactItemModel(
-                    text = report.errorMessage ?: "Kernel Check scan failed.",
+                    text = report.errorMessage ?: "Escaneo de Kernel fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -356,12 +356,12 @@ class KernelCheckCardModelMapper {
         return when (report.stage) {
             KernelCheckStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             KernelCheckStage.FAILED -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.ERROR),
-                "Failed"
+                "Fallido"
             )
 
             KernelCheckStage.READY -> report.methods.map { result ->
@@ -388,7 +388,7 @@ class KernelCheckCardModelMapper {
                     "Native library",
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             KernelCheckStage.FAILED -> placeholderRows(
@@ -416,7 +416,7 @@ class KernelCheckCardModelMapper {
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 KernelCheckDetailRowModel(
-                    label = "Hard findings",
+                    label = "Hallazgos directos",
                     value = report.hardFindingCount.toString(),
                     status = when {
                         report.hardFindingCount > 0 -> DetectorStatus.danger()
@@ -425,7 +425,7 @@ class KernelCheckCardModelMapper {
                     },
                 ),
                 KernelCheckDetailRowModel(
-                    label = "Info findings",
+                    label = "Hallazgos informativos",
                     value = report.infoFindingCount.toString(),
                     status = when {
                         report.hasReviewInfoIndicators -> DetectorStatus.warning()
@@ -448,7 +448,7 @@ class KernelCheckCardModelMapper {
                 ),
                 KernelCheckDetailRowModel(
                     label = "Native library",
-                    value = if (report.nativeAvailable) "Loaded" else "Unavailable",
+                    value = if (report.nativeAvailable) "Loaded" else "No disponible",
                     status = if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -463,7 +463,7 @@ class KernelCheckCardModelMapper {
     ): KernelCheckDetailRowModel {
         return KernelCheckDetailRowModel(
             label = label,
-            value = if (value.isNotBlank()) "Captured" else "Unavailable",
+            value = if (value.isNotBlank()) "Capturado" else "No disponible",
             status = if (value.isNotBlank()) DetectorStatus.allClear() else DetectorStatus.info(
                 InfoKind.SUPPORT
             ),
@@ -528,7 +528,7 @@ class KernelCheckCardModelMapper {
                 val finding = report.infoFindings.firstOrNull { it.id == "kptr_exposed" }
                 KernelCheckDetailRowModel(
                     label = "kptr_restrict",
-                    value = "Exposed",
+                    value = "Expuesto",
                     status = DetectorStatus.warning(),
                     detail = finding?.detail ?: "kptr_restrict appears disabled.",
                 )
@@ -537,7 +537,7 @@ class KernelCheckCardModelMapper {
             report.nativeAvailable -> {
                 KernelCheckDetailRowModel(
                     label = "kptr_restrict",
-                    value = "Protected",
+                    value = "Protegido",
                     status = DetectorStatus.allClear(),
                     detail = "Kernel addresses remained hidden during the native probe.",
                 )
@@ -546,7 +546,7 @@ class KernelCheckCardModelMapper {
             else -> {
                 KernelCheckDetailRowModel(
                     label = "kptr_restrict",
-                    value = "Unavailable",
+                    value = "No disponible",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                     detail = "Native /proc coverage was unavailable, so pointer exposure could not be verified.",
                 )

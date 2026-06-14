@@ -62,12 +62,12 @@ class PlayIntegrityFixCardModelMapper {
 
     private fun buildVerdict(report: PlayIntegrityFixReport): String {
         return when (report.stage) {
-            PlayIntegrityFixStage.LOADING -> "Scanning Play Integrity residue"
-            PlayIntegrityFixStage.FAILED -> "Play Integrity Fix scan failed"
+            PlayIntegrityFixStage.LOADING -> "Escaneando residuos de Play Integrity"
+            PlayIntegrityFixStage.FAILED -> "Escaneo de Play Integrity Fix fallido"
             PlayIntegrityFixStage.READY -> when {
                 report.dangerSignalCount > 0 -> "${report.dangerSignalCount} high-confidence residue signal(s)"
                 report.warningSignalCount > 0 -> "${report.warningSignalCount} signal(s) need review"
-                !report.nativeAvailable -> "Play Integrity scan has reduced native coverage"
+                !report.nativeAvailable -> "Escaneo de Play Integrity con cobertura nativa reducida"
                 else -> "No Play Integrity residue surfaced"
             }
         }
@@ -76,15 +76,15 @@ class PlayIntegrityFixCardModelMapper {
     private fun buildSummary(report: PlayIntegrityFixReport): String {
         return when (report.stage) {
             PlayIntegrityFixStage.LOADING ->
-                "Property residue, cross-source drift, and current-process runtime traces are being collected from Java and native probes."
+                "Recolectando residuos de propiedades, deriva entre fuentes y trazas de runtime."
 
             PlayIntegrityFixStage.FAILED ->
                 report.errorMessage
-                    ?: "Play Integrity Fix scan failed before evidence could be assembled."
+                    ?: "El escaneo de Play Integrity Fix falló antes de recolectar evidencia."
 
             PlayIntegrityFixStage.READY -> when {
                 report.dangerSignalCount > 0 ->
-                    "Direct spoof properties or runtime traces suggest active or recently used Play Integrity bypass infrastructure."
+                    "Propiedades de spoof directas o trazas de runtime sugieren infraestructura activa de bypass de Play Integrity."
 
                 report.warningSignalCount > 0 ->
                     "Only lower-confidence residue or cross-source drift surfaced. This can reflect disabled leftovers, partial cleanup, or source disagreement."
@@ -101,7 +101,7 @@ class PlayIntegrityFixCardModelMapper {
     private fun buildHeaderFacts(report: PlayIntegrityFixReport): List<PlayIntegrityFixHeaderFactModel> {
         return when (report.stage) {
             PlayIntegrityFixStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -148,7 +148,7 @@ class PlayIntegrityFixCardModelMapper {
             PlayIntegrityFixStage.LOADING -> placeholderRows(
                 labels = listOf("Spoof control", "Pixel props", "Device spoof", "Security spoof"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             PlayIntegrityFixStage.FAILED -> placeholderRows(
@@ -168,7 +168,7 @@ class PlayIntegrityFixCardModelMapper {
             PlayIntegrityFixStage.LOADING -> placeholderRows(
                 labels = listOf("Reflection/getprop/native alignment"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -190,7 +190,7 @@ class PlayIntegrityFixCardModelMapper {
             PlayIntegrityFixStage.LOADING -> placeholderRows(
                 labels = listOf("Maps runtime trace", "Native libc residue"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -206,7 +206,7 @@ class PlayIntegrityFixCardModelMapper {
                     placeholderRows(
                         labels = listOf("Maps runtime trace", "Native libc residue"),
                         status = DetectorStatus.info(InfoKind.SUPPORT),
-                        value = "Unavailable",
+                        value = "No disponible",
                         monospace = true,
                     )
                 } else {
@@ -222,14 +222,14 @@ class PlayIntegrityFixCardModelMapper {
         return when (report.stage) {
             PlayIntegrityFixStage.LOADING -> listOf(
                 PlayIntegrityFixImpactItemModel(
-                    text = "Gathering residue properties and runtime trace evidence for Play Integrity spoof frameworks.",
+                    text = "Recolectando residuos de Play Integrity y trazas de runtime.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             PlayIntegrityFixStage.FAILED -> listOf(
                 PlayIntegrityFixImpactItemModel(
-                    text = report.errorMessage ?: "Play Integrity Fix scan failed.",
+                    text = report.errorMessage ?: "Escaneo de Play Integrity Fix fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -298,12 +298,12 @@ class PlayIntegrityFixCardModelMapper {
         return when (report.stage) {
             PlayIntegrityFixStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             PlayIntegrityFixStage.FAILED -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.ERROR),
-                "Failed"
+                "Fallido"
             )
 
             PlayIntegrityFixStage.READY -> report.methods.map { result ->
@@ -332,7 +332,7 @@ class PlayIntegrityFixCardModelMapper {
                     "Native library",
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             PlayIntegrityFixStage.FAILED -> placeholderRows(
@@ -401,7 +401,7 @@ class PlayIntegrityFixCardModelMapper {
                 ),
                 PlayIntegrityFixDetailRowModel(
                     label = "Native library",
-                    value = if (report.nativeAvailable) "Loaded" else "Unavailable",
+                    value = if (report.nativeAvailable) "Loaded" else "No disponible",
                     status = if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -489,7 +489,7 @@ class PlayIntegrityFixCardModelMapper {
             return "N/A"
         }
         val total = report.nativePropertyHitCount + report.nativeTraceCount
-        return if (total > 0) total.toString() else "Clean"
+        return if (total > 0) total.toString() else "Limpio"
     }
 
     private fun nativeFactStatus(report: PlayIntegrityFixReport): DetectorStatus {
@@ -502,11 +502,11 @@ class PlayIntegrityFixCardModelMapper {
     }
 
     private fun countOrNone(count: Int): String {
-        return if (count > 0) count.toString() else "None"
+        return if (count > 0) count.toString() else "Ninguno"
     }
 
     private fun countOrClean(count: Int): String {
-        return if (count > 0) count.toString() else "Clean"
+        return if (count > 0) count.toString() else "Limpio"
     }
 
     private fun badgeValue(value: String): String {

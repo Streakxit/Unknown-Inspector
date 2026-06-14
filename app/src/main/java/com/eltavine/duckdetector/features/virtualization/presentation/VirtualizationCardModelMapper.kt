@@ -101,8 +101,8 @@ class VirtualizationCardModelMapper {
 
     private fun buildVerdict(report: VirtualizationReport): String {
         return when (report.stage) {
-            VirtualizationStage.LOADING -> "Scanning virtualization and translation state"
-            VirtualizationStage.FAILED -> "Virtualization scan failed"
+            VirtualizationStage.LOADING -> "Escaneando estado de virtualización"
+            VirtualizationStage.FAILED -> "Escaneo de virtualización fallido"
             VirtualizationStage.READY -> when {
                 report.dangerSignals.isNotEmpty() -> "${report.dangerSignals.size} direct virtualization signal(s)"
                 report.warningSignals.isNotEmpty() -> "${report.warningSignals.size} virtualization signal(s) need review"
@@ -116,11 +116,11 @@ class VirtualizationCardModelMapper {
     private fun buildSummary(report: VirtualizationReport): String {
         return when (report.stage) {
             VirtualizationStage.LOADING ->
-                "Properties, Build fields, runtime artifacts, startup preload, helper-process consistency, and native or ASM honeypots are collecting local evidence."
+                "Verificando propiedades, campos de build, artefactos de runtime, preload y honeypots."
 
             VirtualizationStage.FAILED ->
                 report.errorMessage
-                    ?: "Virtualization scan failed before evidence could be assembled."
+                    ?: "El escaneo de virtualización falló antes de recolectar evidencia."
 
             VirtualizationStage.READY -> when {
                 report.dangerSignals.isNotEmpty() ->
@@ -144,7 +144,7 @@ class VirtualizationCardModelMapper {
     private fun buildHeaderFacts(report: VirtualizationReport): List<VirtualizationHeaderFactModel> {
         return when (report.stage) {
             VirtualizationStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -202,7 +202,7 @@ class VirtualizationCardModelMapper {
         return when (stage) {
             VirtualizationStage.LOADING -> placeholderRows(
                 placeholders,
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT),
             )
 
@@ -215,8 +215,8 @@ class VirtualizationCardModelMapper {
             VirtualizationStage.READY -> if (rows.isEmpty()) {
                 listOf(
                     VirtualizationDetailRowModel(
-                        label = "Status",
-                        value = "Clean",
+                        label = "Estado",
+                        value = "Limpio",
                         status = DetectorStatus.allClear(),
                         detail = "No findings were produced for this section.",
                     ),
@@ -231,14 +231,14 @@ class VirtualizationCardModelMapper {
         return when (report.stage) {
             VirtualizationStage.LOADING -> listOf(
                 VirtualizationImpactItemModel(
-                    text = "Gathering current-process guest and translation evidence.",
+                    text = "Recolectando evidencia de entorno guest y traducción.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             VirtualizationStage.FAILED -> listOf(
                 VirtualizationImpactItemModel(
-                    text = report.errorMessage ?: "Virtualization scan failed.",
+                    text = report.errorMessage ?: "Escaneo de virtualización fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -276,13 +276,13 @@ class VirtualizationCardModelMapper {
         return when (report.stage) {
             VirtualizationStage.LOADING -> placeholderRows(
                 METHOD_LABELS,
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT),
             )
 
             VirtualizationStage.FAILED -> placeholderRows(
                 METHOD_LABELS,
-                "Failed",
+                "Fallido",
                 DetectorStatus.info(InfoKind.ERROR),
             )
 
@@ -302,7 +302,7 @@ class VirtualizationCardModelMapper {
         return when (report.stage) {
             VirtualizationStage.LOADING -> placeholderRows(
                 SCAN_LABELS,
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT),
             )
 
@@ -315,7 +315,7 @@ class VirtualizationCardModelMapper {
             VirtualizationStage.READY -> listOf(
                 VirtualizationDetailRowModel(
                     label = "Startup preload",
-                    value = if (report.startupPreloadAvailable) "Ready" else "Unavailable",
+                    value = if (report.startupPreloadAvailable) "Ready" else "No disponible",
                     status = if (report.startupPreloadAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),
@@ -329,24 +329,24 @@ class VirtualizationCardModelMapper {
                 ),
                 VirtualizationDetailRowModel(
                     label = "Cross-process helper",
-                    value = if (report.crossProcessAvailable) "Ready" else "Unavailable",
+                    value = if (report.crossProcessAvailable) "Ready" else "No disponible",
                     status = if (report.crossProcessAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),
                 ),
                 VirtualizationDetailRowModel(
                     label = "Isolated helper",
-                    value = if (report.isolatedProcessAvailable) "Ready" else "Unavailable",
+                    value = if (report.isolatedProcessAvailable) "Ready" else "No disponible",
                     status = if (report.isolatedProcessAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),
                 ),
                 VirtualizationDetailRowModel(
-                    label = "Package visibility",
+                    label = "Visibilidad de paquetes",
                     value = when (report.packageVisibility) {
                         InstalledPackageVisibility.FULL -> "Full"
                         InstalledPackageVisibility.RESTRICTED -> "Scoped"
-                        InstalledPackageVisibility.UNKNOWN -> "Unknown"
+                        InstalledPackageVisibility.UNKNOWN -> "Desconocido"
                     },
                     status = if (report.packageVisibility == InstalledPackageVisibility.RESTRICTED) {
                         DetectorStatus.info(InfoKind.SUPPORT)
@@ -371,7 +371,7 @@ class VirtualizationCardModelMapper {
                 ),
                 VirtualizationDetailRowModel(
                     label = "EGL renderer",
-                    value = if (report.eglAvailable) "Ready" else "Unavailable",
+                    value = if (report.eglAvailable) "Ready" else "No disponible",
                     status = if (report.eglAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),
@@ -393,7 +393,7 @@ class VirtualizationCardModelMapper {
                 ),
                 VirtualizationDetailRowModel(
                     label = "Mount namespace",
-                    value = if (report.mountNamespaceAvailable) "Ready" else "Unavailable",
+                    value = if (report.mountNamespaceAvailable) "Ready" else "No disponible",
                     status = if (report.mountNamespaceAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),
@@ -435,7 +435,7 @@ class VirtualizationCardModelMapper {
                 ),
                 VirtualizationDetailRowModel(
                     label = "Syscall pack",
-                    value = if (report.syscallPackSupported) "Ready" else "Unsupported",
+                    value = if (report.syscallPackSupported) "Ready" else "No soportado",
                     status = if (report.syscallPackSupported) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT,
                     ),

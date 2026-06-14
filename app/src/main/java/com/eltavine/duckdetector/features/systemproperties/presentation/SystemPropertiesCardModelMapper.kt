@@ -37,7 +37,7 @@ class SystemPropertiesCardModelMapper {
         report: SystemPropertiesReport,
     ): SystemPropertiesCardModel {
         return SystemPropertiesCardModel(
-            title = "System Properties",
+            title = "Propiedades del Sistema",
             subtitle = buildSubtitle(report),
             status = report.toDetectorStatus(),
             verdict = buildVerdict(report),
@@ -70,8 +70,8 @@ class SystemPropertiesCardModelMapper {
 
     private fun buildVerdict(report: SystemPropertiesReport): String {
         return when (report.stage) {
-            SystemPropertiesStage.LOADING -> "Scanning property, boot, and source state"
-            SystemPropertiesStage.FAILED -> "System Properties scan failed"
+            SystemPropertiesStage.LOADING -> "Escaneando propiedades, boot y fuentes"
+            SystemPropertiesStage.FAILED -> "Escaneo de propiedades del sistema fallido"
             SystemPropertiesStage.READY -> when {
                 report.hasDangerSignals -> "${report.dangerSignals.size} high-risk property or coherence signal(s)"
                 report.hasWarningSignals -> "${report.warningSignals.size} property signal(s) need review"
@@ -88,7 +88,7 @@ class SystemPropertiesCardModelMapper {
 
             SystemPropertiesStage.FAILED ->
                 report.errorMessage
-                    ?: "System property scan failed before evidence could be assembled."
+                    ?: "El escaneo de propiedades falló antes de recolectar evidencia."
 
             SystemPropertiesStage.READY -> when {
                 report.hasDangerSignals ->
@@ -109,7 +109,7 @@ class SystemPropertiesCardModelMapper {
     private fun buildHeaderFacts(report: SystemPropertiesReport): List<SystemPropertiesHeaderFactModel> {
         return when (report.stage) {
             SystemPropertiesStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -139,12 +139,12 @@ class SystemPropertiesCardModelMapper {
                     ),
                     SystemPropertiesHeaderFactModel(
                         label = "Boot",
-                        value = if (report.bootSignalCount > 0) report.bootSignalCount.toString() else "Clean",
+                        value = if (report.bootSignalCount > 0) report.bootSignalCount.toString() else "Limpio",
                         status = categoryStatus(bootSignals),
                     ),
                     SystemPropertiesHeaderFactModel(
                         label = "Build",
-                        value = if (report.buildProfileSignalCount > 0) report.buildProfileSignalCount.toString() else "Clean",
+                        value = if (report.buildProfileSignalCount > 0) report.buildProfileSignalCount.toString() else "Limpio",
                         status = categoryStatus(buildSignals),
                     ),
                 )
@@ -162,7 +162,7 @@ class SystemPropertiesCardModelMapper {
                     "init.svc.magisk_daemon"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             SystemPropertiesStage.FAILED -> placeholderRows(
@@ -194,7 +194,7 @@ class SystemPropertiesCardModelMapper {
                     "partition.system.verified"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             SystemPropertiesStage.FAILED -> placeholderRows(
@@ -225,7 +225,7 @@ class SystemPropertiesCardModelMapper {
                     "Build.FINGERPRINT"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             SystemPropertiesStage.FAILED -> placeholderRows(
@@ -251,7 +251,7 @@ class SystemPropertiesCardModelMapper {
             SystemPropertiesStage.LOADING -> placeholderRows(
                 labels = listOf("ro.boot.verifiedbootstate", "ro.build.type"),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -278,7 +278,7 @@ class SystemPropertiesCardModelMapper {
                     "prop_area hole: u:object_r:shell_prop:s0"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -309,7 +309,7 @@ class SystemPropertiesCardModelMapper {
                     "ro.build.fingerprint"
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
                 monospace = true,
             )
 
@@ -333,14 +333,14 @@ class SystemPropertiesCardModelMapper {
         return when (report.stage) {
             SystemPropertiesStage.LOADING -> listOf(
                 SystemPropertiesImpactItemModel(
-                    text = "Gathering property, boot, and native cross-check evidence.",
+                    text = "Recolectando evidencia de propiedades, boot y cruces nativos.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             SystemPropertiesStage.FAILED -> listOf(
                 SystemPropertiesImpactItemModel(
-                    text = report.errorMessage ?: "System Properties scan failed.",
+                    text = report.errorMessage ?: "Escaneo de propiedades del sistema fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -412,12 +412,12 @@ class SystemPropertiesCardModelMapper {
         return when (report.stage) {
             SystemPropertiesStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             SystemPropertiesStage.FAILED -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.ERROR),
-                "Failed"
+                "Fallido"
             )
 
             SystemPropertiesStage.READY -> report.methods.map { result ->
@@ -450,7 +450,7 @@ class SystemPropertiesCardModelMapper {
                     "Info props",
                 ),
                 status = DetectorStatus.info(InfoKind.SUPPORT),
-                value = "Pending",
+                value = "Pendiente",
             )
 
             SystemPropertiesStage.FAILED -> placeholderRows(
@@ -666,7 +666,7 @@ class SystemPropertiesCardModelMapper {
     }
 
     private fun countLabel(count: Int): String {
-        return if (count > 0) count.toString() else "None"
+        return if (count > 0) count.toString() else "Ninguno"
     }
 
     private fun badgeValue(

@@ -71,12 +71,12 @@ class MemoryCardModelMapper {
 
     private fun buildVerdict(report: MemoryReport): String {
         return when (report.stage) {
-            MemoryStage.LOADING -> "Scanning runtime memory"
-            MemoryStage.FAILED -> "Memory scan failed"
+            MemoryStage.LOADING -> "Escaneando memoria en runtime"
+            MemoryStage.FAILED -> "Escaneo de memoria fallido"
             MemoryStage.READY -> when {
                 report.dangerFindingCount > 0 -> "${report.dangerFindingCount} high-risk memory signal(s)"
                 report.reviewFindingCount > 0 -> "Runtime memory needs review"
-                !report.nativeAvailable -> "Memory scan has reduced native coverage"
+                !report.nativeAvailable -> "Escaneo de memoria con cobertura nativa reducida"
                 else -> "No hook-like memory signals"
             }
         }
@@ -89,7 +89,7 @@ class MemoryCardModelMapper {
 
             MemoryStage.FAILED ->
                 report.errorMessage
-                    ?: "Memory detection failed before native evidence could be assembled."
+                    ?: "La detección de memoria falló antes de recolectar evidencia nativa."
 
             MemoryStage.READY -> when {
                 report.dangerFindingCount > 0 ->
@@ -110,7 +110,7 @@ class MemoryCardModelMapper {
     private fun buildHeaderFacts(report: MemoryReport): List<MemoryHeaderFactModel> {
         return when (report.stage) {
             MemoryStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -120,7 +120,7 @@ class MemoryCardModelMapper {
                     label = "Critical",
                     value = when {
                         report.dangerFindingCount > 0 -> report.dangerFindingCount.toString()
-                        report.nativeAvailable -> "Clean"
+                        report.nativeAvailable -> "Limpio"
                         else -> "N/A"
                     },
                     status = when {
@@ -133,7 +133,7 @@ class MemoryCardModelMapper {
                     label = "Review",
                     value = when {
                         report.reviewFindingCount > 0 -> report.reviewFindingCount.toString()
-                        report.nativeAvailable -> "Clean"
+                        report.nativeAvailable -> "Limpio"
                         else -> "N/A"
                     },
                     status = when {
@@ -148,7 +148,7 @@ class MemoryCardModelMapper {
                         report.hookFindingCount > 0 -> report.hookFindingCount.toString()
                         report.modifiedFunctionCount > 0 -> report.modifiedFunctionCount.toString()
                         !report.nativeAvailable -> "N/A"
-                        else -> "Clean"
+                        else -> "Limpio"
                     },
                     status = when {
                         report.hookFindingCount > 0 -> DetectorStatus.danger()
@@ -164,7 +164,7 @@ class MemoryCardModelMapper {
                             (report.mappingFindingCount + report.loaderFindingCount).toString()
 
                         !report.nativeAvailable -> "N/A"
-                        else -> "Clean"
+                        else -> "Limpio"
                     },
                     status = when {
                         report.mappingFindingCount + report.loaderFindingCount > 0 -> report.toDetectorStatus()
@@ -185,7 +185,7 @@ class MemoryCardModelMapper {
             MemoryStage.LOADING -> placeholderRows(
                 listOf(fallbackLabel),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             MemoryStage.FAILED -> placeholderRows(
@@ -204,7 +204,7 @@ class MemoryCardModelMapper {
                     listOf(
                         MemoryDetailRowModel(
                             label = fallbackLabel,
-                            value = if (report.nativeAvailable) "Clean" else "Unavailable",
+                            value = if (report.nativeAvailable) "Limpio" else "No disponible",
                             status = if (report.nativeAvailable) {
                                 DetectorStatus.allClear()
                             } else {
@@ -226,14 +226,14 @@ class MemoryCardModelMapper {
         return when (report.stage) {
             MemoryStage.LOADING -> listOf(
                 MemoryImpactItemModel(
-                    text = "Gathering local runtime memory evidence.",
+                    text = "Recolectando evidencia de memoria en runtime.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             MemoryStage.FAILED -> listOf(
                 MemoryImpactItemModel(
-                    text = report.errorMessage ?: "Memory scan failed.",
+                    text = report.errorMessage ?: "Escaneo de memoria fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -294,7 +294,7 @@ class MemoryCardModelMapper {
                     "Loader visibility"
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             MemoryStage.FAILED -> placeholderRows(
@@ -331,7 +331,7 @@ class MemoryCardModelMapper {
                     "Native library"
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             MemoryStage.FAILED -> placeholderRows(
@@ -347,7 +347,7 @@ class MemoryCardModelMapper {
 
             MemoryStage.READY -> listOf(
                 MemoryDetailRowModel(
-                    label = "Danger findings",
+                    label = "Hallazgos críticos",
                     value = if (report.nativeAvailable || report.dangerFindingCount > 0) {
                         report.dangerFindingCount.toString()
                     } else {
@@ -360,7 +360,7 @@ class MemoryCardModelMapper {
                     },
                 ),
                 MemoryDetailRowModel(
-                    label = "Review findings",
+                    label = "Hallazgos de revisión",
                     value = if (report.nativeAvailable || report.reviewFindingCount > 0) {
                         report.reviewFindingCount.toString()
                     } else {
@@ -387,7 +387,7 @@ class MemoryCardModelMapper {
                 ),
                 MemoryDetailRowModel(
                     label = "Native library",
-                    value = if (report.nativeAvailable) "Loaded" else "Unavailable",
+                    value = if (report.nativeAvailable) "Loaded" else "No disponible",
                     status = if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.ERROR
                     ),

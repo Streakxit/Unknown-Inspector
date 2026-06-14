@@ -91,7 +91,7 @@ class LSPosedCardModelMapper {
 
             LSPosedStage.FAILED ->
                 report.errorMessage
-                    ?: "LSPosed detection failed before evidence could be assembled."
+                    ?: "La detección de LSPosed falló antes de recolectar evidencia."
 
             LSPosedStage.READY -> when {
                 report.hasDangerSignals ->
@@ -112,7 +112,7 @@ class LSPosedCardModelMapper {
     private fun buildHeaderFacts(report: LSPosedReport): List<LSPosedHeaderFactModel> {
         return when (report.stage) {
             LSPosedStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -138,14 +138,14 @@ class LSPosedCardModelMapper {
                 ),
                 LSPosedHeaderFactModel(
                     label = "Bridge",
-                    value = if (report.binderHitCount > 0) report.binderHitCount.toString() else "Clean",
+                    value = if (report.binderHitCount > 0) report.binderHitCount.toString() else "Limpio",
                     status = if (report.binderHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedHeaderFactModel(
-                    label = "Packages",
+                    label = "Paquetes",
                     value = when {
                         report.packageSignalCount > 0 -> report.packageSignalCount.toString()
-                        report.packageVisibility == LSPosedPackageVisibility.FULL -> "Clean"
+                        report.packageVisibility == LSPosedPackageVisibility.FULL -> "Limpio"
                         else -> visibilityLabel(report.packageVisibility)
                     },
                     status = when {
@@ -167,7 +167,7 @@ class LSPosedCardModelMapper {
             LSPosedStage.LOADING -> placeholderRows(
                 listOf(fallbackLabel),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             LSPosedStage.FAILED -> placeholderRows(
@@ -189,7 +189,7 @@ class LSPosedCardModelMapper {
                             value = if (group == LSPosedSignalGroup.PACKAGES) {
                                 visibilityLabel(report.packageVisibility)
                             } else {
-                                "Unavailable"
+                                "No disponible"
                             },
                             status = DetectorStatus.info(InfoKind.SUPPORT),
                             detail = "This LSPosed evidence slice was unavailable or scoped, so it is not treated as clean.",
@@ -199,7 +199,7 @@ class LSPosedCardModelMapper {
                     listOf(
                         LSPosedDetailRowModel(
                             label = fallbackLabel,
-                            value = "Clean",
+                            value = "Limpio",
                             status = DetectorStatus.allClear(),
                             detail = "No signal surfaced in this LSPosed evidence slice.",
                         ),
@@ -213,14 +213,14 @@ class LSPosedCardModelMapper {
         return when (report.stage) {
             LSPosedStage.LOADING -> listOf(
                 LSPosedImpactItemModel(
-                    text = "Gathering class, ClassLoader, Binder, runtime-artifact, logcat, package, SELinux policy, and native runtime evidence.",
+                    text = "Recolectando evidencia de clases, Binder, artefactos de runtime y paquetes.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             LSPosedStage.FAILED -> listOf(
                 LSPosedImpactItemModel(
-                    text = report.errorMessage ?: "LSPosed scan failed.",
+                    text = report.errorMessage ?: "Escaneo de LSPosed fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -279,7 +279,7 @@ class LSPosedCardModelMapper {
         return when (report.stage) {
             LSPosedStage.LOADING -> placeholderMethodRows(
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending"
+                "Pendiente"
             )
 
             LSPosedStage.FAILED -> placeholderMethodRows(
@@ -324,7 +324,7 @@ class LSPosedCardModelMapper {
                     "Package visibility",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             LSPosedStage.FAILED -> placeholderRows(
@@ -355,7 +355,7 @@ class LSPosedCardModelMapper {
 
             LSPosedStage.READY -> listOf(
                 LSPosedDetailRowModel(
-                    label = "Danger signals",
+                    label = "Señales críticas",
                     value = report.dangerSignalCount.toString(),
                     status = when {
                         report.dangerSignalCount > 0 -> DetectorStatus.danger()
@@ -364,7 +364,7 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Review signals",
+                    label = "Señales de revisión",
                     value = report.warningSignalCount.toString(),
                     status = when {
                         report.warningSignalCount > 0 -> DetectorStatus.warning()
@@ -426,7 +426,7 @@ class LSPosedCardModelMapper {
                 ),
                 LSPosedDetailRowModel(
                     label = "Runtime artifacts availability",
-                    value = if (report.runtimeArtifactAvailable) "Checked" else "Unavailable",
+                    value = if (report.runtimeArtifactAvailable) "Checked" else "No disponible",
                     status = if (report.runtimeArtifactAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -447,7 +447,7 @@ class LSPosedCardModelMapper {
                 ),
                 LSPosedDetailRowModel(
                     label = "Logcat availability",
-                    value = if (report.logcatAvailable) "Checked" else "Unavailable",
+                    value = if (report.logcatAvailable) "Checked" else "No disponible",
                     status = if (report.logcatAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -468,7 +468,7 @@ class LSPosedCardModelMapper {
                 ),
                 LSPosedDetailRowModel(
                     label = "Dirty policy availability",
-                    value = if (report.dirtyPolicyAvailable) "Checked" else "Unavailable",
+                    value = if (report.dirtyPolicyAvailable) "Checked" else "No disponible",
                     status = if (report.dirtyPolicyAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -510,7 +510,7 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Package visibility",
+                    label = "Visibilidad de paquetes",
                     value = visibilityLabel(report.packageVisibility),
                     status = when (report.packageVisibility) {
                         LSPosedPackageVisibility.FULL -> DetectorStatus.allClear()
@@ -592,7 +592,7 @@ class LSPosedCardModelMapper {
         return when {
             count > 0 -> count.toString()
             reducedCoverage -> "N/A"
-            else -> "None"
+            else -> "Ninguno"
         }
     }
 
@@ -602,7 +602,7 @@ class LSPosedCardModelMapper {
         return when (visibility) {
             LSPosedPackageVisibility.FULL -> "Full"
             LSPosedPackageVisibility.RESTRICTED -> "Restricted"
-            LSPosedPackageVisibility.UNKNOWN -> "Unknown"
+            LSPosedPackageVisibility.UNKNOWN -> "Desconocido"
         }
     }
 

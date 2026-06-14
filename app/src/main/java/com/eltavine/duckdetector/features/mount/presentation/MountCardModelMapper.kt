@@ -83,8 +83,8 @@ class MountCardModelMapper {
 
     private fun buildVerdict(report: MountReport): String {
         return when (report.stage) {
-            MountStage.LOADING -> "Scanning runtime mount visibility"
-            MountStage.FAILED -> "Mount scan failed"
+            MountStage.LOADING -> "Escaneando visibilidad de montaje"
+            MountStage.FAILED -> "Escaneo de montaje fallido"
             MountStage.READY -> when {
                 report.dangerFindings.isNotEmpty() && hasOnlyPreloadEvidence(report) ->
                     "${report.dangerFindings.size} critical startup signal(s)"
@@ -102,7 +102,7 @@ class MountCardModelMapper {
     private fun buildSummary(report: MountReport): String {
         return when (report.stage) {
             MountStage.LOADING ->
-                "Mount table, mountinfo, memory maps, filesystem type, and path-based root artifact probes are collecting local evidence."
+                "Verificando tabla de montaje, mountinfo, mapas de memoria y artefactos de root."
 
             MountStage.FAILED ->
                 report.errorMessage ?: "Mount scan failed before evidence could be assembled."
@@ -126,7 +126,7 @@ class MountCardModelMapper {
 
     private fun buildHeaderFacts(report: MountReport): List<MountHeaderFactModel> {
         return when (report.stage) {
-            MountStage.LOADING -> placeholderFacts("Pending", DetectorStatus.info(InfoKind.SUPPORT))
+            MountStage.LOADING -> placeholderFacts("Pendiente", DetectorStatus.info(InfoKind.SUPPORT))
             MountStage.FAILED -> placeholderFacts("Error", DetectorStatus.info(InfoKind.ERROR))
             MountStage.READY -> listOf(
                 MountHeaderFactModel(
@@ -140,7 +140,7 @@ class MountCardModelMapper {
                     status = if (report.warningFindings.isEmpty()) DetectorStatus.allClear() else DetectorStatus.warning(),
                 ),
                 MountHeaderFactModel(
-                    label = "Coverage",
+                    label = "Cobertura",
                     value = "${coveragePercent(report)}%",
                     status = when {
                         report.permissionDenied == 0 -> DetectorStatus.allClear()
@@ -167,7 +167,7 @@ class MountCardModelMapper {
         return when (stage) {
             MountStage.LOADING -> placeholderRows(
                 placeholders,
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -180,8 +180,8 @@ class MountCardModelMapper {
             MountStage.READY -> if (rows.isEmpty()) {
                 listOf(
                     MountDetailRowModel(
-                        label = "Status",
-                        value = "Clean",
+                        label = "Estado",
+                        value = "Limpio",
                         status = DetectorStatus.allClear(),
                         detail = "No findings were produced for this section.",
                     ),
@@ -196,14 +196,14 @@ class MountCardModelMapper {
         return when (report.stage) {
             MountStage.LOADING -> listOf(
                 MountImpactItemModel(
-                    text = "Gathering runtime mount and filesystem evidence.",
+                    text = "Recolectando evidencia de montaje y filesystem.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             MountStage.FAILED -> listOf(
                 MountImpactItemModel(
-                    text = report.errorMessage ?: "Mount scan failed.",
+                    text = report.errorMessage ?: "Escaneo de montaje fallido.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -221,13 +221,13 @@ class MountCardModelMapper {
         return when (report.stage) {
             MountStage.LOADING -> placeholderRows(
                 methodLabels(),
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
             MountStage.FAILED -> placeholderRows(
                 methodLabels(),
-                "Failed",
+                "Fallido",
                 DetectorStatus.info(InfoKind.ERROR)
             )
 
@@ -247,7 +247,7 @@ class MountCardModelMapper {
         return when (report.stage) {
             MountStage.LOADING -> placeholderRows(
                 scanLabels(),
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
@@ -348,7 +348,7 @@ class MountCardModelMapper {
         return listOf(
             MountHeaderFactModel("Critical", value, status),
             MountHeaderFactModel("Review", value, status),
-            MountHeaderFactModel("Coverage", value, status),
+            MountHeaderFactModel("Cobertura", value, status),
             MountHeaderFactModel("Native", value, status),
         )
     }
@@ -411,7 +411,7 @@ class MountCardModelMapper {
         }
     }
 
-    private fun countLabel(count: Int): String = if (count == 0) "None" else count.toString()
+    private fun countLabel(count: Int): String = if (count == 0) "Ninguno" else count.toString()
 
     private fun yesNo(value: Boolean): String = if (value) "Yes" else "No"
 
@@ -433,17 +433,17 @@ class MountCardModelMapper {
 
     private fun preloadStateLabel(report: MountReport): String {
         return when {
-            !report.earlyPreloadAvailable -> "Unavailable"
-            report.earlyPreloadDetected -> "Detected"
-            else -> "Clean"
+            !report.earlyPreloadAvailable -> "No disponible"
+            report.earlyPreloadDetected -> "Detectado"
+            else -> "Limpio"
         }
     }
 
     private fun preloadContextLabel(report: MountReport): String {
         return when {
             !report.earlyPreloadAvailable -> "N/A"
-            report.earlyPreloadContextValid -> "Fresh"
-            else -> "Stale"
+            report.earlyPreloadContextValid -> "Reciente"
+            else -> "Desactualizado"
         }
     }
 

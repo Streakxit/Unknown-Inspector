@@ -81,42 +81,42 @@ class SelinuxCardModelMapper {
             contextValidity?.details?.contains("repeatability failed", ignoreCase = true) == true
         val appZygoteCarrierState = contextValiditySupportState(contextValidity)
         return when (report.stage) {
-            SelinuxStage.LOADING -> "Scanning SELinux state"
-            SelinuxStage.FAILED -> "SELinux scan failed"
+            SelinuxStage.LOADING -> "Escaneando estado de SELinux"
+            SelinuxStage.FAILED -> "Escaneo de SELinux fallido"
             SelinuxStage.READY -> when (report.mode) {
                 SelinuxMode.ENFORCING -> when {
-                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.TAMPERED -> "Enforcing with audit rewrite"
+                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.TAMPERED -> "Activo con reescritura de audit"
                     contextValidity?.status == SelinuxContextValidityProbe.BITPAIR_KSU_PRESENT ->
-                        "Enforcing with KSU context materialized"
-                    policyloadSeqno?.isSecure == false -> "Enforcing with app_zygote seqno split"
-                    procAttrCurrent?.isSecure == false -> "Enforcing with app_zygote attr-write anomaly"
+                        "Activo con contexto KSU materializado"
+                    policyloadSeqno?.isSecure == false -> "Activo con split seqno app_zygote"
+                    procAttrCurrent?.isSecure == false -> "Activo con anomalía attr-write app_zygote"
                     dirtyPolicyHit != null -> trustedPolicyRuleVerdict()
                     appZygoteCarrierState == AppZygoteCarrierSupportState.UNTRUSTED ->
-                        "Enforcing with untrusted app_zygote carrier"
+                        "Activo con carrier app_zygote no confiable"
                     appZygoteCarrierState == AppZygoteCarrierSupportState.FAILED ->
-                        "Enforcing with reduced app_zygote coverage"
+                        "Activo con cobertura app_zygote reducida"
 
                     contextValidity?.status == SelinuxContextValidityProbe.BITPAIR_SELF_TEST_FAILED ->
                         if (repeatabilityFailed) {
-                            "Enforcing with unstable context oracle"
+                            "Activo con oráculo de contexto inestable"
                         } else {
-                            "Enforcing with untrusted context oracle"
+                            "Activo con oráculo de contexto no confiable"
                         }
 
                     contextValidity?.status == SelinuxContextValidityProbe.BITPAIR_AMBIGUOUS ->
-                        "Enforcing with context split"
+                        "Activo con contexto dividido"
 
-                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.EXPOSED -> "Enforcing with audit exposure"
-                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.SEVERE -> "Enforcing with weak policy"
-                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.RESIDUE -> "Enforcing with audit risk"
-                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.MODERATE -> "Enforcing with policy drift"
-                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.MINOR -> "Enforcing with minor drift"
-                    else -> "Enforcing"
+                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.EXPOSED -> "Activo con exposición de audit"
+                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.SEVERE -> "Activo con política débil"
+                    report.auditIntegrity?.state == SelinuxAuditIntegrityState.RESIDUE -> "Activo con riesgo de audit"
+                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.MODERATE -> "Activo con deriva de política"
+                    report.policyAnalysis?.weakness == SelinuxPolicyWeakness.MINOR -> "Activo con deriva menor"
+                    else -> "Activo"
                 }
 
                 SelinuxMode.PERMISSIVE -> "Permissive"
-                SelinuxMode.DISABLED -> "Disabled"
-                SelinuxMode.UNKNOWN -> "Unknown"
+                SelinuxMode.DISABLED -> "Deshabilitado"
+                SelinuxMode.UNKNOWN -> "Desconocido"
             }
         }
     }
@@ -131,26 +131,26 @@ class SelinuxCardModelMapper {
         val appZygoteCarrierState = contextValiditySupportState(contextValidity)
         return when (report.stage) {
             SelinuxStage.LOADING ->
-                "Checking sysfs, getenforce, /proc/self/attr/current, and app_zygote attr writes before deriving final mode with paradox logic."
+                "Verificando sysfs, getenforce y /proc/self/attr/current para derivar el modo SELinux final."
 
             SelinuxStage.FAILED ->
                 report.errorMessage
-                    ?: "SELinux scan failed before the detector could assemble local evidence."
+                    ?: "El escaneo de SELinux falló antes de recolectar evidencia local."
 
             SelinuxStage.READY -> when (report.mode) {
                 SelinuxMode.ENFORCING -> {
                     val base = when (report.policyAnalysis?.weakness) {
                         SelinuxPolicyWeakness.SEVERE ->
-                            "SELinux is enforcing, but the policy looks severely weakened or modified."
+                            "SELinux está activo, pero la política parece severamente debilitada o modificada."
 
                         SelinuxPolicyWeakness.MODERATE ->
-                            "SELinux is enforcing, but policy analysis found noticeable drift."
+                            "SELinux está activo, pero el análisis de política encontró deriva notable."
 
                         SelinuxPolicyWeakness.MINOR ->
-                            "SELinux is enforcing and only minor policy drift surfaced."
+                            "SELinux está activo y solo se detectó deriva menor de política."
 
                         SelinuxPolicyWeakness.NONE, null ->
-                            "SELinux is enforcing and the visible policy surface looks internally consistent."
+                            "SELinux está activo y la política visible parece internamente consistente."
                     }
                     val extra = buildList {
                         if (report.paradoxDetected) {
@@ -233,10 +233,10 @@ class SelinuxCardModelMapper {
                 }
 
                 SelinuxMode.PERMISSIVE ->
-                    "SELinux still labels activity, but violations are logged instead of blocked."
+                    "SELinux todavía etiqueta actividad, pero las violaciones se registran en lugar de bloquearse."
 
                 SelinuxMode.DISABLED ->
-                    "Mandatory access control is off, so SELinux no longer constrains process behavior."
+                    "El control de acceso obligatorio está desactivado; SELinux ya no restringe los procesos."
 
                 SelinuxMode.UNKNOWN ->
                     "Local probes did not resolve a stable SELinux mode."
@@ -264,7 +264,7 @@ class SelinuxCardModelMapper {
             ),
             SelinuxHeaderFactModel(
                 label = "Context",
-                value = report.contextType ?: "Unknown",
+                value = report.contextType ?: "Desconocido",
                 status = when {
                     policy?.dangerousTypesFound?.isNotEmpty() == true -> DetectorStatus.danger()
                     report.contextType != null -> DetectorStatus.allClear()
@@ -282,9 +282,9 @@ class SelinuxCardModelMapper {
                     "Enforcing",
                     ignoreCase = true
                 )
-            } -> "Direct confirmation"
+            } -> "Confirmación directa"
 
-            else -> "Fallback inference"
+            else -> "Inferencia de respaldo"
         }
         return listOf(
             SelinuxDetailRowModel(
@@ -297,7 +297,7 @@ class SelinuxCardModelMapper {
                 value = when (report.mode) {
                     SelinuxMode.ENFORCING -> "Yes"
                     SelinuxMode.PERMISSIVE, SelinuxMode.DISABLED -> "No"
-                    SelinuxMode.UNKNOWN -> "Unknown"
+                    SelinuxMode.UNKNOWN -> "Desconocido"
                 },
                 status = modeStatus(report.mode),
             ),
@@ -305,9 +305,9 @@ class SelinuxCardModelMapper {
                 label = "MAC active",
                 value = when (report.mode) {
                     SelinuxMode.ENFORCING -> "Yes"
-                    SelinuxMode.PERMISSIVE -> "Logging only"
+                    SelinuxMode.PERMISSIVE -> "Solo registro"
                     SelinuxMode.DISABLED -> "No"
-                    SelinuxMode.UNKNOWN -> "Unknown"
+                    SelinuxMode.UNKNOWN -> "Desconocido"
                 },
                 status = modeStatus(report.mode),
             ),
@@ -323,7 +323,7 @@ class SelinuxCardModelMapper {
             ),
             SelinuxDetailRowModel(
                 label = "Process context",
-                value = report.contextType ?: "Unknown",
+                value = report.contextType ?: "Desconocido",
                 status = if (report.processContext != null) DetectorStatus.allClear() else DetectorStatus.info(
                     InfoKind.SUPPORT
                 ),
@@ -344,14 +344,14 @@ class SelinuxCardModelMapper {
             return when (report.stage) {
                 SelinuxStage.LOADING -> listOf(
                     SelinuxImpactItemModel(
-                        text = "Gathering local status evidence.",
+                        text = "Recolectando evidencia de estado local.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                 )
 
                 SelinuxStage.FAILED -> listOf(
                     SelinuxImpactItemModel(
-                        text = report.errorMessage ?: "Scan failed.",
+                        text = report.errorMessage ?: "Escaneo fallido.",
                         status = DetectorStatus.info(InfoKind.ERROR),
                     ),
                 )
@@ -364,11 +364,11 @@ class SelinuxCardModelMapper {
         when (report.mode) {
             SelinuxMode.ENFORCING -> {
                 items += SelinuxImpactItemModel(
-                    "Mandatory access control is active.",
+                    "El control de acceso obligatorio está activo.",
                     DetectorStatus.allClear()
                 )
                 items += SelinuxImpactItemModel(
-                    "Policy violations should be blocked and logged.",
+                    "Las violaciones de política deben ser bloqueadas y registradas.",
                     DetectorStatus.allClear()
                 )
                 if (report.paradoxDetected) {
@@ -402,12 +402,12 @@ class SelinuxCardModelMapper {
                 }
                 when (report.policyAnalysis?.weakness) {
                     SelinuxPolicyWeakness.MODERATE -> items += SelinuxImpactItemModel(
-                        "Policy drift may allow some restrictions to be bypassed.",
+                        "La deriva de política puede permitir que algunas restricciones sean evitadas.",
                         DetectorStatus.warning(),
                     )
 
                     SelinuxPolicyWeakness.SEVERE -> items += SelinuxImpactItemModel(
-                        "Policy looks heavily weakened, so enforcement may be ineffective.",
+                        "La política parece muy debilitada; el cumplimiento puede ser inefectivo.",
                         DetectorStatus.danger(),
                     )
 
@@ -417,22 +417,22 @@ class SelinuxCardModelMapper {
 
             SelinuxMode.PERMISSIVE -> {
                 items += SelinuxImpactItemModel(
-                    "Violations are logged but not blocked.",
+                    "Las violaciones se registran pero no se bloquean.",
                     DetectorStatus.danger(),
                 )
                 items += SelinuxImpactItemModel(
-                    "Security-sensitive apps and integrity checks may fail.",
+                    "Apps sensibles a seguridad y verificaciones de integridad pueden fallar.",
                     DetectorStatus.danger(),
                 )
             }
 
             SelinuxMode.DISABLED -> {
                 items += SelinuxImpactItemModel(
-                    "Mandatory access control is completely disabled.",
+                    "El control de acceso obligatorio está completamente deshabilitado.",
                     DetectorStatus.danger(),
                 )
                 items += SelinuxImpactItemModel(
-                    "The device is likely heavily modified or compromised.",
+                    "El dispositivo probablemente está muy modificado o comprometido.",
                     DetectorStatus.danger(),
                 )
             }
@@ -561,12 +561,12 @@ class SelinuxCardModelMapper {
         }
         val allowed = results.filter { it.status == "Allowed" }.map { msdPolicyRuleName(it.method) }
         val denied = results.filter { it.status == "Denied" }.map { msdPolicyRuleName(it.method) }
-        val unavailable = results.filter { it.status == "Unavailable" }.map { msdPolicyRuleName(it.method) }
+        val unavailable = results.filter { it.status == "No disponible" }.map { msdPolicyRuleName(it.method) }
         val aggregateResult = SelinuxCheckResult(
             method = "Dirty sepolicy rule: MSD",
             status = when {
                 allowed.isNotEmpty() -> "Allowed"
-                unavailable.isNotEmpty() -> "Unavailable"
+                unavailable.isNotEmpty() -> "No disponible"
                 else -> "Denied"
             },
             isSecure = when {
@@ -612,12 +612,12 @@ class SelinuxCardModelMapper {
         }
         val allowed = results.filter { it.status == "Allowed" }.map { droidspacesPolicyRuleName(it.method) }
         val denied = results.filter { it.status == "Denied" }.map { droidspacesPolicyRuleName(it.method) }
-        val unavailable = results.filter { it.status == "Unavailable" }.map { droidspacesPolicyRuleName(it.method) }
+        val unavailable = results.filter { it.status == "No disponible" }.map { droidspacesPolicyRuleName(it.method) }
         val aggregateResult = SelinuxCheckResult(
             method = "Dirty sepolicy rule: Droidspaces",
             status = when {
                 allowed.isNotEmpty() -> "Allowed"
-                unavailable.isNotEmpty() -> "Unavailable"
+                unavailable.isNotEmpty() -> "No disponible"
                 else -> "Denied"
             },
             isSecure = when {
@@ -690,18 +690,18 @@ class SelinuxCardModelMapper {
             ),
             SelinuxDetailRowModel(
                 label = "Process context",
-                value = policy.contextType ?: "Unknown",
+                value = policy.contextType ?: "Desconocido",
                 status = if (policy.dangerousTypesFound.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
                 detail = policy.processContext,
             ),
             SelinuxDetailRowModel(
                 label = "Dangerous types",
-                value = if (policy.dangerousTypesFound.isEmpty()) "None" else policy.dangerousTypesFound.joinToString(),
+                value = if (policy.dangerousTypesFound.isEmpty()) "Ninguno" else policy.dangerousTypesFound.joinToString(),
                 status = if (policy.dangerousTypesFound.isEmpty()) DetectorStatus.allClear() else DetectorStatus.danger(),
             ),
             SelinuxDetailRowModel(
                 label = "Permissive domains",
-                value = if (policy.permissiveDomains.isEmpty()) "None" else policy.permissiveDomains.joinToString(),
+                value = if (policy.permissiveDomains.isEmpty()) "Ninguno" else policy.permissiveDomains.joinToString(),
                 status = if (policy.permissiveDomains.isEmpty()) DetectorStatus.allClear() else DetectorStatus.warning(),
             ),
         )
@@ -739,8 +739,8 @@ class SelinuxCardModelMapper {
                 label = "Runtime markers",
                 value = when {
                     analysis.runtimeHits.isNotEmpty() -> "${analysis.runtimeHits.size} hit(s)"
-                    analysis.logcatChecked -> "Not observed"
-                    else -> "Unavailable"
+                    analysis.logcatChecked -> "No observado"
+                    else -> "No disponible"
                 },
                 status = when {
                     analysis.runtimeHits.isNotEmpty() -> DetectorStatus.danger()
@@ -762,8 +762,8 @@ class SelinuxCardModelMapper {
                 label = "AVC side-channel",
                 value = when {
                     analysis.sideChannelHits.isNotEmpty() -> "${analysis.sideChannelHits.size} hit(s)"
-                    analysis.logcatChecked -> "Not observed"
-                    else -> "Unavailable"
+                    analysis.logcatChecked -> "No observado"
+                    else -> "No disponible"
                 },
                 status = when {
                     analysis.sideChannelHits.isNotEmpty() -> DetectorStatus.warning()
@@ -788,8 +788,8 @@ class SelinuxCardModelMapper {
                 label = "su-related AVC",
                 value = when {
                     analysis.suspiciousActorHits.isNotEmpty() -> "${analysis.suspiciousActorHits.size} hit(s)"
-                    analysis.logcatChecked -> "Not observed"
-                    else -> "Unavailable"
+                    analysis.logcatChecked -> "No observado"
+                    else -> "No disponible"
                 },
                 status = when {
                     analysis.suspiciousActorHits.isNotEmpty() -> DetectorStatus.warning()
@@ -809,7 +809,7 @@ class SelinuxCardModelMapper {
             ),
             SelinuxDetailRowModel(
                 label = "Residue paths",
-                value = if (analysis.residueHits.isNotEmpty()) "${analysis.residueHits.size} hit(s)" else "None",
+                value = if (analysis.residueHits.isNotEmpty()) "${analysis.residueHits.size} hit(s)" else "Ninguno",
                 status = when {
                     analysis.residueHits.any { it.strongSignal } -> DetectorStatus.warning()
                     analysis.residueHits.isNotEmpty() -> DetectorStatus.info(InfoKind.SUPPORT)
@@ -884,12 +884,12 @@ class SelinuxCardModelMapper {
         return listOf(
             SelinuxDetailRowModel(
                 label = "Android",
-                value = if (report.androidVersion.isNotBlank()) report.androidVersion else "Unknown",
+                value = if (report.androidVersion.isNotBlank()) report.androidVersion else "Desconocido",
                 status = DetectorStatus.info(InfoKind.SUPPORT),
             ),
             SelinuxDetailRowModel(
                 label = "API level",
-                value = if (report.apiLevel > 0) report.apiLevel.toString() else "Unknown",
+                value = if (report.apiLevel > 0) report.apiLevel.toString() else "Desconocido",
                 status = DetectorStatus.info(InfoKind.SUPPORT),
             ),
             SelinuxDetailRowModel(
@@ -917,10 +917,10 @@ class SelinuxCardModelMapper {
     private fun policyWeaknessLabel(weakness: SelinuxPolicyWeakness?): String {
         return when (weakness) {
             SelinuxPolicyWeakness.NONE -> "Strong"
-            SelinuxPolicyWeakness.MINOR -> "Minor drift"
+            SelinuxPolicyWeakness.MINOR -> "Deriva menor"
             SelinuxPolicyWeakness.MODERATE -> "Review"
             SelinuxPolicyWeakness.SEVERE -> "Weak"
-            null -> "Skipped"
+            null -> "Omitido"
         }
     }
 
@@ -989,12 +989,12 @@ class SelinuxCardModelMapper {
 
     private fun auditIntegrityLabel(analysis: SelinuxAuditIntegrityAnalysis?): String {
         return when (analysis?.state) {
-            SelinuxAuditIntegrityState.CLEAR -> "No signal"
+            SelinuxAuditIntegrityState.CLEAR -> "Sin señal"
             SelinuxAuditIntegrityState.RESIDUE -> "Residue"
-            SelinuxAuditIntegrityState.EXPOSED -> "Exposed"
-            SelinuxAuditIntegrityState.TAMPERED -> "Tampered"
-            SelinuxAuditIntegrityState.INCONCLUSIVE -> "Inconclusive"
-            null -> "Skipped"
+            SelinuxAuditIntegrityState.EXPOSED -> "Expuesto"
+            SelinuxAuditIntegrityState.TAMPERED -> "Modificado"
+            SelinuxAuditIntegrityState.INCONCLUSIVE -> "Inconcluso"
+            null -> "Omitido"
         }
     }
 
@@ -1104,7 +1104,7 @@ class SelinuxCardModelMapper {
     }
 
     private fun trustedPolicyRuleVerdict(): String {
-        return "Enforcing with dirty sepolicy rule"
+        return "Activo con regla sepolicy modificada"
     }
 
     private fun trustedPolicyRuleSummary(result: SelinuxCheckResult): String {

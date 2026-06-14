@@ -63,8 +63,8 @@ class ZygiskCardModelMapper {
         report: ZygiskReport,
     ): String {
         return when (report.stage) {
-            ZygiskStage.LOADING -> "Scanning Zygisk runtime traces"
-            ZygiskStage.FAILED -> "Zygisk scan failed"
+            ZygiskStage.LOADING -> "Escaneando trazas Zygisk"
+            ZygiskStage.FAILED -> "Escaneo de Zygisk fallido"
             ZygiskStage.READY -> when {
                 report.fdTrapDetected -> "Cross-process FD trap is positive"
                 report.nativeStrongHitCount > 0 -> "${report.nativeStrongHitCount} direct runtime signal(s)"
@@ -81,7 +81,7 @@ class ZygiskCardModelMapper {
     ): String {
         return when (report.stage) {
             ZygiskStage.LOADING ->
-                "The detector is collecting cross-process specialization evidence first, then correlating environment, linker, namespace, maps, smaps, thread, fd, stack, seccomp, and heap traces from the current process."
+                "El detector verifica evidencia entre procesos, luego correlaciona trazas de linker, namespace, mapas y heap."
 
             ZygiskStage.FAILED ->
                 report.errorMessage ?: "Zygisk detection failed before evidence could be assembled."
@@ -107,14 +107,14 @@ class ZygiskCardModelMapper {
     ): List<ZygiskHeaderFactModel> {
         return when (report.stage) {
             ZygiskStage.LOADING -> placeholderFacts(
-                "Pending",
+                "Pendiente",
                 DetectorStatus.info(InfoKind.SUPPORT)
             )
 
             ZygiskStage.FAILED -> placeholderFacts("Error", DetectorStatus.info(InfoKind.ERROR))
             ZygiskStage.READY -> listOf(
                 ZygiskHeaderFactModel(
-                    label = "State",
+                    label = "Estado",
                     value = stateLabel(report),
                     status = report.toDetectorStatus(),
                 ),
@@ -126,9 +126,9 @@ class ZygiskCardModelMapper {
                 ZygiskHeaderFactModel(
                     label = "FD trap",
                     value = when {
-                        report.fdTrapDetected -> "Detected"
-                        report.fdTrapAvailable -> "Clean"
-                        else -> "Unavailable"
+                        report.fdTrapDetected -> "Detectado"
+                        report.fdTrapAvailable -> "Limpio"
+                        else -> "No disponible"
                     },
                     status = when {
                         report.fdTrapDetected -> DetectorStatus.danger()
@@ -140,7 +140,7 @@ class ZygiskCardModelMapper {
                     label = "Native",
                     value = when {
                         report.nativeAvailable -> "Ready"
-                        else -> "Unavailable"
+                        else -> "No disponible"
                     },
                     status = when {
                         report.nativeAvailable -> DetectorStatus.allClear()
@@ -158,7 +158,7 @@ class ZygiskCardModelMapper {
             ZygiskStage.LOADING -> placeholderRows(
                 listOf("State", "Confidence", "Strong signals", "Heuristic signals"),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             ZygiskStage.FAILED -> placeholderRows(
@@ -169,7 +169,7 @@ class ZygiskCardModelMapper {
 
             ZygiskStage.READY -> listOf(
                 ZygiskDetailRowModel(
-                    label = "State",
+                    label = "Estado",
                     value = stateLabel(report),
                     status = report.toDetectorStatus(),
                     detail = "Balanced policy: FD trap or any direct runtime strong hit is red, one heuristic-only family is yellow, converging heuristic families also escalate to red.",
@@ -211,14 +211,14 @@ class ZygiskCardModelMapper {
         return when (report.stage) {
             ZygiskStage.LOADING -> listOf(
                 ZygiskImpactItemModel(
-                    text = "Collecting the cross-process FD trap result and the native runtime snapshot in parallel.",
+                    text = "Recolectando resultado de FD trap entre procesos y snapshot nativo en paralelo.",
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
             )
 
             ZygiskStage.FAILED -> listOf(
                 ZygiskImpactItemModel(
-                    text = report.errorMessage ?: "Zygisk detection failed.",
+                    text = report.errorMessage ?: "Detección de Zygisk fallida.",
                     status = DetectorStatus.info(InfoKind.ERROR),
                 ),
             )
@@ -286,7 +286,7 @@ class ZygiskCardModelMapper {
                     "Solist, atexit, stack, heap",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             ZygiskStage.FAILED -> placeholderRows(
@@ -322,7 +322,7 @@ class ZygiskCardModelMapper {
             ZygiskStage.LOADING -> placeholderRows(
                 listOf("Cross-process", "Runtime", "Linker", "Maps", "Heap", "Threads", "FDs"),
                 DetectorStatus.info(InfoKind.SUPPORT),
-                "Pending",
+                "Pendiente",
             )
 
             ZygiskStage.FAILED -> placeholderRows(
@@ -336,7 +336,7 @@ class ZygiskCardModelMapper {
                     listOf(
                         ZygiskDetailRowModel(
                             label = "Signals",
-                            value = if (report.fullyClean) "Clean" else "Unavailable",
+                            value = if (report.fullyClean) "Limpio" else "No disponible",
                             status = if (report.fullyClean) {
                                 DetectorStatus.allClear()
                             } else {
@@ -426,7 +426,7 @@ class ZygiskCardModelMapper {
             report.fdTrapDetected || report.nativeStrongHitCount > 0 -> "High"
             report.heuristicHitCount > 0 -> "Medium"
             report.fullyClean -> "High"
-            else -> "Partial"
+            else -> "Parcial"
         }
     }
 
