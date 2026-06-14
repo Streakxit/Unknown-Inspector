@@ -2,10 +2,7 @@
   <img src="logo.jpg" alt="UNKNOWN Inspector Logo" width="300px">
 </p>
 
-<p align="center">
-  <a href="https://github.com/Streakxit/Unknown-Inspector/stargazers"><img src="https://img.shields.io/github/stars/Streakxit/Unknown-Inspector?style=social" alt="Stars"></a>
-  <a href="https://github.com/Streakxit/Unknown-Inspector/network/members"><img src="https://img.shields.io/github/forks/Streakxit/Unknown-Inspector?style=social" alt="Forks"></a>
-  <a href="https://github.com/Streakxit/Unknown-Inspector/releases"><img src="https://img.shields.io/github/v/release/Streakxit/Unknown-Inspector?style=flat-square&logo=github" alt="Releases"></a>
+
   <a href="https://github.com/Streakxit/Unknown-Inspector/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Streakxit/Unknown-Inspector?style=flat-square" alt="License"></a>
 </p>
 
