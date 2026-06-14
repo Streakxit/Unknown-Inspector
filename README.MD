@@ -18,9 +18,6 @@ UNKNOWN Inspector es una aplicación Android de detección de seguridad enfocada
 
 La app combina una interfaz Jetpack Compose, módulos de detección en Kotlin y sondas de bajo nivel en C++ y Assembly para presentar resultados detallados a través de tarjetas estructuradas.
 
-> Desarrollada y mantenida por **UNKNOWN Security Team** — especialistas en análisis forense de dispositivos Android para la comunidad competitiva de Free Fire en Brasil y Latinoamérica.
-
----
 
 # ✨ Características Principales
 
