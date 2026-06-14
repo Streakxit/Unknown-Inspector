@@ -61,7 +61,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import compose.icons.SimpleIcons
-import compose.icons.simpleicons.Tencentqq
 import com.eltavine.duckdetector.BuildConfig
 import com.eltavine.duckdetector.core.ui.model.DetectionSeverity
 import com.eltavine.duckdetector.R
@@ -360,36 +359,6 @@ private fun BrandHeader() {
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            SocialGlyph(
-                iconRes = R.drawable.ic_telegram,
-                onClick = {
-                    uriHandler.openUri("https://github.com/Streakxit/Unknown-Inspector")
-                },
-            )
-            SocialGlyph(
-                iconVector = SimpleIcons.Tencentqq,
-                onClick = {
-                    context.getSystemService(android.content.ClipboardManager::class.java)
-                        ?.setPrimaryClip(
-                            ClipData.newPlainText(
-                                "UNKNOWN Inspector QQ group",
-                                DUCK_DETECTOR_QQ_GROUP,
-                            ),
-                        )
-                    Toast.makeText(
-                        context,
-                        "QQ group number copied: $DUCK_DETECTOR_QQ_GROUP",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    uriHandler.openUri(DUCK_DETECTOR_QQ_GROUP_URL)
-                },
-            )
-        }
     }
 }
 

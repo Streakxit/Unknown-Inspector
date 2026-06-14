@@ -195,57 +195,7 @@ fun AlphaBuildWarningOverlay(
                         text = stringResource(R.string.alpha_helper),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(18.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        ExternalLinkIcon(
-                            iconResId = R.drawable.ic_github,
-                            label = stringResource(R.string.social_github),
-                            onOpen = { uriHandler.openUri(APP_ERRORS_TRACKING_GITHUB) },
-                        )
-                        ExternalLinkIcon(
-                            iconResId = R.drawable.ic_telegram,
-                            label = stringResource(R.string.social_telegram),
-                            onOpen = { uriHandler.openUri(APP_ERRORS_TRACKING_TELEGRAM) },
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Schedule,
-                            contentDescription = null,
-                            tint = if (canDismiss) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            },
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Text(
-                            text = if (canDismiss) {
-                                stringResource(R.string.alpha_dismiss_ready)
-                            } else {
-                                stringResource(R.string.alpha_dismiss_waiting, remainingSeconds)
-                            },
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-                            if (canDismiss) {
-                                dismissOverlay()
-                            }
-                        },
+                    ),
                         enabled = canDismiss,
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
