@@ -696,7 +696,7 @@ class CustomRomCardModelMapper {
                 ),
                 CustomRomDetailRowModel(
                     label = "Visibilidad de paquetes",
-                    value = if (report.packageVisibility == CustomRomPackageVisibility.FULL) "Full" else "Scoped",
+                    value = if (report.packageVisibility == CustomRomPackageVisibility.FULL) "Completo" else "Scoped",
                     status = if (report.packageVisibility == CustomRomPackageVisibility.FULL) {
                         DetectorStatus.allClear()
                     } else {

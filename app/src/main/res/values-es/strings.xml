@@ -87,7 +87,7 @@
     <string name="alpha_warning_runtime">Pueden ocurrir fallos inesperados de inicio o crashes en runtime en este branch.</string>
     <string name="alpha_warning_report">Si encontrás un problema, por favor reportalo. Los pasos de reproducción claros son especialmente útiles.</string>
     <string name="alpha_warning_download">Si no sabés cómo capturar logs de crash, descargá AppErrorsTracking desde uno de los enlaces.</string>
-    <string name="alpha_helper">Ayuda de logs de crash: AppErrorsTracking está disponible en GitHub Actions y Telegram CI.</string>
+    <string name="alpha_helper">Ayuda de logs de crash: AppErrorsTracking está disponible en GitHub Actions.</string>
     <string name="alpha_dismiss_ready">Ya podés cerrar esta advertencia.</string>
     <string name="alpha_dismiss_waiting">Cerrar disponible en %1$ds.</string>
     <string name="alpha_continue">Entiendo, continuar</string>

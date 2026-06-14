@@ -201,7 +201,7 @@ class LSPosedCardModelMapper {
                             label = fallbackLabel,
                             value = "Limpio",
                             status = DetectorStatus.allClear(),
-                            detail = "No signal surfaced in this LSPosed evidence slice.",
+                            detail = "No se detectó señal en esta porción de evidencia LSPosed.",
                         ),
                     )
                 }
@@ -228,11 +228,11 @@ class LSPosedCardModelMapper {
             LSPosedStage.READY -> when {
                 report.hasDangerSignals -> listOf(
                     LSPosedImpactItemModel(
-                        text = "Loaded Xposed classes, bridge fields, Binder bridge responses, runtime artifacts, logcat leaks, dirty SELinux policy rules, and native LSPosed keywords are stronger evidence than package residue because they touch the current process, live policy, or system services directly.",
+                        text = "Clases Xposed cargadas, campos bridge, respuestas Binder, artefactos de runtime, fugas logcat, reglas de política SELinux sucia y palabras clave LSPosed nativas son evidencia más fuerte que el residuo de paquetes porque tocan el proceso actual, la política activa o los servicios del sistema directamente.",
                         status = DetectorStatus.danger(),
                     ),
                     LSPosedImpactItemModel(
-                        text = "This card still observes only a narrow runtime slice. Read it together with Memory, Native Root, Mount, and System Properties when the setup is actively hiding itself.",
+                        text = "Esta tarjeta solo observa una porción estrecha del runtime. Leéla junto con Memoria, Root Nativo, Montaje y Propiedades del Sistema cuando la configuración se esté ocultando activamente.",
                         status = DetectorStatus.warning(),
                     ),
                 )
@@ -305,22 +305,22 @@ class LSPosedCardModelMapper {
                 listOf(
                     "Danger signals",
                     "Review signals",
-                    "Class hits",
-                    "ClassLoader hits",
-                    "Bridge field hits",
-                    "Stack hits",
-                    "Callback hits",
-                    "Binder hits",
-                    "Runtime artifact hits",
-                    "Runtime artifacts availability",
-                    "Logcat hits",
-                    "Logcat availability",
-                    "Dirty policy hits",
-                    "Dirty policy availability",
-                    "Manager packages",
-                    "Module apps",
-                    "Native maps",
-                    "Native heap",
+                    "Detecciones de clase",
+                    "Detecciones ClassLoader",
+                    "Detecciones campo bridge",
+                    "Detecciones de stack",
+                    "Detecciones callback",
+                    "Detecciones Binder",
+                    "Detecciones artefactos runtime",
+                    "Disponibilidad artefactos runtime",
+                    "Detecciones logcat",
+                    "Disponibilidad logcat",
+                    "Detecciones política sucia",
+                    "Disponibilidad política sucia",
+                    "Paquetes manager",
+                    "Apps de módulo",
+                    "Mapas nativos",
+                    "Heap nativo",
                     "Package visibility",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
@@ -331,22 +331,22 @@ class LSPosedCardModelMapper {
                 listOf(
                     "Danger signals",
                     "Review signals",
-                    "Class hits",
-                    "ClassLoader hits",
-                    "Bridge field hits",
-                    "Stack hits",
-                    "Callback hits",
-                    "Binder hits",
-                    "Runtime artifact hits",
-                    "Runtime artifacts availability",
-                    "Logcat hits",
-                    "Logcat availability",
-                    "Dirty policy hits",
-                    "Dirty policy availability",
-                    "Manager packages",
-                    "Module apps",
-                    "Native maps",
-                    "Native heap",
+                    "Detecciones de clase",
+                    "Detecciones ClassLoader",
+                    "Detecciones campo bridge",
+                    "Detecciones de stack",
+                    "Detecciones callback",
+                    "Detecciones Binder",
+                    "Detecciones artefactos runtime",
+                    "Disponibilidad artefactos runtime",
+                    "Detecciones logcat",
+                    "Disponibilidad logcat",
+                    "Detecciones política sucia",
+                    "Disponibilidad política sucia",
+                    "Paquetes manager",
+                    "Apps de módulo",
+                    "Mapas nativos",
+                    "Heap nativo",
                     "Package visibility",
                 ),
                 DetectorStatus.info(InfoKind.ERROR),
@@ -373,12 +373,12 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Class hits",
+                    label = "Detecciones de clase",
                     value = report.classHitCount.toString(),
                     status = if (report.classHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "ClassLoader hits",
+                    label = "Detecciones ClassLoader",
                     value = report.classLoaderHitCount.toString(),
                     status = when {
                         report.signals.any {
@@ -391,27 +391,27 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Bridge field hits",
+                    label = "Detecciones campo bridge",
                     value = report.bridgeFieldHitCount.toString(),
                     status = if (report.bridgeFieldHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Stack hits",
+                    label = "Detecciones de stack",
                     value = report.stackHitCount.toString(),
                     status = if (report.stackHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Callback hits",
+                    label = "Detecciones callback",
                     value = report.callbackHitCount.toString(),
                     status = if (report.callbackHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Binder hits",
+                    label = "Detecciones Binder",
                     value = report.binderHitCount.toString(),
                     status = if (report.binderHitCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Runtime artifact hits",
+                    label = "Detecciones artefactos runtime",
                     value = report.runtimeArtifactHitCount.toString(),
                     status = when {
                         report.signals.any {
@@ -425,14 +425,14 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Runtime artifacts availability",
-                    value = if (report.runtimeArtifactAvailable) "Checked" else "No disponible",
+                    label = "Disponibilidad artefactos runtime",
+                    value = if (report.runtimeArtifactAvailable) "Verificado" else "No disponible",
                     status = if (report.runtimeArtifactAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Logcat hits",
+                    label = "Detecciones logcat",
                     value = report.logcatHitCount.toString(),
                     status = when {
                         report.signals.any {
@@ -446,14 +446,14 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Logcat availability",
-                    value = if (report.logcatAvailable) "Checked" else "No disponible",
+                    label = "Disponibilidad logcat",
+                    value = if (report.logcatAvailable) "Verificado" else "No disponible",
                     status = if (report.logcatAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Dirty policy hits",
+                    label = "Detecciones política sucia",
                     value = report.policySignalCount.toString(),
                     status = when {
                         report.signals.any {
@@ -467,24 +467,24 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Dirty policy availability",
-                    value = if (report.dirtyPolicyAvailable) "Checked" else "No disponible",
+                    label = "Disponibilidad política sucia",
+                    value = if (report.dirtyPolicyAvailable) "Verificado" else "No disponible",
                     status = if (report.dirtyPolicyAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Manager packages",
+                    label = "Paquetes manager",
                     value = report.managerPackageCount.toString(),
                     status = if (report.managerPackageCount > 0) DetectorStatus.warning() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Module apps",
+                    label = "Apps de módulo",
                     value = report.moduleAppCount.toString(),
                     status = if (report.moduleAppCount > 0) DetectorStatus.warning() else DetectorStatus.allClear(),
                 ),
                 LSPosedDetailRowModel(
-                    label = "Native maps",
+                    label = "Mapas nativos",
                     value = if (report.nativeAvailable || report.nativeMapsHitCount > 0) {
                         report.nativeMapsHitCount.toString()
                     } else {
@@ -497,7 +497,7 @@ class LSPosedCardModelMapper {
                     },
                 ),
                 LSPosedDetailRowModel(
-                    label = "Native heap",
+                    label = "Heap nativo",
                     value = if (report.nativeHeapAvailable || report.nativeHeapHitCount > 0) {
                         "${report.nativeHeapHitCount}/${report.nativeHeapScannedRegions}"
                     } else {
@@ -575,10 +575,10 @@ class LSPosedCardModelMapper {
             "Runtime artifacts",
             "Logcat leaks",
             "Dirty sepolicy",
-            "Native maps",
-            "Native heap",
+            "Mapas nativos",
+            "Heap nativo",
             "Native library",
-            "Signal summary",
+            "Resumen de señales",
         ).map { label ->
             LSPosedDetailRowModel(
                 label = label,
@@ -600,7 +600,7 @@ class LSPosedCardModelMapper {
         visibility: LSPosedPackageVisibility,
     ): String {
         return when (visibility) {
-            LSPosedPackageVisibility.FULL -> "Full"
+            LSPosedPackageVisibility.FULL -> "Completo"
             LSPosedPackageVisibility.RESTRICTED -> "Restricted"
             LSPosedPackageVisibility.UNKNOWN -> "Desconocido"
         }

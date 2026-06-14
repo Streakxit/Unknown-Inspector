@@ -249,7 +249,7 @@ class DangerousAppsCardModelMapper {
 
     private fun visibilityLabel(visibility: DangerousPackageVisibility): String {
         return when (visibility) {
-            DangerousPackageVisibility.FULL -> "Full"
+            DangerousPackageVisibility.FULL -> "Completo"
             DangerousPackageVisibility.RESTRICTED -> "Scoped"
             DangerousPackageVisibility.UNKNOWN -> "Pendiente"
         }

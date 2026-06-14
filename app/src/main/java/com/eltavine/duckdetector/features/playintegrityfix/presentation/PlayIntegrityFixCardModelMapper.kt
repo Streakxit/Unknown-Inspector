@@ -464,7 +464,7 @@ class PlayIntegrityFixCardModelMapper {
             "getprop snapshot",
             "JVM fallback",
             "Native libc props",
-            "Native maps",
+            "Mapas nativos",
             "Property catalog",
             "Source consistency",
         ).map { label ->

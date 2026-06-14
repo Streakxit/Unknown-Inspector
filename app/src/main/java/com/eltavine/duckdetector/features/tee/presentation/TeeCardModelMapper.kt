@@ -131,7 +131,7 @@ class TeeCardModelMapper {
     private fun verdictValue(report: TeeReport): String = when (report.verdict) {
         TeeVerdict.LOADING -> "Escaneando"
         TeeVerdict.CONSISTENT -> if (report.supplementaryIndicatorCount > 0) {
-            "Aligned + review"
+            "Alineado + revisión"
         } else {
             "Aligned"
         }

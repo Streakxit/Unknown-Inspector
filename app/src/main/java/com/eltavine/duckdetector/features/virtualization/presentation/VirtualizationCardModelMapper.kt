@@ -344,7 +344,7 @@ class VirtualizationCardModelMapper {
                 VirtualizationDetailRowModel(
                     label = "Visibilidad de paquetes",
                     value = when (report.packageVisibility) {
-                        InstalledPackageVisibility.FULL -> "Full"
+                        InstalledPackageVisibility.FULL -> "Completo"
                         InstalledPackageVisibility.RESTRICTED -> "Scoped"
                         InstalledPackageVisibility.UNKNOWN -> "Desconocido"
                     },
