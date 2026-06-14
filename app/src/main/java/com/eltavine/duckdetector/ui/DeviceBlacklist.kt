@@ -108,7 +108,7 @@ internal fun BlockedDeviceScreen(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             WrapSafeText(
-                text = "Duck Detector will close now.",
+                text = "UNKNOWN Inspector will close now.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

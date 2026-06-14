@@ -45,7 +45,7 @@ class DashboardExportFormatter {
 
     fun format(state: DashboardUiState): String = buildString {
         appendLine("========================================")
-        appendLine("  Duck Detector — Security Scan Report")
+        appendLine("  UNKNOWN Inspector — Security Scan Report")
         appendLine("========================================")
         appendLine()
         appendLine("App Version : ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")

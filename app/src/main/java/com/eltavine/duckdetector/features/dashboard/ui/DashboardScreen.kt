@@ -377,7 +377,7 @@ private fun BrandHeader() {
                     context.getSystemService(android.content.ClipboardManager::class.java)
                         ?.setPrimaryClip(
                             ClipData.newPlainText(
-                                "Duck Detector QQ group",
+                                "UNKNOWN Inspector QQ group",
                                 DUCK_DETECTOR_QQ_GROUP,
                             ),
                         )

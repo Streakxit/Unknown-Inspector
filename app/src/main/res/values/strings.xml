@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <resources>
-    <string name="duck_logo_description">Duck Detector logo</string>
+    <string name="duck_logo_description">UNKNOWN Inspector logo</string>
     <string name="social_github">GitHub</string>
     <string name="social_telegram">Telegram</string>
     <string name="user_agreement">User Agreement</string>
@@ -23,11 +23,11 @@ limitations under the License.
     <string name="please_read_carefully">Please read carefully before continuing</string>
     <string name="agreement_risk_title">High-risk use reminder</string>
     <string name="agreement_risk_body_emphasis">Do not treat any single result as a final legal, compliance, warranty, or security conclusion.</string>
-    <string name="agreement_risk_body_template">Duck Detector provides reference signals only. %1$s Always combine the app\'s output with manual verification, upstream evidence, and your own risk assessment before taking action.</string>
+    <string name="agreement_risk_body_template">UNKNOWN Inspector provides reference signals only. %1$s Always combine the app\'s output with manual verification, upstream evidence, and your own risk assessment before taking action.</string>
     <string name="user_agreement_title">User Agreement</string>
-    <string name="user_agreement_content" formatted="false">By using Duck Detector, you agree to the following terms:&#10;&#10;1. Purpose of use&#10;This application is designed solely for educational and personal security-assessment purposes. It helps users understand the security status of their own devices.&#10;&#10;2. No warranty&#10;This application is provided &quot;as is&quot; without any warranties, express or implied. The developers do not guarantee the accuracy, completeness, or reliability of detection results.&#10;&#10;3. User responsibility&#10;You are solely responsible for how you use this application and any consequences that may arise from its use.&#10;&#10;4. Compliance with laws&#10;You agree to use this application in compliance with all applicable local, national, and international laws and regulations.</string>
+    <string name="user_agreement_content" formatted="false">By using UNKNOWN Inspector, you agree to the following terms:&#10;&#10;1. Purpose of use&#10;This application is designed solely for educational and personal security-assessment purposes. It helps users understand the security status of their own devices.&#10;&#10;2. No warranty&#10;This application is provided &quot;as is&quot; without any warranties, express or implied. The developers do not guarantee the accuracy, completeness, or reliability of detection results.&#10;&#10;3. User responsibility&#10;You are solely responsible for how you use this application and any consequences that may arise from its use.&#10;&#10;4. Compliance with laws&#10;You agree to use this application in compliance with all applicable local, national, and international laws and regulations.</string>
     <string name="disclaimer_title">Disclaimer</string>
-    <string name="disclaimer_content" formatted="false">IMPORTANT NOTICE:&#10;&#10;1. Detection limitations&#10;Duck Detector uses various methods to detect device security status, but no detection method is 100&#37; accurate. Results should be considered indicators rather than definitive assessments.&#10;&#10;2. False positives and false negatives&#10;The application may produce false positives or false negatives. Always use professional security tools and your own verification for comprehensive assessment.&#10;&#10;3. No liability&#10;The developers, contributors, and distributors of Duck Detector shall not be held liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use this application.&#10;&#10;4. Third-party services&#10;TEE revocation checks use a built-in snapshot by default. If you allow online revocation refresh, the app may contact the Google attestation revocation endpoint. Security scans themselves still run locally on your device, and detector findings are not intentionally uploaded as scan telemetry.</string>
+    <string name="disclaimer_content" formatted="false">IMPORTANT NOTICE:&#10;&#10;1. Detection limitations&#10;UNKNOWN Inspector uses various methods to detect device security status, but no detection method is 100&#37; accurate. Results should be considered indicators rather than definitive assessments.&#10;&#10;2. False positives and false negatives&#10;The application may produce false positives or false negatives. Always use professional security tools and your own verification for comprehensive assessment.&#10;&#10;3. No liability&#10;The developers, contributors, and distributors of UNKNOWN Inspector shall not be held liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use this application.&#10;&#10;4. Third-party services&#10;TEE revocation checks use a built-in snapshot by default. If you allow online revocation refresh, the app may contact the Google attestation revocation endpoint. Security scans themselves still run locally on your device, and detector findings are not intentionally uploaded as scan telemetry.</string>
     <string name="privacy_notice_title">Privacy Notice</string>
     <string name="privacy_notice_content" formatted="false">Privacy summary: Security checks run locally on your device. Detector findings are not intentionally uploaded as scan telemetry. TEE revocation checks use a built-in snapshot by default; if you allow online revocation refresh, the app may contact the Google attestation revocation endpoint.</string>
     <string name="timer_elapsed">30 seconds elapsed</string>
@@ -55,7 +55,7 @@ limitations under the License.
     <string name="about_privacy_summary">Checks run locally on-device. Built-in TEE revocation data is bundled with the app; online CRL refresh is optional and only happens if you enable it in Settings.</string>
     <string name="about_label_copy_build_info">Copy Build Info</string>
     <string name="about_copy_build_info_summary">Copy version, build time and build hash</string>
-    <string name="about_clipboard_label">Duck Detector build info</string>
+    <string name="about_clipboard_label">UNKNOWN Inspector build info</string>
     <string name="about_clipboard_version_line">Version: %1$s (%2$d)</string>
     <string name="about_clipboard_build_time_line">Build Time (UTC): %1$s UTC</string>
     <string name="about_clipboard_build_hash_line">Build Hash: %1$s</string>
@@ -135,7 +135,7 @@ limitations under the License.
     <string name="startup_status_review_later">Review later</string>
     <string name="startup_notifications_title">Notifications</string>
     <string name="startup_notifications_ready_headline">Scan notifications are enabled.</string>
-    <string name="startup_notifications_ready_detail">Duck Detector can publish scan-progress notifications while detector cards collect evidence.</string>
+    <string name="startup_notifications_ready_detail">UNKNOWN Inspector can publish scan-progress notifications while detector cards collect evidence.</string>
     <string name="startup_notifications_prompt_headline">Choose whether scan progress may post notifications.</string>
     <string name="startup_notifications_prompt_detail_api33">Android %1$d requires runtime notification permission. Startup scanning stays blocked until you allow it or explicitly continue without it.</string>
     <string name="startup_notifications_prompt_detail_legacy">This Android version does not require a runtime notification prompt, but the startup policy still needs to record your choice.</string>
@@ -145,26 +145,26 @@ limitations under the License.
     <string name="startup_notifications_skipped_detail">Scan progress will stay inside the app until you grant notification permission later.</string>
     <string name="startup_live_update_title">Live Update</string>
     <string name="startup_live_update_unsupported_headline">Promoted ongoing notifications are not available on this Android version.</string>
-    <string name="startup_live_update_unsupported_detail">Duck Detector will use a regular notification path when notification permission is available.</string>
+    <string name="startup_live_update_unsupported_detail">UNKNOWN Inspector will use a regular notification path when notification permission is available.</string>
     <string name="startup_live_update_waiting_headline">Live Update depends on the notification path.</string>
     <string name="startup_live_update_waiting_detail">Grant notification permission first. If you keep notifications disabled, this card will fall back to regular in-app progress only.</string>
     <string name="startup_live_update_ready_headline">Promoted ongoing notifications are allowed.</string>
     <string name="startup_live_update_ready_detail">On supported Android versions, scan progress can surface through the richer Live Update path.</string>
     <string name="startup_live_update_prompt_headline">Choose whether to use the Android Live Update path.</string>
-    <string name="startup_live_update_prompt_detail">Duck Detector can open the system page for promoted ongoing notifications. If you skip this, scan progress falls back to a regular notification.</string>
+    <string name="startup_live_update_prompt_detail">UNKNOWN Inspector can open the system page for promoted ongoing notifications. If you skip this, scan progress falls back to a regular notification.</string>
     <string name="startup_live_update_open_settings">Open settings</string>
     <string name="startup_live_update_use_regular">Use regular</string>
     <string name="startup_live_update_regular_headline">Regular notifications were selected.</string>
     <string name="startup_live_update_regular_detail">Promoted ongoing notifications stay disabled. Scan progress will use the regular notification path instead.</string>
     <string name="startup_crl_title">CRL online refresh</string>
     <string name="startup_crl_prompt_headline">Choose whether TEE revocation checks may fetch online updates.</string>
-    <string name="startup_crl_prompt_detail">Duck Detector always checks the built-in revocation snapshot. Allowing network lets it fetch Google\'s latest attestation revocation feed during TEE validation.</string>
+    <string name="startup_crl_prompt_detail">UNKNOWN Inspector always checks the built-in revocation snapshot. Allowing network lets it fetch Google\'s latest attestation revocation feed during TEE validation.</string>
     <string name="startup_crl_allow_network">Allow refresh</string>
     <string name="startup_crl_local_only">Built-in only</string>
     <string name="startup_crl_ready_headline">Online CRL refresh is allowed.</string>
     <string name="startup_crl_ready_detail">TEE validation checks the built-in snapshot and may refresh Google\'s attestation revocation feed whenever network conditions permit.</string>
     <string name="startup_crl_local_headline">TEE revocation checks use the built-in snapshot.</string>
-    <string name="startup_crl_local_detail">Duck Detector will not perform online CRL refresh until you re-enable it in Settings. Built-in revocation checks remain active.</string>
+    <string name="startup_crl_local_detail">UNKNOWN Inspector will not perform online CRL refresh until you re-enable it in Settings. Built-in revocation checks remain active.</string>
     <string name="startup_package_manager_title">PackageManager</string>
     <string name="startup_package_restricted_headline">Package inventory looks scoped or filtered.</string>
     <string name="startup_package_restricted_detail">PackageManager exposed only %1$d installed packages. Dangerous Apps and related probes can under-report installed tools under restricted visibility, scoped inventory, or HMA-style filtering.</string>

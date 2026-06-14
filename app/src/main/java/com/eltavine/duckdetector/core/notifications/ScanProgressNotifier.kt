@@ -161,7 +161,7 @@ class ScanProgressNotifier(
                 "Scan progress",
                 NotificationManager.IMPORTANCE_LOW,
             ).apply {
-                description = "Overall Duck Detector scan progress and final dashboard verdict."
+                description = "Overall UNKNOWN Inspector scan progress and final dashboard verdict."
                 setShowBadge(false)
             },
         )
