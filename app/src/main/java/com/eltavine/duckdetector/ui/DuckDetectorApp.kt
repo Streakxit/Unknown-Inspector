@@ -732,12 +732,12 @@ private fun StartupBootstrapLoadingScreen(
         ) {
             CircularProgressIndicator()
             Text(
-                text = "Preparing startup",
+                text = "Preparando inicio",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = "Loading agreement state before startup policy review.",
+                text = "Cargando estado antes de la revisión de inicio.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

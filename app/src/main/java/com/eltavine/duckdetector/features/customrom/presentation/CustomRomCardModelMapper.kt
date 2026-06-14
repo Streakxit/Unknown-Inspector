@@ -479,7 +479,7 @@ class CustomRomCardModelMapper {
                     } else if (report.hasReducedCoverage()) {
                         add(
                             CustomRomImpactItemModel(
-                                text = "No custom ROM signature surfaced from available probes, but package visibility, property-area, or native symbol coverage was incomplete.",
+                                text = "No se detectaron firmas de ROM personalizada, pero la cobertura de paquetes, área de propiedades o símbolos nativos fue incompleta.",
                                 status = DetectorStatus.info(InfoKind.SUPPORT),
                             ),
                         )
@@ -501,7 +501,7 @@ class CustomRomCardModelMapper {
                     }
                     add(
                         CustomRomImpactItemModel(
-                            text = "A determined ROM can remove obvious signatures, so absence is not proof of stock firmware.",
+                            text = "Una ROM modificada puede eliminar firmas obvias, por lo que la ausencia no es prueba de firmware original.",
                             status = DetectorStatus.info(InfoKind.SUPPORT),
                         ),
                     )

@@ -85,7 +85,7 @@ class NativeRootCardModelMapper {
                 report.ksuManagerPackagePresent -> "KernelSU manager package detected"
                 report.hasWarningFindings -> "${report.warningFindingCount} native signal(s) need review"
                 !report.nativeAvailable -> "Detector nativo no disponible"
-                report.hasReducedCoverage() -> "Native root scan has reduced coverage"
+                report.hasReducedCoverage() -> "Escaneo de root nativo con cobertura reducida"
                 else -> "No native root indicators"
             }
         }
@@ -341,7 +341,7 @@ class NativeRootCardModelMapper {
                     add(
                         if (report.hasReducedCoverage()) {
                             NativeRootImpactItemModel(
-                                text = "No native root indicator surfaced from available probes, but one or more support-only evidence paths were unavailable or scoped.",
+                                text = "No se detectó ningún indicador de root nativo, pero una o más rutas de evidencia de soporte no estuvieron disponibles.",
                                 status = DetectorStatus.info(InfoKind.SUPPORT),
                             )
                         } else {
@@ -356,7 +356,7 @@ class NativeRootCardModelMapper {
                     NativeRootImpactItemModel(
                         text = if (report.nativeAvailable) {
                             if (report.hasReducedCoverage()) {
-                                "Reduced coverage lowers confidence without implying a positive root detection."
+                                "La cobertura reducida disminuye la confianza sin implicar una detección positiva de root."
                             } else {
                                 "A determined root can still hide or remove residue, so absence of native hits is not proof of a stock device."
                             }

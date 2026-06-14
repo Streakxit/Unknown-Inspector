@@ -156,7 +156,7 @@ fun DashboardScreen(
             item {
                 ExportButton(
                     onClick = {
-                        exportLauncher.launch("duck_detector_report.txt")
+                        exportLauncher.launch("unknown_inspector_report.txt")
                     },
                 )
             }
@@ -368,7 +368,7 @@ private fun BrandHeader() {
             SocialGlyph(
                 iconRes = R.drawable.ic_telegram,
                 onClick = {
-                    uriHandler.openUri("https://t.me/duck_detector")
+                    uriHandler.openUri("https://github.com/Streakxit/Unknown-Inspector")
                 },
             )
             SocialGlyph(
@@ -721,7 +721,7 @@ private fun DashboardFindingsHeader(
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             WrapSafeText(
-                text = "Top findings",
+                text = "Hallazgos principales",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )

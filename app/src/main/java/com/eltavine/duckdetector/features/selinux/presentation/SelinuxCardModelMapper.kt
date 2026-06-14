@@ -394,7 +394,7 @@ class SelinuxCardModelMapper {
                     )
 
                     SelinuxAuditIntegrityState.INCONCLUSIVE -> items += SelinuxImpactItemModel(
-                        "Audit rewrite checks were partially unavailable from this app context.",
+                        "Las verificaciones de reescritura de audit estuvieron parcialmente no disponibles desde este contexto de app.",
                         DetectorStatus.info(InfoKind.SUPPORT),
                     )
 
@@ -504,7 +504,7 @@ class SelinuxCardModelMapper {
             )
 
             procAttrCurrent?.isSecure == true -> items += SelinuxImpactItemModel(
-                "The dedicated app_zygote carrier rejected the tested privileged contexts with normal EINVAL results.",
+                "El carrier app_zygote dedicado rechazó los contextos privilegiados probados con resultados EINVAL normales.",
                 DetectorStatus.allClear(),
             )
 
@@ -902,9 +902,9 @@ class SelinuxCardModelMapper {
 
     private fun buildReferences(): List<String> {
         return listOf(
-            "SELinux paradox: permission denied can prove enforcing mode.",
-            "Enforcing mode blocks disallowed actions instead of only logging them.",
-            "Production Android devices are expected to run enforcing SELinux.",
+            "Paradoja SELinux: un permiso denegado puede probar el modo enforcing.",
+            "El modo enforcing bloquea las acciones no permitidas en lugar de solo registrarlas.",
+            "Se espera que los dispositivos Android de producción ejecuten SELinux en modo enforcing.",
             "app_zygote can query SELinux context validity through selinux_check_context, which ultimately writes to /sys/fs/selinux/context.",
             "A dedicated app_zygote carrier can also probe privileged context materialization by writing candidate labels to /proc/self/attr/current and classifying non-EINVAL outcomes.",
             "The policyload/access seqno oracle must be captured inside zygotePreloadName; the isolated child may lose app_zygote SELinuxfs access and should downgrade missing coverage to info.",

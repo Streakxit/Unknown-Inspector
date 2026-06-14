@@ -107,7 +107,7 @@ class VirtualizationCardModelMapper {
                 report.dangerSignals.isNotEmpty() -> "${report.dangerSignals.size} direct virtualization signal(s)"
                 report.warningSignals.isNotEmpty() -> "${report.warningSignals.size} virtualization signal(s) need review"
                 report.onlyHostAppCorroboration -> "${report.hostAppCorroborationCount} corroborating host app(s)"
-                report.hasReducedCoverage() -> "Virtualization scan has reduced coverage"
+                report.hasReducedCoverage() -> "Escaneo de virtualización con cobertura reducida"
                 else -> "No direct virtualization signal"
             }
         }
@@ -252,11 +252,11 @@ class VirtualizationCardModelMapper {
                 ) {
                     listOf(
                         VirtualizationImpactItemModel(
-                            text = "No direct virtualization signal surfaced from available probes, but coverage was incomplete.",
+                            text = "Ninguna señal directa de virtualización surgió de las sondas disponibles, pero la cobertura fue incompleta.",
                             status = DetectorStatus.info(InfoKind.SUPPORT),
                         ),
                         VirtualizationImpactItemModel(
-                            text = "Unavailable helper or native paths reduce confidence without implying a positive detection.",
+                            text = "Las rutas nativas o auxiliares no disponibles reducen la confianza sin implicar una detección positiva.",
                             status = DetectorStatus.info(InfoKind.SUPPORT),
                         ),
                     )

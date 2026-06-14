@@ -68,7 +68,7 @@ class PlayIntegrityFixCardModelMapper {
                 report.dangerSignalCount > 0 -> "${report.dangerSignalCount} high-confidence residue signal(s)"
                 report.warningSignalCount > 0 -> "${report.warningSignalCount} signal(s) need review"
                 !report.nativeAvailable -> "Escaneo de Play Integrity con cobertura nativa reducida"
-                else -> "No Play Integrity residue surfaced"
+                else -> "Sin residuos de Play Integrity detectados"
             }
         }
     }
@@ -270,7 +270,7 @@ class PlayIntegrityFixCardModelMapper {
                 if (isEmpty() && report.nativeAvailable) {
                     add(
                         PlayIntegrityFixImpactItemModel(
-                            text = "No common Play Integrity Fix residue surfaced from the current property catalog or runtime trace heuristics.",
+                            text = "No se detectaron residuos comunes de Play Integrity Fix en el catálogo de propiedades o heurísticas de runtime actuales.",
                             status = DetectorStatus.allClear(),
                         ),
                     )
@@ -285,7 +285,7 @@ class PlayIntegrityFixCardModelMapper {
                 } else {
                     add(
                         PlayIntegrityFixImpactItemModel(
-                            text = "Absence of residue is not proof of stock state. A determined bypass can clean properties and avoid obvious in-process traces.",
+                            text = "La ausencia de residuos no prueba que el sistema esté sin modificar. Un bypass puede limpiar propiedades y evitar trazas en el proceso.",
                             status = DetectorStatus.info(InfoKind.SUPPORT),
                         ),
                     )

@@ -72,7 +72,7 @@ class KernelCheckCardModelMapper {
                 report.hasInformationalCveState -> "CVE patch state is informational"
                 report.cvePatchState == KernelCheckCvePatchState.INCONCLUSIVE -> "CVE patch state inconclusive"
                 !report.nativeAvailable -> "Escaneo de kernel con cobertura nativa reducida"
-                else -> "No suspicious kernel markers"
+                else -> "Sin marcadores de kernel sospechosos"
             }
         }
     }

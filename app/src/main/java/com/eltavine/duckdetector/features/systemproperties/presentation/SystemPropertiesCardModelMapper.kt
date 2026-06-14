@@ -350,7 +350,7 @@ class SystemPropertiesCardModelMapper {
                 if (crossCheckSignals.isNotEmpty()) {
                     add(
                         SystemPropertiesImpactItemModel(
-                            text = "Cross-check contradictions mean different system layers disagree about the same boot or build state, which is stronger than a single suspicious value.",
+                            text = "Las contradicciones entre cruces de verificación indican que diferentes capas del sistema no coinciden en el mismo estado de boot o build, lo cual es más fuerte que un único valor sospechoso.",
                             status = if (crossCheckSignals.any { it.severity == SystemPropertySeverity.DANGER }) {
                                 DetectorStatus.danger()
                             } else {
@@ -400,7 +400,7 @@ class SystemPropertiesCardModelMapper {
                 }
                 add(
                     SystemPropertiesImpactItemModel(
-                        text = "System properties are still software-readable values, so even aligned results should be combined with kernel, SU, TEE, and package-level signals.",
+                        text = "Las propiedades del sistema son valores legibles por software; incluso resultados alineados deben combinarse con señales de kernel, SU, TEE y paquetes.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                 )

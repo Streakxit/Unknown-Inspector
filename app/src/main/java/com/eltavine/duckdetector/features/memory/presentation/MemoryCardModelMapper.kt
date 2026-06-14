@@ -93,7 +93,7 @@ class MemoryCardModelMapper {
 
             MemoryStage.READY -> when {
                 report.dangerFindingCount > 0 ->
-                    "High-risk findings point to hook-like code redirection, suspicious executable mappings, or loader-visible runtime artifacts."
+                    "Los hallazgos de alto riesgo apuntan a redirección de código tipo hook, mapeos ejecutables sospechosos o artefactos de runtime visibles en el cargador."
 
                 report.reviewFindingCount > 0 ->
                     "The current process memory stayed mostly clean, but there are still runtime indicators that deserve review."

@@ -30,7 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Message
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Schedule
@@ -143,8 +143,8 @@ fun AboutCard(
                 AboutInfoRow(
                     label = stringResource(R.string.about_label_email),
                     value = ABOUT_EMAIL,
-                    icon = Icons.Rounded.Email,
-                    onClick = { uriHandler.openUri("mailto:$ABOUT_EMAIL") },
+                    icon = Icons.Rounded.Message,
+                    onClick = { uriHandler.openUri("https://discord.com/users/unknownnnnn.444") },
                 )
                 AboutInfoRow(
                     label = stringResource(R.string.about_label_build_time),

@@ -70,7 +70,7 @@ class ZygiskCardModelMapper {
                 report.nativeStrongHitCount > 0 -> "${report.nativeStrongHitCount} direct runtime signal(s)"
                 report.heuristicHitCount >= 2 -> "${report.heuristicHitCount} heuristic probes converged"
                 report.heuristicHitCount == 1 -> "One heuristic probe needs review"
-                report.fullyClean -> "No Zygisk runtime signal"
+                report.fullyClean -> "Sin señal Zygisk en runtime"
                 else -> "Zygisk result needs more support"
             }
         }
@@ -248,11 +248,11 @@ class ZygiskCardModelMapper {
 
                 DetectorStatus.allClear() -> listOf(
                     ZygiskImpactItemModel(
-                        text = "No direct runtime or converging heuristic signal surfaced in the current app process.",
+                        text = "Ninguna señal directa de runtime ni señal heurística convergente surgió en el proceso de app actual.",
                         status = DetectorStatus.allClear(),
                     ),
                     ZygiskImpactItemModel(
-                        text = "A clean result reduces confidence in active Zygisk-style tampering for this process, but it does not prove the whole device is stock.",
+                        text = "Un resultado limpio reduce la confianza en manipulación estilo Zygisk, pero no prueba que todo el dispositivo esté sin modificar.",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
                 )
