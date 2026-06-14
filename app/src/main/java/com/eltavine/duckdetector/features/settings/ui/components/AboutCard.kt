@@ -51,10 +51,10 @@ import com.eltavine.duckdetector.core.ui.components.WrapSafeText
 import com.eltavine.duckdetector.core.ui.presentation.formatBuildTimeUtc
 import com.eltavine.duckdetector.ui.theme.ShapeTokens
 
-private const val ABOUT_WEBSITE = "eltavine.com"
-private const val ABOUT_EMAIL = "me@eltavine.com"
-private const val ABOUT_GITHUB_URL = "https://github.com/eltavine/Duck-Detector-Refactoring"
-private const val ABOUT_GITHUB_REPOSITORY = "eltavine/Duck-Detector-Refactoring"
+private const val ABOUT_WEBSITE = "github.com/Streakxit"
+private const val ABOUT_EMAIL = "unknownnnnn.444"
+private const val ABOUT_GITHUB_URL = "https://github.com/Streakxit/Unknown-Inspector"
+private const val ABOUT_GITHUB_REPOSITORY = "Streakxit/Unknown-Inspector"
 
 @Composable
 fun AboutCard(

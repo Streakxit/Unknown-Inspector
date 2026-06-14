@@ -53,7 +53,6 @@ import com.eltavine.duckdetector.core.ui.components.WrapSafeText
 import com.eltavine.duckdetector.features.licenses.ui.OpenSourceLicensesEntry
 import com.eltavine.duckdetector.features.licenses.ui.OpenSourceLicensesScreen
 import com.eltavine.duckdetector.features.settings.ui.components.AboutCard
-import com.eltavine.duckdetector.features.settings.ui.components.AuthorCard
 import com.eltavine.duckdetector.features.settings.ui.model.SettingsUiState
 import com.eltavine.duckdetector.ui.theme.ShapeTokens
 
@@ -177,7 +176,6 @@ fun SettingsScreen(
                     onClick = { showingLicenses = true },
                 )
 
-                AuthorCard()
 
                 Spacer(modifier = Modifier.height(72.dp))
             }

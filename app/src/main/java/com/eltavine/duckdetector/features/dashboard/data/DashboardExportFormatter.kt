@@ -54,19 +54,19 @@ class DashboardExportFormatter {
         appendLine("Report Time : ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss (z)", Locale.US).format(Date())}")
         appendLine()
 
-        appendLine("----- OVERVIEW -----")
+        appendLine("----- RESUMEN -----")
         appendLine("Status  : ${state.overview.headline}")
         appendLine("Summary : ${state.overview.summary}")
         appendLine()
-        appendLine("Metrics:")
+        appendLine("Métricas:")
         state.overview.metrics.forEach { metric ->
             appendLine("  ${metric.label}: ${metric.value}")
         }
         appendLine()
 
-        appendLine("----- TOP FINDINGS -----")
+        appendLine("----- HALLAZGOS PRINCIPALES -----")
         if (state.topFindings.isEmpty()) {
-            appendLine("  (none)")
+            appendLine("  (ninguno)")
         } else {
             state.topFindings.forEach { finding ->
                 val severity = severityLabel(finding.status.severity)
@@ -77,18 +77,18 @@ class DashboardExportFormatter {
         }
         appendLine()
 
-        appendLine("----- DETECTOR CARDS -----")
+        appendLine("----- MÓDULOS DE DETECCIÓN -----")
         state.detectorCards.forEach { entry ->
             appendDetectorCard(entry)
         }
         appendLine()
 
-        appendLine("----- DEVICE INFO -----")
+        appendLine("----- INFO DEL DISPOSITIVO -----")
         appendDeviceInfo(state.deviceInfoCard)
         appendLine()
 
         appendLine("========================================")
-        appendLine("  End of report")
+        appendLine("  Fin del reporte")
         appendLine("========================================")
     }
 
@@ -115,12 +115,12 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendCardHeader(title: String, verdict: String, statusLabel: String) {
         appendLine()
         appendLine("  [$statusLabel] $title")
-        appendLine("  Verdict: $verdict")
+        appendLine("  Veredicto: $verdict")
     }
 
     private fun StringBuilder.appendHeaderFacts(facts: List<Pair<String, String>>) {
         if (facts.isEmpty()) return
-        appendLine("  Header facts:")
+        appendLine("  Hechos principales:")
         facts.forEach { (label, value) ->
             appendLine("    $label: $value")
         }
@@ -151,10 +151,10 @@ class DashboardExportFormatter {
     }
 
     private fun severityLabel(severity: DetectionSeverity): String = when (severity) {
-        DetectionSeverity.DANGER -> "DANGER"
-        DetectionSeverity.WARNING -> "WARNING"
+        DetectionSeverity.DANGER -> "CRÍTICO"
+        DetectionSeverity.WARNING -> "ADVERTENCIA"
         DetectionSeverity.INFO -> "INFO"
-        DetectionSeverity.ALL_CLEAR -> "CLEAR"
+        DetectionSeverity.ALL_CLEAR -> "LIMPIO"
     }
 
     private fun headerFactsToPairs(facts: List<*>): List<Pair<String, String>> {
@@ -205,14 +205,14 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendBootloader(model: BootloaderCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("State", detailRowsToTriples(model.stateRows))
+        appendDetailRows("Estado", detailRowsToTriples(model.stateRows))
         appendDetailRows("Attestation", detailRowsToTriples(model.attestationRows))
-        appendDetailRows("Properties", detailRowsToTriples(model.propertyRows))
-        appendDetailRows("Consistency", detailRowsToTriples(model.consistencyRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Propiedades", detailRowsToTriples(model.propertyRows))
+        appendDetailRows("Consistencia", detailRowsToTriples(model.consistencyRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -220,14 +220,14 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendMount(model: MountCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Artifacts", detailRowsToTriples(model.artifactRows))
+        appendDetailRows("Artefactos", detailRowsToTriples(model.artifactRows))
         appendDetailRows("Runtime", detailRowsToTriples(model.runtimeRows))
         appendDetailRows("Filesystem", detailRowsToTriples(model.filesystemRows))
-        appendDetailRows("Consistency", detailRowsToTriples(model.consistencyRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Consistencia", detailRowsToTriples(model.consistencyRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -238,10 +238,10 @@ class DashboardExportFormatter {
         appendDetailRows("Build", detailRowsToTriples(model.buildRows))
         appendDetailRows("Runtime", detailRowsToTriples(model.runtimeRows))
         appendDetailRows("Framework", detailRowsToTriples(model.frameworkRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -249,25 +249,25 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendSelinux(model: SelinuxCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("State", detailRowsToTriples(model.stateRows))
-        appendDetailRows("Policy", detailRowsToTriples(model.policyRows))
+        appendDetailRows("Estado", detailRowsToTriples(model.stateRows))
+        appendDetailRows("Política", detailRowsToTriples(model.policyRows))
         appendDetailRows("Audit", detailRowsToTriples(model.auditRows))
-        appendDetailRows("Device", detailRowsToTriples(model.deviceRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Dispositivo", detailRowsToTriples(model.deviceRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
         if (model.policyNotes.isNotEmpty()) {
-            appendLine("  Policy notes:")
+            appendLine("  Notas de política:")
             appendImpactItems(impactItemsToStrings(model.policyNotes))
         }
         if (model.auditNotes.isNotEmpty()) {
-            appendLine("  Audit notes:")
+            appendLine("  Notas de audit:")
             appendImpactItems(impactItemsToStrings(model.auditNotes))
         }
         if (model.references.isNotEmpty()) {
-            appendLine("  References:")
+            appendLine("  Referencias:")
             model.references.forEach { ref ->
                 appendLine("    • $ref")
             }
@@ -278,29 +278,29 @@ class DashboardExportFormatter {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
         if (model.hmaAlert != null) {
-            appendLine("  HMA Alert: ${model.hmaAlert.title}")
+            appendLine("  Alerta HMA: ${model.hmaAlert.title}")
             appendLine("    ${model.hmaAlert.summary}")
             if (model.hmaAlert.hiddenPackages.isNotEmpty()) {
-                appendLine("    Hidden packages:")
+                appendLine("    Paquetes ocultos:")
                 model.hmaAlert.hiddenPackages.forEach { pkg ->
                     appendLine("      ${pkg.appName} (${pkg.packageName}) methods: ${pkg.methods.joinToString()}")
                 }
             }
         }
         if (model.packageItems.isNotEmpty()) {
-            appendLine("  Packages:")
+            appendLine("  Paquetes:")
             model.packageItems.forEach { pkg ->
                 appendLine("    ${pkg.appName} (${pkg.packageName}) methods: ${pkg.methods.joinToString()}")
             }
         }
         if (model.context.isNotEmpty()) {
-            appendLine("  Context:")
+            appendLine("  Contexto:")
             model.context.forEach { ctx ->
                 appendLine("    ${ctx.label}: ${ctx.value}")
             }
         }
         if (model.targetApps.isNotEmpty()) {
-            appendLine("  Target apps:")
+            appendLine("  Apps objetivo:")
             model.targetApps.forEach { app ->
                 appendLine("    ${app.appName} (${app.packageName}) [${app.category}]")
             }
@@ -310,13 +310,13 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendKernelCheck(model: KernelCheckCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Identity", detailRowsToTriples(model.identityRows))
-        appendDetailRows("Anomalies", detailRowsToTriples(model.anomalyRows))
-        appendDetailRows("Behavior", detailRowsToTriples(model.behaviorRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Identidad", detailRowsToTriples(model.identityRows))
+        appendDetailRows("Anomalías", detailRowsToTriples(model.anomalyRows))
+        appendDetailRows("Comportamiento", detailRowsToTriples(model.behaviorRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -325,12 +325,12 @@ class DashboardExportFormatter {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
         appendDetailRows("Hooks", detailRowsToTriples(model.hookRows))
-        appendDetailRows("Mapping", detailRowsToTriples(model.mappingRows))
-        appendDetailRows("Loader", detailRowsToTriples(model.loaderRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Mapeo", detailRowsToTriples(model.mappingRows))
+        appendDetailRows("Cargador", detailRowsToTriples(model.loaderRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -340,13 +340,13 @@ class DashboardExportFormatter {
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
         appendDetailRows("Runtime", detailRowsToTriples(model.runtimeRows))
         appendDetailRows("Binder", detailRowsToTriples(model.binderRows))
-        appendDetailRows("Package", detailRowsToTriples(model.packageRows))
-        appendDetailRows("SELinux policy", detailRowsToTriples(model.policyRows))
-        appendDetailRows("Native", detailRowsToTriples(model.nativeRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Paquete", detailRowsToTriples(model.packageRows))
+        appendDetailRows("Política SELinux", detailRowsToTriples(model.policyRows))
+        appendDetailRows("Nativo", detailRowsToTriples(model.nativeRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -354,14 +354,14 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendNativeRoot(model: NativeRootCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Native", detailRowsToTriples(model.nativeRows))
+        appendDetailRows("Nativo", detailRowsToTriples(model.nativeRows))
         appendDetailRows("Runtime", detailRowsToTriples(model.runtimeRows))
         appendDetailRows("Kernel", detailRowsToTriples(model.kernelRows))
-        appendDetailRows("Properties", detailRowsToTriples(model.propertyRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Propiedades", detailRowsToTriples(model.propertyRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -369,13 +369,13 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendPlayIntegrityFix(model: PlayIntegrityFixCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Properties", detailRowsToTriples(model.propertyRows))
-        appendDetailRows("Consistency", detailRowsToTriples(model.consistencyRows))
-        appendDetailRows("Native", detailRowsToTriples(model.nativeRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Propiedades", detailRowsToTriples(model.propertyRows))
+        appendDetailRows("Consistencia", detailRowsToTriples(model.consistencyRows))
+        appendDetailRows("Nativo", detailRowsToTriples(model.nativeRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -384,7 +384,7 @@ class DashboardExportFormatter {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
         if (model.highlightSignals.isNotEmpty()) {
-            appendLine("  Highlight signals:")
+            appendLine("  Señales destacadas:")
             model.highlightSignals.forEach { signal ->
                 appendLine("    ${signal.label}: ${signal.value}")
             }
@@ -395,11 +395,11 @@ class DashboardExportFormatter {
                 appendLine("    ${row.label}: ${row.value}")
             }
         }
-        appendLine("  Network: ${model.networkState.summary}")
-        appendLine("  Certificate count: ${model.certificateSummary.count}")
+        appendLine("  Red: ${model.networkState.summary}")
+        appendLine("  Certificados: ${model.certificateSummary.count}")
         if (model.exportText.isNotBlank()) {
             appendLine()
-            appendLine("  --- TEE detailed export ---")
+            appendLine("  --- Exportación detallada TEE ---")
             appendLine(model.exportText)
         }
     }
@@ -407,12 +407,12 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendSu(model: SuCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Artifacts", detailRowsToTriples(model.artifactRows))
+        appendDetailRows("Artefactos", detailRowsToTriples(model.artifactRows))
         appendDetailRows("Context", detailRowsToTriples(model.contextRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -423,13 +423,13 @@ class DashboardExportFormatter {
         appendDetailRows("Core", detailRowsToTriples(model.coreRows))
         appendDetailRows("Boot", detailRowsToTriples(model.bootRows))
         appendDetailRows("Build", detailRowsToTriples(model.buildRows))
-        appendDetailRows("Source", detailRowsToTriples(model.sourceRows))
-        appendDetailRows("Consistency", detailRowsToTriples(model.consistencyRows))
+        appendDetailRows("Fuente", detailRowsToTriples(model.sourceRows))
+        appendDetailRows("Consistencia", detailRowsToTriples(model.consistencyRows))
         appendDetailRows("Info", detailRowsToTriples(model.infoRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
     }
@@ -437,19 +437,19 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendVirtualization(model: VirtualizationCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("Environment", detailRowsToTriples(model.environmentRows))
+        appendDetailRows("Entorno", detailRowsToTriples(model.environmentRows))
         appendDetailRows("Runtime", detailRowsToTriples(model.runtimeRows))
-        appendDetailRows("Consistency", detailRowsToTriples(model.consistencyRows))
+        appendDetailRows("Consistencia", detailRowsToTriples(model.consistencyRows))
         appendDetailRows("Honeypot", detailRowsToTriples(model.honeypotRows))
-        appendDetailRows("Host apps", detailRowsToTriples(model.hostAppRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
-        appendDetailRows("Scan", detailRowsToTriples(model.scanRows))
+        appendDetailRows("Apps host", detailRowsToTriples(model.hostAppRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Escaneo", detailRowsToTriples(model.scanRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
         if (model.references.isNotEmpty()) {
-            appendLine("  References:")
+            appendLine("  Referencias:")
             model.references.forEach { ref ->
                 appendLine("    • $ref")
             }
@@ -459,15 +459,15 @@ class DashboardExportFormatter {
     private fun StringBuilder.appendZygisk(model: ZygiskCardModel) {
         appendCardHeader(model.title, model.verdict, severityLabel(model.status.severity))
         appendHeaderFacts(headerFactsToPairs(model.headerFacts))
-        appendDetailRows("State", detailRowsToTriples(model.stateRows))
-        appendDetailRows("Signals", detailRowsToTriples(model.signalRows))
-        appendDetailRows("Methods", detailRowsToTriples(model.methodRows))
+        appendDetailRows("Estado", detailRowsToTriples(model.stateRows))
+        appendDetailRows("Señales", detailRowsToTriples(model.signalRows))
+        appendDetailRows("Métodos", detailRowsToTriples(model.methodRows))
         if (model.impactItems.isNotEmpty()) {
-            appendLine("  Impact:")
+            appendLine("  Impacto:")
             appendImpactItems(impactItemsToStrings(model.impactItems))
         }
         if (model.references.isNotEmpty()) {
-            appendLine("  References:")
+            appendLine("  Referencias:")
             model.references.forEach { ref ->
                 appendLine("    • $ref")
             }
