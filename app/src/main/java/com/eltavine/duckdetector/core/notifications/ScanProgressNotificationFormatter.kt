@@ -46,7 +46,7 @@ class ScanProgressNotificationFormatter {
         val overview = snapshot.dashboardOverview
         return if (snapshot.scanning) {
             ScanProgressNotificationModel(
-                title = "Scanning $clampedReady/$clampedTotal",
+                title = "Escaneando $clampedReady/$clampedTotal",
                 text = "${overview.headline} \u00b7 ${overview.summary}",
                 subText = "UNKNOWN Inspector",
                 shortCriticalText = "$clampedReady/$clampedTotal",
@@ -67,9 +67,9 @@ class ScanProgressNotificationFormatter {
         headline: String,
     ): String? {
         return when (headline) {
-            "Danger",
-            "Warning",
-            "Info",
+            "Peligro",
+            "Advertencia",
+            "Información",
             "OK" -> headline
 
             else -> null

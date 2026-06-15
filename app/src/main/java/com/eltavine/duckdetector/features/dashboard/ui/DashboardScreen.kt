@@ -120,7 +120,7 @@ fun DashboardScreen(
                 }
                 Toast.makeText(
                     context,
-                    "Report saved",
+                    "Reporte guardado",
                     Toast.LENGTH_SHORT,
                 ).show()
             } catch (e: Exception) {
@@ -287,13 +287,13 @@ private fun DashboardLoadingOverlay(
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             WrapSafeText(
-                text = "Running local checks",
+                text = "Ejecutando verificaciones locales",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
             )
             WrapSafeText(
-                text = "Dashboard summary will unlock when the detector cards finish collecting evidence.",
+                text = "El resumen del dashboard se desbloqueará cuando las tarjetas terminen de recolectar evidencia.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -353,7 +353,7 @@ private fun BrandHeader() {
                 )
                 BuildTimeMetaBlock(
                     icon = Icons.Rounded.Schedule,
-                    label = "Build Time (UTC)",
+                    label = "Hora de compilación (UTC)",
                     time = formatBuildTimeUtc(BuildConfig.BUILD_TIME_UTC),
                 )
             }
@@ -377,7 +377,7 @@ private fun ExportButton(
         )
         Spacer(modifier = Modifier.size(8.dp))
         WrapSafeText(
-            text = "Export Report",
+            text = "Exportar Reporte",
             style = MaterialTheme.typography.labelLarge,
         )
     }
@@ -695,7 +695,7 @@ private fun DashboardFindingsHeader(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             WrapSafeText(
-                text = "Priority review queue",
+                text = "Cola de revisión prioritaria",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -799,9 +799,9 @@ private fun findingSeverityLabel(
     finding: DashboardFindingModel,
 ): String {
     return when (finding.status.severity) {
-        DetectionSeverity.DANGER -> "High"
-        DetectionSeverity.WARNING -> "Warn"
-        DetectionSeverity.INFO -> "Check"
-        DetectionSeverity.ALL_CLEAR -> "Clear"
+        DetectionSeverity.DANGER -> "Alto"
+        DetectionSeverity.WARNING -> "Adv"
+        DetectionSeverity.INFO -> "Info"
+        DetectionSeverity.ALL_CLEAR -> "OK"
     }
 }

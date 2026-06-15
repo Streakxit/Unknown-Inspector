@@ -220,52 +220,52 @@ fun buildDashboardOverview(
     }
 
     val headline = when {
-        dangerCount > 0 -> "Danger"
-        warningCount > 0 -> "Warning"
-        infoErrorCount > 0 -> "Info"
-        readyCount == 0 -> "Ready"
-        pendingCount > 0 -> "Pending"
+        dangerCount > 0 -> "Peligro"
+        warningCount > 0 -> "Advertencia"
+        infoErrorCount > 0 -> "Información"
+        readyCount == 0 -> "Listo"
+        pendingCount > 0 -> "Pendiente"
         else -> "OK"
     }
 
     val summary = when {
-        dangerCount > 0 -> "Start with ${focusTitles.joinToString(separator = " and ")}."
-        warningCount > 0 -> "Review ${focusTitles.joinToString(separator = " and ")} next."
-        infoErrorCount > 0 -> "${focusTitles.joinToString(separator = " and ")} need more context before treating results as clean."
-        readyCount == 0 -> "Detector cards will populate as local checks complete."
-        pendingCount > 0 -> "Additional modules are still collecting their local evidence."
-        else -> "Use the detector cards below to inspect local evidence in detail."
+        dangerCount > 0 -> "Empezar con ${focusTitles.joinToString(separator = " y ")}."
+        warningCount > 0 -> "Revisar ${focusTitles.joinToString(separator = " y ")} next."
+        infoErrorCount > 0 -> "${focusTitles.joinToString(separator = " y ")} necesitan más contexto antes de tratar los resultados como limpios."
+        readyCount == 0 -> "Las tarjetas de detección se poblarán a medida que finalicen las verificaciones locales."
+        pendingCount > 0 -> "Los módulos adicionales aún están recolectando su evidencia local."
+        else -> "Usá las tarjetas de detección de abajo para inspeccionar la evidencia local en detalle."
     }
 
     return DashboardOverviewModel(
         title = if (scanDurationMillis != null && scanCompletedAtEpochMillis != null && pendingCount == 0) {
-            "Scanned at ${formatDetectedTimeLocal(scanCompletedAtEpochMillis)}\nTotal time ${formatScanDuration(scanDurationMillis)}"
+            "Escaneado el ${formatDetectedTimeLocal(scanCompletedAtEpochMillis)}\nTiempo total ${formatScanDuration(scanDurationMillis)}"
         } else {
-            "Security overview"
+            "Resumen de seguridad"
         },
         headline = headline,
         summary = summary,
         status = overviewStatus,
         metrics = listOf(
             DashboardOverviewMetricModel(
-                label = "Danger",
+                label = "Peligro",
                 value = dangerCount.toString(),
                 status = if (dangerCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
             ),
             DashboardOverviewMetricModel(
-                label = "Warning",
+                label = "Advertencia",
                 value = warningCount.toString(),
                 status = if (warningCount > 0) DetectorStatus.warning() else DetectorStatus.allClear(),
             ),
             DashboardOverviewMetricModel(
-                label = "Ready",
+                label = "Listo",
                 value = readyCount.toString(),
                 status = if (readyCount > 0) DetectorStatus.allClear() else DetectorStatus.info(
                     InfoKind.SUPPORT
                 ),
             ),
             DashboardOverviewMetricModel(
-                label = "Pending",
+                label = "Pendiente",
                 value = pendingCount.toString(),
                 status = if (pendingCount > 0) DetectorStatus.info(InfoKind.SUPPORT) else DetectorStatus.allClear(),
             ),
@@ -318,9 +318,9 @@ fun buildDashboardFindings(
     if (contributions.any { !it.ready }) {
         return listOf(
             DashboardFindingModel(
-                detectorTitle = "Scan status",
-                headline = "Waiting for detector evidence",
-                detail = "Detector cards will expand as modules finish collecting local evidence.",
+                detectorTitle = "Estado del escaneo",
+                headline = "Esperando evidencia de los detectores",
+                detail = "Las tarjetas se expandirán a medida que los módulos terminen de recolectar evidencia local.",
                 status = DetectorStatus.info(InfoKind.SUPPORT),
             ),
         )
@@ -328,9 +328,9 @@ fun buildDashboardFindings(
 
     return listOf(
         DashboardFindingModel(
-            detectorTitle = "Overview",
-            headline = "No urgent findings in ready modules",
-            detail = "Open detector cards below to review detailed local evidence and secondary checks.",
+            detectorTitle = "Resumen",
+            headline = "Sin hallazgos urgentes en los módulos listos",
+            detail = "Abrí las tarjetas de detección para revisar la evidencia local detallada y las verificaciones secundarias.",
             status = DetectorStatus.allClear(),
         ),
     )

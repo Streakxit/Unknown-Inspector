@@ -68,25 +68,25 @@ class NativeRootCardModelMapper {
             NativeRootStage.LOADING -> "Escaneando indicadores root del kernel"
             NativeRootStage.FAILED -> "Escaneo de root nativo fallido"
             NativeRootStage.READY -> when {
-                report.kernelSuDetected && report.aPatchDetected -> "KernelSU and APatch indicators detected"
-                report.selfSuDomain -> "Current app already runs in KernelSU su domain"
-                report.kernelSuDetected && report.ksuSupercallProbeHit -> "KernelSU detected via ksu_driver"
-                report.kernelSuDetected && report.prctlProbeHit -> "KernelSU detected via prctl"
-                report.kernelSuDetected -> "KernelSU indicators detected"
-                report.aPatchDetected -> "APatch indicators detected"
-                report.magiskDetected -> "Magisk native indicators detected"
-                report.rootDetected -> "Root indicators detected"
+                report.kernelSuDetected && report.aPatchDetected -> "Indicadores de KernelSU y APatch detectados"
+                report.selfSuDomain -> "La app ya se ejecuta en el dominio su de KernelSU"
+                report.kernelSuDetected && report.ksuSupercallProbeHit -> "KernelSU detectado via ksu_driver"
+                report.kernelSuDetected && report.prctlProbeHit -> "KernelSU detectado via prctl"
+                report.kernelSuDetected -> "Indicadores de KernelSU detectados"
+                report.aPatchDetected -> "Indicadores de APatch detectados"
+                report.magiskDetected -> "Indicadores nativos de Magisk detectados"
+                report.rootDetected -> "Indicadores de root detectados"
                 report.hasDangerFindings -> "${report.dangerFindingCount} runtime root signal(s)"
-                report.mountAnchorDriftCount > 0 -> "Isolated mount drift suggests namespace tampering"
-                report.mountDriftSignalCount > 0 -> "Isolated-process namespace drift needs review"
+                report.mountAnchorDriftCount > 0 -> "Deriva de montaje aislado sugiere manipulación de namespace"
+                report.mountDriftSignalCount > 0 -> "La deriva de namespace del proceso aislado requiere revisión"
                 report.ksuManagerPackagePresent && report.ksuManagerTraitHitCount > 0 ->
-                    "KernelSU manager weak fingerprint detected"
+                    "Fingerprint débil del manager de KernelSU detectado"
 
                 report.ksuManagerPackagePresent -> "KernelSU manager package detected"
                 report.hasWarningFindings -> "${report.warningFindingCount} native signal(s) need review"
                 !report.nativeAvailable -> "Detector nativo no disponible"
                 report.hasReducedCoverage() -> "Escaneo de root nativo con cobertura reducida"
-                else -> "No native root indicators"
+                else -> "Sin indicadores de root nativo"
             }
         }
     }
@@ -97,23 +97,23 @@ class NativeRootCardModelMapper {
                 "Las sondas nativas verifican supercall, syscall, side-channel, deriva de montaje y evidencia de propiedades."
 
             NativeRootStage.FAILED ->
-                report.errorMessage ?: "Native Root scan failed before evidence could be assembled."
+                report.errorMessage ?: "El escaneo de Root Nativo falló antes de recolectar evidencia."
 
             NativeRootStage.READY -> when {
                 report.hasDangerFindings ->
-                    "Read-only ksu_driver hits, direct syscall hits, self-process IOC, root-manager paths, curated runtime residue paths, /data/local/tmp metadata drift, cgroup/process leakage, unexpected root processes, or isolated-process namespace drift indicate active native root infrastructure."
+                    "Detecciones de ksu_driver de solo lectura, syscall directos, IOC del proceso propio, rutas del manager root, rutas de residuo de runtime, deriva de metadatos /data/local/tmp, fuga cgroup/proceso, procesos root inesperados o deriva de namespace indican infraestructura root nativa activa."
 
                 report.hasWarningFindings ->
-                    "Only weaker isolated-process mount drift, manager manifest fingerprints, process, cgroup, kernel, property, or metadata residue surfaced. These are review-worthy, but not as strong as direct native probes."
+                    "Solo surgieron señales más débiles de deriva de montaje de proceso aislado, fingerprints del manifest del manager o residuos de proceso, cgroup, kernel o metadatos. Son dignas de revisión, pero no tan fuertes como las sondas nativas directas."
 
                 !report.nativeAvailable ->
-                    "This detector relies mostly on JNI-backed native probes. Native coverage was unavailable on this build, and the remaining runtime checks stayed clean."
+                    "Este detector depende principalmente de sondas nativas JNI. La cobertura nativa no estuvo disponible en este build, y las verificaciones de runtime restantes permanecieron limpias."
 
                 report.hasReducedCoverage() ->
                     "No native root indicator surfaced from available probes, but one or more direct, cgroup, isolated-process, or package-visibility evidence paths had reduced coverage."
 
                 else ->
-                    "KernelSU read-only supercall, prctl-side probes, KernelPatch side channel, self-process IOC, isolated-process mount drift, manager manifest fingerprint, SUSFS side-channel, /data/adb artifacts, curated tmp/system/storage residue paths, /data/local/tmp metadata, root-process audit, cgroup/process leakage, kernel strings, and properties stayed clean."
+                    "Las sondas supercall de KernelSU, prctl, canal lateral KernelPatch, IOC de proceso propio, deriva de montaje aislado, fingerprint del manifest, canal lateral SUSFS, artefactos /data/adb, rutas de residuo curadas, metadatos /data/local/tmp, auditoría de procesos root, fugas cgroup, strings del kernel y propiedades permanecieron limpios."
             }
         }
         if (report.stage != NativeRootStage.READY) {
@@ -226,9 +226,9 @@ class NativeRootCardModelMapper {
                     add(
                         NativeRootDetailRowModel(
                             label = "KSU supercall",
-                            value = "Blocked by seccomp",
+                            value = "Bloqueado por seccomp",
                             status = DetectorStatus.info(InfoKind.SUPPORT),
-                            detail = "The sacrificial reboot() helper died under app seccomp before it could install a temporary [ksu_driver] fd. Other KernelSU checks still ran.",
+                            detail = "El proceso helper reboot() sacrificial terminó bajo seccomp antes de poder instalar un fd [ksu_driver] temporal. Otras verificaciones de KernelSU continuaron.",
                         )
                     )
                 }
@@ -240,12 +240,12 @@ class NativeRootCardModelMapper {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderRows(
                 listOf(
-                    "Self process IOC",
-                    "Isolated mount drift",
-                    "Manager fingerprint",
-                    "Runtime paths",
-                    "Root processes",
-                    "Cgroup leakage",
+                    "IOC de proceso propio",
+                    "Deriva de montaje aislado",
+                    "Fingerprint del manager",
+                    "Rutas de runtime",
+                    "Procesos root",
+                    "Fuga cgroup",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
                 "Pendiente",
@@ -253,12 +253,12 @@ class NativeRootCardModelMapper {
 
             NativeRootStage.FAILED -> placeholderRows(
                 listOf(
-                    "Self process IOC",
-                    "Isolated mount drift",
-                    "Manager fingerprint",
-                    "Runtime paths",
-                    "Root processes",
-                    "Cgroup leakage",
+                    "IOC de proceso propio",
+                    "Deriva de montaje aislado",
+                    "Fingerprint del manager",
+                    "Rutas de runtime",
+                    "Procesos root",
+                    "Fuga cgroup",
                 ),
                 DetectorStatus.info(InfoKind.ERROR),
                 "Error",
@@ -271,13 +271,13 @@ class NativeRootCardModelMapper {
     private fun buildKernelRows(report: NativeRootReport): List<NativeRootDetailRowModel> {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderRows(
-                listOf("Kernel symbols", "Kernel modules", "Kernel identity"),
+                listOf("Símbolos del kernel", "Módulos del kernel", "Identidad del kernel"),
                 DetectorStatus.info(InfoKind.SUPPORT),
                 "Pendiente",
             )
 
             NativeRootStage.FAILED -> placeholderRows(
-                listOf("Kernel symbols", "Kernel modules", "Kernel identity"),
+                listOf("Símbolos del kernel", "Módulos del kernel", "Identidad del kernel"),
                 DetectorStatus.info(InfoKind.ERROR),
                 "Error",
             )
@@ -289,14 +289,14 @@ class NativeRootCardModelMapper {
     private fun buildPropertyRows(report: NativeRootReport): List<NativeRootDetailRowModel> {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderRows(
-                listOf("Root-specific properties"),
+                listOf("Propiedades específicas de root"),
                 DetectorStatus.info(InfoKind.SUPPORT),
                 "Pendiente",
                 monospace = true,
             )
 
             NativeRootStage.FAILED -> placeholderRows(
-                listOf("Root-specific properties"),
+                listOf("Propiedades específicas de root"),
                 DetectorStatus.info(InfoKind.ERROR),
                 "Error",
                 monospace = true,
@@ -333,7 +333,7 @@ class NativeRootCardModelMapper {
                 } else if (report.hasWarningFindings) {
                     add(
                         NativeRootImpactItemModel(
-                            text = "Isolated-process mount drift, manager manifest fingerprints, kernel strings, property residue, or cgroup leakage can indicate native-root history or selective runtime hiding, but they are weaker than direct syscall-side probes.",
+                            text = "La deriva de montaje de proceso aislado, fingerprints del manifest del manager, strings del kernel, residuos de propiedades o fugas cgroup pueden indicar historial root nativo, pero son más débiles que las sondas directas a nivel syscall.",
                             status = DetectorStatus.warning(),
                         ),
                     )
@@ -346,7 +346,7 @@ class NativeRootCardModelMapper {
                             )
                         } else {
                             NativeRootImpactItemModel(
-                                text = "No common KernelSU, APatch, Magisk, SUSFS, or cgroup-leak traces surfaced from the current probe set.",
+                                text = "No surgieron trazas comunes de KernelSU, APatch, Magisk, SUSFS ni fugas cgroup del conjunto de sondas actual.",
                                 status = DetectorStatus.allClear(),
                             )
                         },
@@ -358,10 +358,10 @@ class NativeRootCardModelMapper {
                             if (report.hasReducedCoverage()) {
                                 "La cobertura reducida disminuye la confianza sin implicar una detección positiva de root."
                             } else {
-                                "A determined root can still hide or remove residue, so absence of native hits is not proof of a stock device."
+                                "Un root determinado puede ocultar o eliminar residuos, por lo que la ausencia de detecciones nativas no prueba que el dispositivo sea original."
                             }
                         } else {
-                            "Native coverage was unavailable, so this card should not be treated as a strong clean verdict."
+                            "La cobertura nativa no estuvo disponible, por lo que esta tarjeta no debe tratarse como un veredicto limpio fuerte."
                         },
                         status = DetectorStatus.info(InfoKind.SUPPORT),
                     ),
@@ -398,29 +398,29 @@ class NativeRootCardModelMapper {
         return when (report.stage) {
             NativeRootStage.LOADING -> placeholderRows(
                 listOf(
-                    "Paths checked",
-                    "Path hits",
-                    "Proc checked",
-                    "Proc denied",
-                    "Proc hits",
+                    "Rutas verificadas",
+                    "Detecciones de ruta",
+                    "Procs verificados",
+                    "Procs denegados",
+                    "Detecciones de proc",
                     "Self context",
-                    "Self driver FDs",
-                    "Self wrapper FDs",
-                    "Main mnt ns",
-                    "Isolated mnt ns",
-                    "Mount drift hits",
-                    "Mount anchor drifts",
+                    "FDs driver propios",
+                    "FDs wrapper propios",
+                    "NS montaje principal",
+                    "NS montaje aislado",
+                    "Detecciones deriva montaje",
+                    "Derivas de anclaje de montaje",
                     "Manager package",
-                    "Manager traits",
-                    "Cgroup paths",
+                    "Rasgos del manager",
+                    "Rutas cgroup",
                     "Cgroup visible",
-                    "Cgroup proc",
-                    "Cgroup denied",
-                    "Cgroup hits",
-                    "Kernel sources",
-                    "Kernel hits",
-                    "Properties checked",
-                    "Property hits",
+                    "Proc cgroup",
+                    "Cgroup denegado",
+                    "Detecciones cgroup",
+                    "Fuentes del kernel",
+                    "Detecciones del kernel",
+                    "Propiedades verificadas",
+                    "Detecciones de propiedades",
                     "Native library",
                 ),
                 DetectorStatus.info(InfoKind.SUPPORT),
@@ -429,29 +429,29 @@ class NativeRootCardModelMapper {
 
             NativeRootStage.FAILED -> placeholderRows(
                 listOf(
-                    "Paths checked",
-                    "Path hits",
-                    "Proc checked",
-                    "Proc denied",
-                    "Proc hits",
+                    "Rutas verificadas",
+                    "Detecciones de ruta",
+                    "Procs verificados",
+                    "Procs denegados",
+                    "Detecciones de proc",
                     "Self context",
-                    "Self driver FDs",
-                    "Self wrapper FDs",
-                    "Main mnt ns",
-                    "Isolated mnt ns",
-                    "Mount drift hits",
-                    "Mount anchor drifts",
+                    "FDs driver propios",
+                    "FDs wrapper propios",
+                    "NS montaje principal",
+                    "NS montaje aislado",
+                    "Detecciones deriva montaje",
+                    "Derivas de anclaje de montaje",
                     "Manager package",
-                    "Manager traits",
-                    "Cgroup paths",
+                    "Rasgos del manager",
+                    "Rutas cgroup",
                     "Cgroup visible",
-                    "Cgroup proc",
-                    "Cgroup denied",
-                    "Cgroup hits",
-                    "Kernel sources",
-                    "Kernel hits",
-                    "Properties checked",
-                    "Property hits",
+                    "Proc cgroup",
+                    "Cgroup denegado",
+                    "Detecciones cgroup",
+                    "Fuentes del kernel",
+                    "Detecciones del kernel",
+                    "Propiedades verificadas",
+                    "Detecciones de propiedades",
                     "Native library",
                 ),
                 DetectorStatus.info(InfoKind.ERROR),
@@ -460,12 +460,12 @@ class NativeRootCardModelMapper {
 
             NativeRootStage.READY -> listOf(
                 NativeRootDetailRowModel(
-                    "Paths checked",
+                    "Rutas verificadas",
                     report.pathCheckCount.toString(),
                     DetectorStatus.info(InfoKind.SUPPORT)
                 ),
                 NativeRootDetailRowModel(
-                    "Path hits",
+                    "Detecciones de ruta",
                     report.pathHitCount.toString(),
                     when {
                         report.findings.any {
@@ -483,19 +483,19 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Proc checked",
+                    "Procs verificados",
                     if (report.nativeAvailable) report.processCheckedCount.toString() else "N/A",
                     if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 NativeRootDetailRowModel(
-                    "Proc denied",
+                    "Procs denegados",
                     if (report.nativeAvailable) report.processDeniedCount.toString() else "N/A",
                     DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 NativeRootDetailRowModel(
-                    "Proc hits",
+                    "Detecciones de proc",
                     if (report.nativeAvailable) report.processHitCount.toString() else "N/A",
                     when {
                         report.processHitCount > 0 -> DetectorStatus.danger()
@@ -518,7 +518,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Self driver FDs",
+                    "FDs driver propios",
                     if (report.nativeAvailable) report.selfKsuDriverFdCount.toString() else "N/A",
                     when {
                         report.selfKsuDriverFdCount > 0 -> DetectorStatus.danger()
@@ -527,7 +527,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Self wrapper FDs",
+                    "FDs wrapper propios",
                     if (report.nativeAvailable) report.selfKsuFdwrapperFdCount.toString() else "N/A",
                     when {
                         report.selfKsuFdwrapperFdCount > 0 -> DetectorStatus.danger()
@@ -536,7 +536,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Main mnt ns",
+                    "NS montaje principal",
                     report.mainMountNamespaceInode.ifBlank { "No disponible" },
                     when {
                         report.mountDriftSignalCount > 0 -> DetectorStatus.warning()
@@ -545,7 +545,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Isolated mnt ns",
+                    "NS montaje aislado",
                     when {
                         report.isolatedMountNamespaceInode.isNotBlank() -> report.isolatedMountNamespaceInode
                         report.isolatedMountProbeAvailable -> "No disponible"
@@ -558,7 +558,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Mount drift hits",
+                    "Detecciones deriva montaje",
                     if (report.isolatedMountProbeAvailable) report.mountDriftSignalCount.toString() else "N/A",
                     when {
                         report.mountDriftSignalCount > 0 -> DetectorStatus.warning()
@@ -567,7 +567,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Mount anchor drifts",
+                    "Derivas de anclaje de montaje",
                     if (report.isolatedMountProbeAvailable) report.mountAnchorDriftCount.toString() else "N/A",
                     when {
                         report.mountAnchorDriftCount > 0 -> DetectorStatus.warning()
@@ -589,7 +589,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Manager traits",
+                    "Rasgos del manager",
                     when {
                         report.ksuManagerPackagePresent -> "${report.ksuManagerTraitHitCount}/3"
                         report.ksuManagerVisibilityRestricted -> "N/A"
@@ -602,7 +602,7 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Cgroup paths",
+                    "Rutas cgroup",
                     if (report.cgroupAvailable) report.cgroupPathCheckCount.toString() else "N/A",
                     if (report.cgroupAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
@@ -616,19 +616,19 @@ class NativeRootCardModelMapper {
                     ),
                 ),
                 NativeRootDetailRowModel(
-                    "Cgroup proc",
+                    "Proc cgroup",
                     if (report.cgroupAvailable) report.cgroupProcessCheckedCount.toString() else "N/A",
                     if (report.cgroupAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 NativeRootDetailRowModel(
-                    "Cgroup denied",
+                    "Cgroup denegado",
                     if (report.cgroupAvailable) report.cgroupProcDeniedCount.toString() else "N/A",
                     DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 NativeRootDetailRowModel(
-                    "Cgroup hits",
+                    "Detecciones cgroup",
                     if (report.cgroupAvailable) report.cgroupHitCount.toString() else "N/A",
                     when {
                         report.cgroupFindings.any { it.severity == NativeRootFindingSeverity.DANGER } -> DetectorStatus.danger()
@@ -638,14 +638,14 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Kernel sources",
+                    "Fuentes del kernel",
                     if (report.nativeAvailable) report.kernelSourceCount.toString() else "N/A",
                     if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 NativeRootDetailRowModel(
-                    "Kernel hits",
+                    "Detecciones del kernel",
                     if (report.nativeAvailable) report.kernelHitCount.toString() else "N/A",
                     when {
                         report.kernelHitCount > 0 -> DetectorStatus.warning()
@@ -654,14 +654,14 @@ class NativeRootCardModelMapper {
                     },
                 ),
                 NativeRootDetailRowModel(
-                    "Properties checked",
+                    "Propiedades verificadas",
                     if (report.nativeAvailable) report.propertyCheckCount.toString() else "N/A",
                     if (report.nativeAvailable) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 NativeRootDetailRowModel(
-                    "Property hits",
+                    "Detecciones de propiedades",
                     if (report.nativeAvailable) report.propertyHitCount.toString() else "N/A",
                     when {
                         report.propertyHitCount > 0 -> DetectorStatus.warning()

@@ -201,7 +201,7 @@ class BootloaderRepository(
                 "Verified" -> BootloaderState.VERIFIED
                 "Self-signed" -> BootloaderState.SELF_SIGNED
                 "Unverified" -> BootloaderState.UNLOCKED
-                "Failed" -> BootloaderState.FAILED_VERIFICATION
+                "Fallido" -> BootloaderState.FAILED_VERIFICATION
                 else -> when (root.deviceLocked) {
                     false -> BootloaderState.UNLOCKED
                     true -> BootloaderState.LOCKED_UNKNOWN
@@ -234,7 +234,7 @@ class BootloaderRepository(
             add(
                 BootloaderFinding(
                     id = "boot_state",
-                    label = "Boot state",
+                    label = "Estado de boot",
                     value = stateLabel(state, evidenceMode),
                     group = BootloaderFindingGroup.STATE,
                     severity = stateSeverity(state),
@@ -244,7 +244,7 @@ class BootloaderRepository(
             add(
                 BootloaderFinding(
                     id = "evidence_mode",
-                    label = "Evidence source",
+                    label = "Fuente de evidencia",
                     value = evidenceModeLabel(evidenceMode),
                     group = BootloaderFindingGroup.STATE,
                     severity = when (evidenceMode) {
@@ -254,26 +254,26 @@ class BootloaderRepository(
                     },
                     detail = when (evidenceMode) {
                         BootloaderEvidenceMode.ATTESTATION ->
-                            "RootOfTrust data was available and took priority over software-readable properties."
+                            "Los datos de RootOfTrust estuvieron disponibles y tuvieron prioridad sobre las propiedades legibles por software."
 
                         BootloaderEvidenceMode.PROPERTIES_ONLY ->
-                            "Attestation root data was unavailable, so this result falls back to boot properties that can be modified on rooted systems."
+                            "Los datos de raíz de attestation no estuvieron disponibles; este resultado cae de vuelta a propiedades de boot que pueden modificarse en sistemas rooteados."
 
                         BootloaderEvidenceMode.UNAVAILABLE ->
-                            "Neither attestation RootOfTrust nor readable boot properties were available."
+                            "Ni el RootOfTrust de attestation ni las propiedades de boot legibles estuvieron disponibles."
                     },
                 ),
             )
             val lockLabel = when (val locked =
                 attestation.rootOfTrust?.deviceLocked ?: propertyContext.isLocked) {
-                true -> "Locked"
-                false -> "Unlocked"
+                true -> "Bloqueado"
+                false -> "Desbloqueado"
                 null -> "Unknown"
             }
             add(
                 BootloaderFinding(
                     id = "lock_state",
-                    label = "Lock state",
+                    label = "Estado de bloqueo",
                     value = lockLabel,
                     group = BootloaderFindingGroup.STATE,
                     severity = when (attestation.rootOfTrust?.deviceLocked
@@ -288,7 +288,7 @@ class BootloaderRepository(
             add(
                 BootloaderFinding(
                     id = "trust_root",
-                    label = "Trust root",
+                    label = "Raíz de confianza",
                     value = trustRootLabel(trust.trustRoot),
                     group = BootloaderFindingGroup.STATE,
                     severity = trustRootSeverity(trust),
@@ -308,8 +308,8 @@ class BootloaderRepository(
             return listOf(
                 BootloaderFinding(
                     id = "attestation_unavailable",
-                    label = "Key attestation",
-                    value = if (keyPairGenerationFailure) "Failed" else "Unavailable",
+                    label = "Attestation de clave",
+                    value = if (keyPairGenerationFailure) "Fallido" else "No disponible",
                     group = BootloaderFindingGroup.ATTESTATION,
                     severity = if (keyPairGenerationFailure) {
                         BootloaderFindingSeverity.DANGER
@@ -317,7 +317,7 @@ class BootloaderRepository(
                         BootloaderFindingSeverity.INFO
                     },
                     detail = attestation.errorMessage
-                        ?: "Key attestation did not expose a usable certificate chain.",
+                        ?: "La attestation de clave no expuso una cadena de certificados usable.",
                 ),
             )
         }
@@ -327,7 +327,7 @@ class BootloaderRepository(
             add(
                 BootloaderFinding(
                     id = "attestation_tier",
-                    label = "Attestation tier",
+                    label = "Nivel de attestation",
                     value = tierLabel(attestation.tier),
                     group = BootloaderFindingGroup.ATTESTATION,
                     severity = when (attestation.tier) {
@@ -349,8 +349,8 @@ class BootloaderRepository(
             add(
                 BootloaderFinding(
                     id = "attestation_chain",
-                    label = "Certificate chain",
-                    value = if (trust.chainSignatureValid) "Valid" else "Broken",
+                    label = "Cadena de certificados",
+                    value = if (trust.chainSignatureValid) "Válida" else "Rota",
                     group = BootloaderFindingGroup.ATTESTATION,
                     severity = when {
                         !trust.chainSignatureValid -> BootloaderFindingSeverity.DANGER
@@ -366,7 +366,7 @@ class BootloaderRepository(
                 add(
                     BootloaderFinding(
                         id = "attested_boot_state",
-                        label = "Attested boot state",
+                        label = "Estado de boot atestiguado",
                         value = verifiedBootState,
                         group = BootloaderFindingGroup.ATTESTATION,
                         severity = stateSeverity(
@@ -375,7 +375,7 @@ class BootloaderRepository(
                                 propertyContext = BootloaderPropertyContext.empty(),
                             ),
                         ),
-                        detail = "RootOfTrust.verifiedBootState from attestation extension.",
+                        detail = "RootOfTrust.verifiedBootState de la extensión de attestation.",
                     ),
                 )
             }
@@ -383,11 +383,11 @@ class BootloaderRepository(
                 add(
                     BootloaderFinding(
                         id = "attested_lock",
-                        label = "Attested deviceLocked",
+                        label = "deviceLocked atestiguado",
                         value = locked.toString(),
                         group = BootloaderFindingGroup.ATTESTATION,
                         severity = if (locked) BootloaderFindingSeverity.SAFE else BootloaderFindingSeverity.DANGER,
-                        detail = "RootOfTrust.deviceLocked from attestation extension.",
+                        detail = "RootOfTrust.deviceLocked de la extensión de attestation.",
                     ),
                 )
             }
@@ -457,8 +457,8 @@ class BootloaderRepository(
         if (bootConsistency.vbmetaDigestMismatch) {
             findings += BootloaderFinding(
                 id = "vbmeta_digest_mismatch",
-                label = "Attested hash vs vbmeta digest",
-                value = "Mismatch",
+                label = "Hash atestiguado vs digest vbmeta",
+                value = "Discrepancia",
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = BootloaderFindingSeverity.DANGER,
                 detail = bootConsistency.detail,
@@ -467,8 +467,8 @@ class BootloaderRepository(
         if (bootConsistency.vbmetaDigestMissingWhileAttestedHashPresent) {
             findings += BootloaderFinding(
                 id = "vbmeta_digest_missing",
-                label = "Attested hash vs vbmeta digest",
-                value = "Digest missing",
+                label = "Hash atestiguado vs digest vbmeta",
+                value = "Digest faltante",
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = BootloaderFindingSeverity.DANGER,
                 detail = bootConsistency.detail,
@@ -478,7 +478,7 @@ class BootloaderRepository(
             findings += BootloaderFinding(
                 id = "boot_hash_all_zero",
                 label = "Attested boot hash",
-                value = "All zeros",
+                value = "Todo ceros",
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = BootloaderFindingSeverity.DANGER,
                 detail = bootConsistency.detail,
@@ -488,7 +488,7 @@ class BootloaderRepository(
             findings += BootloaderFinding(
                 id = "boot_key_all_zero",
                 label = "Attested boot key",
-                value = "All zeros",
+                value = "Todo ceros",
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = BootloaderFindingSeverity.DANGER,
                 detail = bootConsistency.detail,
@@ -497,8 +497,8 @@ class BootloaderRepository(
         if (bootConsistency.verifiedStateUnlockedMismatch) {
             findings += BootloaderFinding(
                 id = "verified_state_unlocked_mismatch",
-                label = "Verified state coherence",
-                value = "Impossible pair",
+                label = "Coherencia de estado verificado",
+                value = "Par imposible",
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = BootloaderFindingSeverity.DANGER,
                 detail = bootConsistency.detail,
@@ -507,10 +507,10 @@ class BootloaderRepository(
         if (!bootConsistency.hasHardAnomaly) {
             findings += BootloaderFinding(
                 id = "boot_consistency_clean",
-                label = "Attested hash vs vbmeta digest",
+                label = "Hash atestiguado vs digest vbmeta",
                 value = when {
-                    bootConsistency.runtimePropsAvailable -> "Aligned"
-                    else -> "Partial"
+                    bootConsistency.runtimePropsAvailable -> "Alineado"
+                    else -> "Parcial"
                 },
                 group = BootloaderFindingGroup.CONSISTENCY,
                 severity = if (bootConsistency.runtimePropsAvailable) {
@@ -647,14 +647,14 @@ class BootloaderRepository(
     ): List<BootloaderMethodResult> {
         return listOf(
             BootloaderMethodResult(
-                label = "Key attestation",
+                label = "Attestation de clave",
                 summary = when {
                     hasAttestation(attestation) -> tierLabel(attestation.tier)
                     BootloaderSeverityRules.isKeyPairGenerationFailure(attestation.errorMessage) ->
-                        "Failed"
+                        "Fallido"
 
-                    evidenceMode == BootloaderEvidenceMode.PROPERTIES_ONLY -> "Fallback only"
-                    else -> "Unavailable"
+                    evidenceMode == BootloaderEvidenceMode.PROPERTIES_ONLY -> "Solo respaldo"
+                    else -> "No disponible"
                 },
                 outcome = when {
                     hasAttestation(attestation) && (attestation.tier == TeeTier.TEE || attestation.tier == TeeTier.STRONGBOX) ->
@@ -668,13 +668,13 @@ class BootloaderRepository(
                     else -> BootloaderMethodOutcome.SUPPORT
                 },
                 detail = attestation.errorMessage
-                    ?: "RootOfTrust availability: ${attestation.rootOfTrust != null}.",
+                    ?: "Disponibilidad de RootOfTrust: ${attestation.rootOfTrust != null}.",
             ),
             BootloaderMethodResult(
-                label = "Certificate trust",
+                label = "Confianza de certificado",
                 summary = when {
-                    trust.chainLength == 0 -> "No chain"
-                    !trust.chainSignatureValid -> "Invalid"
+                    trust.chainLength == 0 -> "Sin cadena"
+                    !trust.chainSignatureValid -> "Inválida"
                     else -> trustRootLabel(trust.trustRoot)
                 },
                 outcome = when {
@@ -689,11 +689,11 @@ class BootloaderRepository(
                 detail = buildChainDetail(trust),
             ),
             BootloaderMethodResult(
-                label = "Boot consistency",
+                label = "Consistencia de boot",
                 summary = when {
-                    bootConsistency.hasHardAnomaly -> "Anomaly"
-                    bootConsistency.runtimePropsAvailable -> "Aligned"
-                    else -> "Partial"
+                    bootConsistency.hasHardAnomaly -> "Anomalía"
+                    bootConsistency.runtimePropsAvailable -> "Alineado"
+                    else -> "Parcial"
                 },
                 outcome = when {
                     bootConsistency.hasHardAnomaly -> BootloaderMethodOutcome.DANGER
@@ -703,7 +703,7 @@ class BootloaderRepository(
                 detail = bootConsistency.detail,
             ),
             BootloaderMethodResult(
-                label = "Property catalog",
+                label = "Catálogo de propiedades",
                 summary = "$observedPropertyCount / ${BootloaderCatalog.properties.size} observed",
                 outcome = when {
                     observedPropertyCount == 0 -> BootloaderMethodOutcome.SUPPORT
@@ -711,51 +711,51 @@ class BootloaderRepository(
                     propertyContext.hasWarningProperty -> BootloaderMethodOutcome.WARNING
                     else -> BootloaderMethodOutcome.CLEAN
                 },
-                detail = "Tracked boot, AVB, dm-verity, Samsung fuse, and secure-build properties.",
+                detail = "Propiedades de boot, AVB, dm-verity, fuse Samsung y build seguro rastreadas.",
             ),
             BootloaderMethodResult(
                 label = "Reflection API",
-                summary = if (reflectionHitCount > 0) "$reflectionHitCount hit(s)" else "Unavailable",
+                summary = if (reflectionHitCount > 0) "$reflectionHitCount hit(s)" else "No disponible",
                 outcome = if (reflectionHitCount > 0) BootloaderMethodOutcome.CLEAN else BootloaderMethodOutcome.SUPPORT,
-                detail = "android.os.SystemProperties reflection reads for tracked boot properties.",
+                detail = "Lecturas de reflexión de android.os.SystemProperties para propiedades de boot rastreadas.",
             ),
             BootloaderMethodResult(
                 label = "getprop snapshot",
-                summary = if (getpropHitCount > 0) "$getpropHitCount hit(s)" else "Unavailable",
+                summary = if (getpropHitCount > 0) "$getpropHitCount hit(s)" else "No disponible",
                 outcome = if (getpropHitCount > 0) BootloaderMethodOutcome.CLEAN else BootloaderMethodOutcome.SUPPORT,
-                detail = "Single getprop dump reused for cross-source comparisons.",
+                detail = "Volcado único de getprop reutilizado para comparaciones entre fuentes.",
             ),
             BootloaderMethodResult(
                 label = "Native libc",
                 summary = if (nativeSnapshot.nativePropertyHitCount > 0) {
                     "${nativeSnapshot.nativePropertyHitCount} hit(s)"
                 } else {
-                    "Unavailable"
+                    "No disponible"
                 },
                 outcome = if (nativeSnapshot.nativePropertyHitCount > 0) {
                     BootloaderMethodOutcome.CLEAN
                 } else {
                     BootloaderMethodOutcome.SUPPORT
                 },
-                detail = "Native libc property cross-checks using the callback-based system property API.",
+                detail = "Cruces de propiedades nativas libc usando la API de propiedades del sistema basada en callbacks.",
             ),
             BootloaderMethodResult(
-                label = "Raw boot params",
+                label = "Parámetros de boot raw",
                 summary = if (nativeSnapshot.bootParamHitCount > 0) {
                     "${nativeSnapshot.bootParamHitCount} hit(s)"
                 } else {
-                    "Unavailable"
+                    "No disponible"
                 },
                 outcome = if (nativeSnapshot.bootParamHitCount > 0) {
                     BootloaderMethodOutcome.CLEAN
                 } else {
                     BootloaderMethodOutcome.SUPPORT
                 },
-                detail = "androidboot.* values from /proc/cmdline and /proc/bootconfig.",
+                detail = "Valores androidboot.* de /proc/cmdline y /proc/bootconfig.",
             ),
             BootloaderMethodResult(
-                label = "Source consistency",
-                summary = if (sourceSignals.isEmpty()) "Aligned" else "${sourceSignals.size} mismatch(es)",
+                label = "Consistencia de fuente",
+                summary = if (sourceSignals.isEmpty()) "Alineado" else "${sourceSignals.size} mismatch(es)",
                 outcome = when {
                     sourceSignals.any { it.severity == SystemPropertySeverity.DANGER } -> BootloaderMethodOutcome.DANGER
                     sourceSignals.isNotEmpty() -> BootloaderMethodOutcome.WARNING
@@ -765,8 +765,8 @@ class BootloaderRepository(
                 detail = "Cross-source comparison across reflection, getprop, JVM, and native libc reads.",
             ),
             BootloaderMethodResult(
-                label = "Cross-check rules",
-                summary = if (consistencySignals.isEmpty()) "Aligned" else "${consistencySignals.size} finding(s)",
+                label = "Reglas de cruce",
+                summary = if (consistencySignals.isEmpty()) "Alineado" else "${consistencySignals.size} finding(s)",
                 outcome = when {
                     consistencySignals.any { it.severity == SystemPropertySeverity.DANGER } -> BootloaderMethodOutcome.DANGER
                     consistencySignals.isNotEmpty() -> BootloaderMethodOutcome.WARNING
@@ -784,8 +784,8 @@ class BootloaderRepository(
         return when (state) {
             BootloaderState.VERIFIED -> if (evidenceMode == BootloaderEvidenceMode.PROPERTIES_ONLY) "Locked by props" else "Verified"
             BootloaderState.SELF_SIGNED -> "Self-signed"
-            BootloaderState.UNLOCKED -> "Unlocked"
-            BootloaderState.FAILED_VERIFICATION -> "Failed"
+            BootloaderState.UNLOCKED -> "Desbloqueado"
+            BootloaderState.FAILED_VERIFICATION -> "Fallido"
             BootloaderState.LOCKED_UNKNOWN -> "Locked, state unknown"
             BootloaderState.UNKNOWN -> "Unknown"
         }
@@ -1083,7 +1083,7 @@ class BootloaderRepository(
         return when (mode) {
             BootloaderEvidenceMode.ATTESTATION -> "Attestation"
             BootloaderEvidenceMode.PROPERTIES_ONLY -> "Properties"
-            BootloaderEvidenceMode.UNAVAILABLE -> "Unavailable"
+            BootloaderEvidenceMode.UNAVAILABLE -> "No disponible"
         }
     }
 

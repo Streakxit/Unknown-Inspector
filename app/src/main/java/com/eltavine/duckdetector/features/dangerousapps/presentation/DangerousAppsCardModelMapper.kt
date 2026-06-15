@@ -76,13 +76,13 @@ class DangerousAppsCardModelMapper {
 
     private fun buildVerdict(report: DangerousAppsReport): String {
         return when (report.stage) {
-            DangerousAppsStage.LOADING -> "Scanning app inventory"
-            DangerousAppsStage.FAILED -> "Inventory scan failed"
+            DangerousAppsStage.LOADING -> "Escaneando inventario de apps"
+            DangerousAppsStage.FAILED -> "Escaneo de inventario fallido"
             DangerousAppsStage.READY -> when {
-                report.hiddenCount > 0 -> "HMA-style concealment detected"
+                report.hiddenCount > 0 -> "Ocultamiento estilo HMA detectado"
                 report.detectedCount > 0 -> "${report.detectedCount} risky package(s) surfaced"
-                report.suspiciousSharedStorageDenied -> "Shared storage baseline denied"
-                report.suspiciousLowPmInventory -> "Package inventory unusually small"
+                report.suspiciousSharedStorageDenied -> "Línea base de almacenamiento compartido denegada"
+                report.suspiciousLowPmInventory -> "Inventario de paquetes inusualmente pequeño"
                 report.packageVisibility == DangerousPackageVisibility.RESTRICTED -> "Inventory visibility limited"
                 else -> "No known risky packages"
             }
@@ -118,7 +118,7 @@ class DangerousAppsCardModelMapper {
                     }
 
                 report.suspiciousSharedStorageDenied ->
-                    "Multiple fixed shared-storage baseline paths returned EACCES/EPERM under stat(). This suggests shared user gid or related zygote storage groups may have been restricted."
+                    "Múltiples rutas de línea base de almacenamiento compartido devolvieron EACCES/EPERM bajo stat(). Esto sugiere que el gid de usuario compartido o grupos de almacenamiento zygote relacionados pueden estar restringidos."
 
                 report.suspiciousLowPmInventory ->
                     "PackageManager reported a full inventory surface but returned only ${report.packageManagerVisibleCount} visible packages. That is unusually low for a modern device and can happen under HMA-style whitelist filtering."
@@ -135,7 +135,7 @@ class DangerousAppsCardModelMapper {
     private fun buildHeaderFacts(report: DangerousAppsReport): List<DangerousAppsHeaderFactModel> {
         return listOf(
             DangerousAppsHeaderFactModel(
-                label = "Targets",
+                label = "Objetivos",
                 value = report.targets.size.toString(),
                 status = DetectorStatus.allClear(),
             ),
@@ -154,12 +154,12 @@ class DangerousAppsCardModelMapper {
                 },
             ),
             DangerousAppsHeaderFactModel(
-                label = "Hits",
+                label = "Detecciones",
                 value = report.detectedCount.toString(),
                 status = if (report.detectedCount > 0) DetectorStatus.warning() else DetectorStatus.allClear(),
             ),
             DangerousAppsHeaderFactModel(
-                label = "Hidden",
+                label = "Ocultos",
                 value = report.hiddenCount.toString(),
                 status = if (report.hiddenCount > 0) DetectorStatus.danger() else DetectorStatus.allClear(),
             ),
@@ -223,7 +223,7 @@ class DangerousAppsCardModelMapper {
         }
 
         return listOf(
-            ContextItemModel("Inventory", "${report.targets.size} legacy packages"),
+            ContextItemModel("Inventario", "${report.targets.size} legacy packages"),
             ContextItemModel("PackageManager", visibilityLongLabel(report.packageVisibility)),
             ContextItemModel(
                 "Visible packages",
@@ -233,8 +233,8 @@ class DangerousAppsCardModelMapper {
                     "No disponible"
                 },
             ),
-            ContextItemModel("Categories", categories),
-            ContextItemModel("Probe families", probeSummary),
+            ContextItemModel("Categorías", categories),
+            ContextItemModel("Familias de sondas", probeSummary),
         )
     }
 
@@ -250,16 +250,16 @@ class DangerousAppsCardModelMapper {
     private fun visibilityLabel(visibility: DangerousPackageVisibility): String {
         return when (visibility) {
             DangerousPackageVisibility.FULL -> "Completo"
-            DangerousPackageVisibility.RESTRICTED -> "Scoped"
+            DangerousPackageVisibility.RESTRICTED -> "Limitado"
             DangerousPackageVisibility.UNKNOWN -> "Pendiente"
         }
     }
 
     private fun visibilityLongLabel(visibility: DangerousPackageVisibility): String {
         return when (visibility) {
-            DangerousPackageVisibility.FULL -> "Full inventory access"
-            DangerousPackageVisibility.RESTRICTED -> "Scoped inventory access"
-            DangerousPackageVisibility.UNKNOWN -> "Not resolved yet"
+            DangerousPackageVisibility.FULL -> "Acceso completo al inventario"
+            DangerousPackageVisibility.RESTRICTED -> "Acceso limitado al inventario"
+            DangerousPackageVisibility.UNKNOWN -> "No resuelto aún"
         }
     }
 

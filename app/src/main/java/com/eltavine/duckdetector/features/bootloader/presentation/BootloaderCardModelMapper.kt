@@ -65,15 +65,15 @@ class BootloaderCardModelMapper {
 
     private fun buildSubtitle(report: BootloaderReport): String {
         return when (report.stage) {
-            BootloaderStage.LOADING -> "attestation + boot props + raw boot consistency"
-            BootloaderStage.FAILED -> "local bootloader scan failed"
+            BootloaderStage.LOADING -> "attestation + props de boot + consistencia de boot"
+            BootloaderStage.FAILED -> "escaneo local de bootloader fallido"
             BootloaderStage.READY -> "${report.checkedPropertyCount} props · ${report.attestationChainLength} certs · ${report.consistencyFindingCount} cross-checks"
         }
     }
 
     private fun buildVerdict(report: BootloaderReport): String {
         return when (report.stage) {
-            BootloaderStage.LOADING -> "Scanning boot state and verified boot evidence"
+            BootloaderStage.LOADING -> "Escaneando estado de boot y evidencia de boot verificado"
             BootloaderStage.FAILED -> "Bootloader scan failed"
             BootloaderStage.READY -> when {
                 report.dangerFindings.isNotEmpty() -> "${report.dangerFindings.size} critical boot integrity signal(s)"
@@ -81,9 +81,9 @@ class BootloaderCardModelMapper {
                 report.state == BootloaderState.VERIFIED && report.evidenceMode == BootloaderEvidenceMode.ATTESTATION ->
                     "Bloqueado y attestation verificado"
 
-                report.state == BootloaderState.VERIFIED -> "Locked by boot properties"
-                report.state == BootloaderState.LOCKED_UNKNOWN -> "Locked state without full proof"
-                report.state == BootloaderState.UNKNOWN -> "Boot state inconclusive"
+                report.state == BootloaderState.VERIFIED -> "Bloqueado por propiedades de boot"
+                report.state == BootloaderState.LOCKED_UNKNOWN -> "Estado bloqueado sin prueba completa"
+                report.state == BootloaderState.UNKNOWN -> "Estado de boot inconcluso"
                 else -> stateLabel(report.state)
             }
         }
@@ -99,13 +99,13 @@ class BootloaderCardModelMapper {
 
             BootloaderStage.READY -> when {
                 report.dangerFindings.isNotEmpty() ->
-                    "Unlocked state, attestation contradictions, broken certificate trust, or verified-boot failures indicate reduced boot-chain trust."
+                    "Estado desbloqueado, contradicciones de attestation, confianza de certificado rota o fallos de verified-boot indican confianza reducida en la cadena de boot."
 
                 report.warningFindings.isNotEmpty() ->
-                    "The boot chain is not obviously broken, but the evidence still shows custom-root, software-only, or coherence signals worth reviewing."
+                    "La cadena de boot no está obviamente rota, pero la evidencia aún muestra señales de root personalizado, solo software o coherencia que vale la pena revisar."
 
                 report.evidenceMode == BootloaderEvidenceMode.PROPERTIES_ONLY ->
-                    "Boot properties look conservative, but the result falls back to software-readable signals because attestation RootOfTrust was unavailable."
+                    "Las propiedades de boot parecen conservadoras, pero el resultado cae de vuelta a señales legibles por software porque el RootOfTrust de attestation no estuvo disponible."
 
                 report.evidenceMode == BootloaderEvidenceMode.UNAVAILABLE ->
                     "Ni el RootOfTrust de attestation ni las propiedades de boot expusieron datos suficientes para un veredicto del bootloader."
@@ -131,7 +131,7 @@ class BootloaderCardModelMapper {
                     status = report.toDetectorStatus(),
                 ),
                 BootloaderHeaderFactModel(
-                    label = "Proof",
+                    label = "Prueba",
                     value = proofLabel(report.evidenceMode),
                     status = when (report.evidenceMode) {
                         BootloaderEvidenceMode.ATTESTATION -> DetectorStatus.allClear()
@@ -140,7 +140,7 @@ class BootloaderCardModelMapper {
                     },
                 ),
                 BootloaderHeaderFactModel(
-                    label = "Tier",
+                    label = "Nivel",
                     value = tierLabel(report.tier),
                     status = when (report.tier) {
                         TeeTier.STRONGBOX,
@@ -184,7 +184,7 @@ class BootloaderCardModelMapper {
                         label = "Estado",
                         value = "Ninguno",
                         status = DetectorStatus.info(InfoKind.SUPPORT),
-                        detail = "No rows were produced for this section on this device.",
+                        detail = "No se generaron filas para esta sección en este dispositivo.",
                     ),
                 )
             } else {
@@ -260,33 +260,33 @@ class BootloaderCardModelMapper {
 
             BootloaderStage.READY -> listOf(
                 BootloaderDetailRowModel(
-                    label = "Properties checked",
+                    label = "Propiedades verificadas",
                     value = report.checkedPropertyCount.toString(),
                     status = DetectorStatus.info(InfoKind.SUPPORT),
                 ),
                 BootloaderDetailRowModel(
-                    label = "Properties observed",
+                    label = "Propiedades observadas",
                     value = report.observedPropertyCount.toString(),
                     status = if (report.observedPropertyCount > 0) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 BootloaderDetailRowModel(
-                    label = "Native hits",
+                    label = "Detecciones nativas",
                     value = report.nativePropertyHitCount.toString(),
                     status = if (report.nativePropertyHitCount > 0) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 BootloaderDetailRowModel(
-                    label = "Raw boot hits",
+                    label = "Detecciones boot raw",
                     value = report.rawBootParamHitCount.toString(),
                     status = if (report.rawBootParamHitCount > 0) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
                 ),
                 BootloaderDetailRowModel(
-                    label = "Source mismatches",
+                    label = "Discrepancias de fuente",
                     value = report.sourceMismatchCount.toString(),
                     status = if (report.sourceMismatchCount > 0) DetectorStatus.warning() else DetectorStatus.allClear(),
                 ),
@@ -300,7 +300,7 @@ class BootloaderCardModelMapper {
                     },
                 ),
                 BootloaderDetailRowModel(
-                    label = "Attestation chain",
+                    label = "Cadena de attestation",
                     value = report.attestationChainLength.toString(),
                     status = when {
                         report.attestationChainLength == 0 -> DetectorStatus.danger()
@@ -309,8 +309,8 @@ class BootloaderCardModelMapper {
                     },
                 ),
                 BootloaderDetailRowModel(
-                    label = "Hardware-backed",
-                    value = if (report.hardwareBacked) "Yes" else "No",
+                    label = "Respaldado por hardware",
+                    value = if (report.hardwareBacked) "Sí" else "No",
                     status = if (report.hardwareBacked) DetectorStatus.allClear() else DetectorStatus.info(
                         InfoKind.SUPPORT
                     ),
@@ -334,10 +334,10 @@ class BootloaderCardModelMapper {
         status: DetectorStatus
     ): List<BootloaderHeaderFactModel> {
         return listOf(
-            BootloaderHeaderFactModel("State", value, status),
-            BootloaderHeaderFactModel("Proof", value, status),
-            BootloaderHeaderFactModel("Tier", value, status),
-            BootloaderHeaderFactModel("Trust", value, status),
+            BootloaderHeaderFactModel("Estado", value, status),
+            BootloaderHeaderFactModel("Prueba", value, status),
+            BootloaderHeaderFactModel("Nivel", value, status),
+            BootloaderHeaderFactModel("Confianza", value, status),
         )
     }
 
@@ -379,27 +379,27 @@ class BootloaderCardModelMapper {
     )
 
     private fun methodPlaceholders(): List<String> = listOf(
-        "Key attestation",
-        "Certificate trust",
-        "Boot consistency",
-        "Property catalog",
+        "Attestation de clave",
+        "Confianza de certificado",
+        "Consistencia de boot",
+        "Catálogo de propiedades",
         "Reflection API",
         "getprop snapshot",
         "Native libc",
-        "Raw boot params",
-        "Source consistency",
-        "Cross-check rules",
+        "Parámetros de boot raw",
+        "Consistencia de fuente",
+        "Reglas de cruce",
     )
 
     private fun scanPlaceholders(): List<String> = listOf(
-        "Properties checked",
-        "Properties observed",
-        "Native hits",
-        "Raw boot hits",
-        "Source mismatches",
+        "Propiedades verificadas",
+        "Propiedades observadas",
+        "Detecciones nativas",
+        "Detecciones boot raw",
+        "Discrepancias de fuente",
         "Cross-checks",
-        "Attestation chain",
-        "Hardware-backed",
+        "Cadena de attestation",
+        "Respaldado por hardware",
     )
 
     private fun severityStatus(severity: BootloaderFindingSeverity): DetectorStatus {
@@ -422,7 +422,7 @@ class BootloaderCardModelMapper {
 
     private fun proofLabel(mode: BootloaderEvidenceMode): String {
         return when (mode) {
-            BootloaderEvidenceMode.ATTESTATION -> "Attest"
+            BootloaderEvidenceMode.ATTESTATION -> "Attestation"
             BootloaderEvidenceMode.PROPERTIES_ONLY -> "Props"
             BootloaderEvidenceMode.UNAVAILABLE -> "N/A"
         }
@@ -430,11 +430,11 @@ class BootloaderCardModelMapper {
 
     private fun stateLabel(state: BootloaderState): String {
         return when (state) {
-            BootloaderState.VERIFIED -> "Verified"
-            BootloaderState.SELF_SIGNED -> "Custom"
-            BootloaderState.UNLOCKED -> "Unlocked"
+            BootloaderState.VERIFIED -> "Verificado"
+            BootloaderState.SELF_SIGNED -> "Personalizado"
+            BootloaderState.UNLOCKED -> "Desbloqueado"
             BootloaderState.FAILED_VERIFICATION -> "Fallido"
-            BootloaderState.LOCKED_UNKNOWN -> "Locked?"
+            BootloaderState.LOCKED_UNKNOWN -> "¿Bloqueado?"
             BootloaderState.UNKNOWN -> "Desconocido"
         }
     }
@@ -454,7 +454,7 @@ class BootloaderCardModelMapper {
             TeeTrustRoot.GOOGLE -> "Google"
             TeeTrustRoot.GOOGLE_RKP -> "RKP"
             TeeTrustRoot.AOSP -> "AOSP"
-            TeeTrustRoot.FACTORY -> "Factory"
+            TeeTrustRoot.FACTORY -> "Fábrica"
             TeeTrustRoot.UNKNOWN -> "Desconocido"
         }
     }
